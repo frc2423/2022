@@ -1,6 +1,10 @@
 # 2022
 2022 competition season code
 
+## 2022 WPILib installation
+
+Follow the installation guide here: https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/wpilib-setup.html
+
 ## Installing 3rd party libraries 
 
 3rd party libraries: https://docs.wpilib.org/en/stable/docs/software/vscode-overview/3rd-party-libraries.html
