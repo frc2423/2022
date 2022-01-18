@@ -14,3 +14,17 @@ REVLib (SPARK MAX and Color Sensor V3): https://docs.revrobotics.com/sparkmax/so
 NavX: https://www.kauailabs.com/public_files/navx-mxp/navx-mxp.zip
 
 PhotonVision: https://docs.photonvision.org/en/latest/docs/programming/photonlib/adding-vendordep.html
+
+## Documentation
+
+WPILib Docs: https://docs.wpilib.org/en/stable/index.html
+
+PhotonVision (vision processing solution for tracking target when scoring cargo): https://docs.photonvision.org/en/latest/index.html
+
+PhotonVision release thread: https://www.chiefdelphi.com/t/photonvision-2022-official-release/400536
+
+Machine learning with Axon (could be useful for doing more advanced image processing for detecting other objects like cargo and bumpers): https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/axon/index.html
+
+Path planning (used for our autonomous modes): https://docs.wpilib.org/en/stable/docs/software/pathplanning/index.html
+
+Advanced Controls (PID, State-Space, filters, etc): https://docs.wpilib.org/en/stable/docs/software/advanced-controls/index.html
