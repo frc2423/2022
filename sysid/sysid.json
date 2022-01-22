@@ -1,0 +1,11 @@
+{
+  "SysId": {
+    "Analysis Type": "Drivetrain",
+    "AnalyzerJSONLocation": "C:\\Users\\GuestRBE\\Desktop\\rbe\\2022\\sysid\\minibot\\sysid_data20220122-150649.json",
+    "NetworkTables Settings": {
+      "serverTeam": "2423"
+    },
+    "mode": "Client",
+    "serverTeam": "2423"
+  }
+}
