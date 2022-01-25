@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   final double GOAL_RANGE_METERS = Units.feetToMeters(3);
 
   // Change this to match the name of your camera
-  PhotonCamera camera = new PhotonCamera("photonvision");
+  PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000"); //aka Greg
 
   // PID constants should be tuned per robot
   final double LINEAR_P = 0.1;
@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    camera.setPipelineIndex(0);
 
   }
 
@@ -75,15 +76,19 @@ public class Robot extends TimedRobot {
     forwardSpeed = -xboxController.getRightY();
 
     if (xboxController.getAButton()) {
+       System.out.println("we can game");
         // Vision-alignment mode
         // Query the latest result from PhotonVision
         var result = camera.getLatestResult();
 
         if (result.hasTargets()) {
+          // really really has targets? 
             // Calculate angular turn power
             // -1.0 required to ensure positive PID controller effort _increases_ yaw
+            var bestboy = result.getBestTarget();
+            System.out.println("Yaw: " + bestboy.getYaw());
             rotationSpeed = -turnController.calculate(result.getBestTarget().getYaw(), 0);
-
+          
             double range =
               PhotonUtils.calculateDistanceToTargetMeters(
                       CAMERA_HEIGHT_METERS,
@@ -93,6 +98,7 @@ public class Robot extends TimedRobot {
         } else {
             // If we have no targets, stay still.
             rotationSpeed = 0;
+            System.out.println("nope sorry :c");
         }
     } else {
         // Manual Driver Mode
