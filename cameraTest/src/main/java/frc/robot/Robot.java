@@ -68,6 +68,33 @@ public class Robot extends TimedRobot {
 
   }
 
+
+  public double getTurn(double x) {
+    double minTurn = .1;
+    double maxTurn = 1;
+    double minX = 1;
+    double maxX = 5;
+
+    if (x >= maxX) {
+      return maxTurn;
+    }
+    if (x <= -maxX) {
+      return -maxTurn;
+    }
+    
+    if (x >= -minX && x <= minX) {
+      return 0;
+    }
+
+    if (x > minX) {
+      return (maxTurn - minTurn) / (maxX - minX) * x + minTurn;
+    }
+
+    return (maxTurn - minTurn) / (maxX - minX) * x - minTurn;
+  }
+
+
+
   @Override
   public void teleopPeriodic() {
     double forwardSpeed;
