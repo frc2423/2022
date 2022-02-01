@@ -31,11 +31,11 @@ public class Robot extends TimedRobot {
   // PID constants should be tuned per robot
   final double LINEAR_P = 0.1;
   final double LINEAR_D = 0.0;
-  PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
+  //PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
 
   final double ANGULAR_P = 0.1;
   final double ANGULAR_D = 0.0;
-  PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
+ // PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
   XboxController xboxController = new XboxController(0);
 
@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    camera.setPipelineIndex(0);
+    camera.setPipelineIndex(1);
 
   }
 
@@ -70,10 +70,10 @@ public class Robot extends TimedRobot {
 
 
   public double getTurn(double x) {
-    double minTurn = .1;
-    double maxTurn = 1;
-    double minX = 1;
-    double maxX = 5;
+    double minTurn = .03;
+    double maxTurn = 0.05;
+    double minX = 6;
+    double maxX = 25;
 
     if (x >= maxX) {
       return maxTurn;
@@ -87,10 +87,10 @@ public class Robot extends TimedRobot {
     }
 
     if (x > minX) {
-      return (maxTurn - minTurn) / (maxX - minX) * x + minTurn;
+      return (maxTurn - minTurn) / (maxX - minX) * (x - minX) + minTurn;
     }
 
-    return (maxTurn - minTurn) / (maxX - minX) * x - minTurn;
+    return (maxTurn - minTurn) / (maxX - minX) * (x + minX) - minTurn;
   }
 
 
@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
             // -1.0 required to ensure positive PID controller effort _increases_ yaw
             var bestboy = result.getBestTarget();
             System.out.println("Yaw: " + bestboy.getYaw());
-            rotationSpeed = -turnController.calculate(result.getBestTarget().getYaw(), 0);
+            rotationSpeed = getTurn(result.getBestTarget().getYaw());
           
             double range =
               PhotonUtils.calculateDistanceToTargetMeters(
@@ -131,11 +131,14 @@ public class Robot extends TimedRobot {
         // Manual Driver Mode
         rotationSpeed = xboxController.getLeftX();
     }
-    double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(forwardSpeed, rotationSpeed, true);
-    double leftSpeed = DriveHelper.applyDeadband(arcadeSpeeds[0]);
-    double rightSpeed = DriveHelper.applyDeadband(arcadeSpeeds[1]);
-    leftMotor.setPercent(leftSpeed);
+    double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, -rotationSpeed, false);
+    double leftSpeed = arcadeSpeeds[0];
+    double rightSpeed = arcadeSpeeds[1];
+    leftMotor.setPercent(-leftSpeed);
     rightMotor.setPercent(rightSpeed);
 
+    if (xboxController.getAButton()) {
+      System.out.println ("RotationSpeed: " + rotationSpeed+" LeftSpeed: "+leftSpeed+" RightSpeed:"+rightSpeed);
+    }
   }
 }
