@@ -11,8 +11,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.DriveHelper;
 
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class Robot extends TimedRobot {
 
@@ -94,6 +97,19 @@ public class Robot extends TimedRobot {
   }
 
 
+  public double FindAverage(List<PhotonTrackedTarget> reflectiveTargets){
+    
+    double sum = 0;
+    for(int i=0; i<reflectiveTargets.size();i++){
+      PhotonTrackedTarget target = reflectiveTargets.get(i);
+      sum += target.getYaw();
+    }
+    
+    
+    return sum / reflectiveTargets.size();
+  }
+
+
 
   @Override
   public void teleopPeriodic() {
@@ -112,9 +128,10 @@ public class Robot extends TimedRobot {
           // really really has targets? 
             // Calculate angular turn power
             // -1.0 required to ensure positive PID controller effort _increases_ yaw
-            var bestboy = result.getBestTarget();
-            System.out.println("Yaw: " + bestboy.getYaw());
-            rotationSpeed = getTurn(result.getBestTarget().getYaw());
+            var bestYaw = FindAverage(result.getTargets());
+            System.out.println("Best Yaw: " + bestYaw);
+            rotationSpeed = getTurn(bestYaw);
+            //hi this gets the best boy exept the yaw
           
             double range =
               PhotonUtils.calculateDistanceToTargetMeters(
