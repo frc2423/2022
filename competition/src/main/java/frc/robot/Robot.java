@@ -6,14 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
 import frc.robot.constants.constants;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -21,12 +19,10 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.List;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 
 public class Robot extends TimedRobot {
@@ -35,21 +31,20 @@ public class Robot extends TimedRobot {
   private Trajectory m_trajectory;
   private Timer timer;
   private final RamseteController m_ramseteController = new RamseteController();
+  private DifferentialDriveKinematics kinematics;
 
 
   @Override
   public void robotInit() {
-
+    kinematics = new DifferentialDriveKinematics(constants.trackWidth);
     Devices.init();
 
-    m_trajectory =
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-            List.of(new Translation2d(1, 0),new Translation2d(2, 0),new Translation2d(3, 0), new Translation2d(4, 0),new Translation2d(5, 0),new Translation2d(6, 0),new Translation2d(7, 0)),
-            new Pose2d(7, 0, Rotation2d.fromDegrees(0)),
-            new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel)));
-
-
+    m_trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      List.of(new Translation2d(1, 0), new Translation2d(2, 0), new Translation2d(3, 0), new Translation2d(4, 0), new Translation2d(5, 0),new Translation2d(6, 0),new Translation2d(7, 0)),
+      new Pose2d(7, 0, Rotation2d.fromDegrees(0)),
+      new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
+    );
 
   }
 
@@ -58,29 +53,27 @@ public class Robot extends TimedRobot {
   }
 
   public void autonomousInit() {
-
-    timer =new Timer();
+    timer = new Timer();
     timer.start();
   }
 
   @Override
   public void autonomousPeriodic() {
-
     var currTime = timer.get();
-    var desiredPose = m_trajectory.sample(timer.get());
+    var desiredPose = m_trajectory.sample(currTime);
 
-    var refChassisSpeeds = m_ramseteController.calculate(desiredPose.poseMeters, desiredPose);
-    double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(refChassisSpeeds.vxMetersPerSecond, -refChassisSpeeds.omegaRadiansPerSecond, false);
+    ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(desiredPose.poseMeters, desiredPose);
+    var wheelSpeeds = kinematics.toWheelSpeeds(refChassisSpeeds);
 
-    double leftSpeed = arcadeSpeeds[0] * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
-    double rightSpeed = arcadeSpeeds[1] * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
 
+    //double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(refChassisSpeeds.vxMetersPerSecond, -refChassisSpeeds.omegaRadiansPerSecond, false);
+
+    double leftSpeed = wheelSpeeds.leftMetersPerSecond * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
+    double rightSpeed = wheelSpeeds.rightMetersPerSecond * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
     double leftVoltage = feedforward.calculate(leftSpeed); //add acceleration at some point
     double rightVoltage = feedforward.calculate(rightSpeed);
-
     double leftPercent = leftVoltage / RobotController.getBatteryVoltage();
     double rightPercent = rightVoltage / RobotController.getBatteryVoltage();
-
     Devices.leftMotor.setPercent(leftPercent);
     Devices.rightMotor.setPercent(rightPercent);
   }
