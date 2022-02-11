@@ -4,6 +4,8 @@ import frc.robot.devices.NeoMotor;
 
 import edu.wpi.first.wpilibj.XboxController;
 
+import edu.wpi.first.math.util.Units;
+
 public class Devices {
     static XboxController controller = new XboxController(0);
     static NeoMotor leftMotor = new NeoMotor(1); // front left
@@ -18,5 +20,8 @@ public class Devices {
         rightFollowerMotor.follow(rightMotor);
         leftFollowerMotor.follow(leftMotor);
         //this is because the motors are put in the opposite way, so the wheels move in the opposite direction of the motor. 
+        rightMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
+        leftMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
+
     }
 }

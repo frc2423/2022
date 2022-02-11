@@ -39,12 +39,35 @@ public class Robot extends TimedRobot {
     kinematics = new DifferentialDriveKinematics(constants.trackWidth);
     Devices.init();
 
-    m_trajectory = TrajectoryGenerator.generateTrajectory(
+    Trajectory line = TrajectoryGenerator.generateTrajectory(
+      //the line is going along the x axis
       new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-      List.of(new Translation2d(1, 0), new Translation2d(2, 0), new Translation2d(3, 0), new Translation2d(4, 0), new Translation2d(5, 0),new Translation2d(6, 0),new Translation2d(7, 0)),
-      new Pose2d(7, 0, Rotation2d.fromDegrees(0)),
+      List.of(),
+      new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
       new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
     );
+
+    Trajectory parabola = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      List.of(new Translation2d(Units.feetToMeters(6),Units.feetToMeters(4))),
+      new Pose2d(Units.feetToMeters(16), Units.feetToMeters(1), Rotation2d.fromDegrees(0)),
+      new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
+    );
+
+    Trajectory curvy = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+      List.of(
+        new Translation2d(Units.feetToMeters(6),Units.feetToMeters(4)),
+        new Translation2d(Units.feetToMeters(16),Units.feetToMeters(1)),
+        new Translation2d(Units.feetToMeters(27),Units.feetToMeters(1)),
+        new Translation2d(Units.feetToMeters(31),Units.feetToMeters(0))
+      ),
+      new Pose2d(Units.feetToMeters(32), Units.feetToMeters(10), Rotation2d.fromDegrees(90)),
+      new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
+    );
+
+
+    m_trajectory = curvy;
 
   }
 
@@ -68,8 +91,8 @@ public class Robot extends TimedRobot {
 
     //double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(refChassisSpeeds.vxMetersPerSecond, -refChassisSpeeds.omegaRadiansPerSecond, false);
 
-    double leftSpeed = wheelSpeeds.leftMetersPerSecond * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
-    double rightSpeed = wheelSpeeds.rightMetersPerSecond * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
+    double leftSpeed = wheelSpeeds.leftMetersPerSecond;
+    double rightSpeed = wheelSpeeds.rightMetersPerSecond;
     double leftVoltage = feedforward.calculate(leftSpeed); //add acceleration at some point
     double rightVoltage = feedforward.calculate(rightSpeed);
     double leftPercent = leftVoltage / RobotController.getBatteryVoltage();
