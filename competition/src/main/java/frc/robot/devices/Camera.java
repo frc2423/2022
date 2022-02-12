@@ -32,17 +32,16 @@ public class Camera {
     CAMERA_PITCH_RADIANS = cameraPitch;
     GOAL_RANGE_METERS = goalRange;
   }
+
   //finds average of multiple targets
   public double FindAverage(List<PhotonTrackedTarget> reflectiveTargets){
 
-   //making the average of the multiple yaws
+    //making the average of the multiple yaws
     double sum = 0;
     for(int i=0; i<reflectiveTargets.size();i++){
       PhotonTrackedTarget target = reflectiveTargets.get(i);
       sum += target.getYaw();
     }
-    
-    
     return sum / reflectiveTargets.size();
   }
   
