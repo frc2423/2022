@@ -1,6 +1,8 @@
 package frc.robot.devices;
 
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 public class Gyro implements IGyro{
@@ -34,6 +36,10 @@ public class Gyro implements IGyro{
 
     public void calibrate(){
         gyro.calibrate();
+    }
+
+    public Rotation2d getRotation (){
+        return gyro.getRotation2d();
     }
 
 }

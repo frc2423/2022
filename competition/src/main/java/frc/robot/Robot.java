@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
 import frc.robot.constants.constants;
+import frc.robot.subsystem.Drivetrain;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -20,9 +21,12 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+
 import java.util.List;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends TimedRobot {
@@ -32,7 +36,8 @@ public class Robot extends TimedRobot {
   private Timer timer;
   private final RamseteController m_ramseteController = new RamseteController();
   private DifferentialDriveKinematics kinematics;
-
+  private Drivetrain drivetrain = new Drivetrain();
+  private Field2d m_field;
 
   @Override
   public void robotInit() {
@@ -68,6 +73,13 @@ public class Robot extends TimedRobot {
 
 
     m_trajectory = curvy;
+    // Create and push Field2d to SmartDashboard.
+    m_field = new Field2d();
+    SmartDashboard.putData(m_field);
+
+    // Push the trajectory to Field2d.
+    m_field.getObject("traj").setTrajectory(m_trajectory);
+      
 
   }
 
@@ -78,16 +90,26 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     timer = new Timer();
     timer.start();
+    drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)));
+    m_field.setRobotPose(drivetrain.getPose());
+
   }
 
   @Override
   public void autonomousPeriodic() {
     var currTime = timer.get();
     var desiredPose = m_trajectory.sample(currTime);
-
-    ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(desiredPose.poseMeters, desiredPose);
+    drivetrain.updateOdometry();
+    m_field.setRobotPose(drivetrain.getPose());
+    ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(drivetrain.getPose(), desiredPose);
     var wheelSpeeds = kinematics.toWheelSpeeds(refChassisSpeeds);
-
+    System.out.println("Desired" + desiredPose + " Current:" + drivetrain.getPose());
+    NtHelper.setDouble("/robot/Desired/x", desiredPose.poseMeters.getX());
+    NtHelper.setDouble("/robot/Desired/y", desiredPose.poseMeters.getY());
+    NtHelper.setDouble("/robot/Desired/angle", desiredPose.poseMeters.getRotation().getDegrees());
+    NtHelper.setDouble("/robot/Current/x", drivetrain.getPose().getX());
+    NtHelper.setDouble("/robot/Current/y", drivetrain.getPose().getY());
+    NtHelper.setDouble("/robot/Current/angle", drivetrain.getPose().getRotation().getDegrees());
 
     //double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(refChassisSpeeds.vxMetersPerSecond, -refChassisSpeeds.omegaRadiansPerSecond, false);
 
@@ -103,7 +125,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-
+    drivetrain.odometryReset(new Pose2d());
+    
   }
 
   @Override
@@ -124,6 +147,12 @@ public class Robot extends TimedRobot {
 
     Devices.leftMotor.setPercent(leftPercent);
     Devices.rightMotor.setPercent(rightPercent);
+
+    NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());
+    drivetrain.updateOdometry();
+    m_field.setRobotPose(drivetrain.getPose());
+
+
   }
 
 }
