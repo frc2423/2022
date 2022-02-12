@@ -1,10 +1,7 @@
 package frc.robot;
 
 import frc.robot.devices.NeoMotor;
-
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.util.Units;
 import frc.robot.devices.*;
 

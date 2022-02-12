@@ -4,44 +4,41 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Drivetrain;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-
 import java.util.List;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
 public class Robot extends TimedRobot {
 
-  public SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(constants.Ks, constants.Kv);
   private Trajectory m_trajectory;
   private Timer timer;
   private final RamseteController m_ramseteController = new RamseteController();
-  private DifferentialDriveKinematics kinematics;
-  private Drivetrain drivetrain = new Drivetrain();
+  private Drivetrain drivetrain = new Drivetrain(
+    constants.trackWidth, 
+    constants.Ks, 
+    constants.Kv, 
+    Devices.gyro.getRotation()
+  );
   private Field2d m_field;
 
   @Override
   public void robotInit() {
-    kinematics = new DifferentialDriveKinematics(constants.trackWidth);
     Devices.init();
 
     Trajectory line = TrajectoryGenerator.generateTrajectory(
@@ -90,7 +87,10 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     timer = new Timer();
     timer.start();
-    drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)));
+    Devices.leftMotor.resetEncoder(0);
+    Devices.rightMotor.resetEncoder(0);
+    Devices.gyro.reset();
+    drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
     m_field.setRobotPose(drivetrain.getPose());
 
   }
@@ -99,33 +99,28 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     var currTime = timer.get();
     var desiredPose = m_trajectory.sample(currTime);
-    drivetrain.updateOdometry();
+    drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
     m_field.setRobotPose(drivetrain.getPose());
     ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(drivetrain.getPose(), desiredPose);
-    var wheelSpeeds = kinematics.toWheelSpeeds(refChassisSpeeds);
+    double[] motorValues = drivetrain.getMotorValues(refChassisSpeeds);
+    Devices.leftMotor.setPercent(motorValues[0]);
+    Devices.rightMotor.setPercent(motorValues[1]);
+    
     System.out.println("Desired" + desiredPose + " Current:" + drivetrain.getPose());
     NtHelper.setDouble("/robot/Desired/x", desiredPose.poseMeters.getX());
     NtHelper.setDouble("/robot/Desired/y", desiredPose.poseMeters.getY());
     NtHelper.setDouble("/robot/Desired/angle", desiredPose.poseMeters.getRotation().getDegrees());
     NtHelper.setDouble("/robot/Current/x", drivetrain.getPose().getX());
     NtHelper.setDouble("/robot/Current/y", drivetrain.getPose().getY());
-    NtHelper.setDouble("/robot/Current/angle", drivetrain.getPose().getRotation().getDegrees());
-
-    //double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(refChassisSpeeds.vxMetersPerSecond, -refChassisSpeeds.omegaRadiansPerSecond, false);
-
-    double leftSpeed = wheelSpeeds.leftMetersPerSecond;
-    double rightSpeed = wheelSpeeds.rightMetersPerSecond;
-    double leftVoltage = feedforward.calculate(leftSpeed); //add acceleration at some point
-    double rightVoltage = feedforward.calculate(rightSpeed);
-    double leftPercent = leftVoltage / RobotController.getBatteryVoltage();
-    double rightPercent = rightVoltage / RobotController.getBatteryVoltage();
-    Devices.leftMotor.setPercent(leftPercent);
-    Devices.rightMotor.setPercent(rightPercent);
+    NtHelper.setDouble("/robot/Current/angle", drivetrain.getPose().getRotation().getDegrees()); 
   }
 
   @Override
   public void teleopInit() {
-    drivetrain.odometryReset(new Pose2d());
+    Devices.leftMotor.resetEncoder(0);
+        Devices.rightMotor.resetEncoder(0);
+        Devices.gyro.reset();
+    drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
     
   }
 
@@ -136,23 +131,16 @@ public class Robot extends TimedRobot {
 
     double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
 
-    double leftSpeed = arcadeSpeeds[0] * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
-    double rightSpeed = arcadeSpeeds[1] * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
+    double leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
+    double rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
 
-    double leftVoltage = feedforward.calculate(leftSpeed); //add acceleration at some point
-    double rightVoltage = feedforward.calculate(rightSpeed);
+    double[] motorValues = drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
 
-    double leftPercent = leftVoltage / RobotController.getBatteryVoltage();
-    double rightPercent = rightVoltage / RobotController.getBatteryVoltage();
-
-    Devices.leftMotor.setPercent(leftPercent);
-    Devices.rightMotor.setPercent(rightPercent);
+    Devices.leftMotor.setPercent(motorValues[0]);
+    Devices.rightMotor.setPercent(motorValues[1]);
 
     NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());
-    drivetrain.updateOdometry();
+    drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
     m_field.setRobotPose(drivetrain.getPose());
-
-
   }
-
 }
