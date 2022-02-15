@@ -22,7 +22,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-
+import frc.robot.util.Targeting;
 import java.util.List;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -126,32 +126,49 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drivetrain.odometryReset(new Pose2d());
+    Targeting.init();
     
   }
 
   @Override
   public void teleopPeriodic() {
-    double turnRate = DriveHelper.applyDeadband(-Devices.controller.getLeftX());
-    double ySpeed = DriveHelper.applyDeadband(-Devices.controller.getLeftY());
+    // double turnRate = DriveHelper.applyDeadband(-Devices.controller.getLeftX());
+    // double ySpeed = DriveHelper.applyDeadband(-Devices.controller.getLeftY());
 
-    double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
+    // double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
 
-    double leftSpeed = arcadeSpeeds[0] * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
-    double rightSpeed = arcadeSpeeds[1] * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
+    // double leftSpeed = arcadeSpeeds[0] * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
+    // double rightSpeed = arcadeSpeeds[1] * edu.wpi.first.math.util.Units.feetToMeters(constants.maxSpeedo);
 
-    double leftVoltage = feedforward.calculate(leftSpeed); //add acceleration at some point
-    double rightVoltage = feedforward.calculate(rightSpeed);
+    // double leftVoltage = feedforward.calculate(leftSpeed); //add acceleration at some point
+    // double rightVoltage = feedforward.calculate(rightSpeed);
 
-    double leftPercent = leftVoltage / RobotController.getBatteryVoltage();
-    double rightPercent = rightVoltage / RobotController.getBatteryVoltage();
+    // double leftPercent = leftVoltage / RobotController.getBatteryVoltage();
+    // double rightPercent = rightVoltage / RobotController.getBatteryVoltage();
 
-    Devices.leftMotor.setPercent(leftPercent);
-    Devices.rightMotor.setPercent(rightPercent);
+    // Devices.leftMotor.setPercent(leftPercent);
+    // Devices.rightMotor.setPercent(rightPercent);
 
-    NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());
-    drivetrain.updateOdometry();
-    m_field.setRobotPose(drivetrain.getPose());
+    // NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());
+    // drivetrain.updateOdometry();
+    // m_field.setRobotPose(drivetrain.getPose());
 
+    double rotationSpeed = 0;
+
+    if (Devices.controller.getAButton()){
+      rotationSpeed = Targeting.calculate();
+    }
+
+    double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
+    double leftSpeed = arcadeSpeeds[0];
+    double rightSpeed = arcadeSpeeds[1];
+    Devices.leftMotor.setPercent(leftSpeed);
+    Devices.rightMotor.setPercent(rightSpeed);
+
+    NtHelper.setDouble("/robot/aiming/leftSpeed", leftSpeed); 
+    NtHelper.setDouble("/robot/aiming/rightSpeed", rightSpeed);
+
+    NtHelper.setBoolean("/robot/aiming/Button", Devices.controller.getAButton()); 
 
   }
 

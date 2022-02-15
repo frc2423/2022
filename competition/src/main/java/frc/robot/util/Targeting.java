@@ -5,19 +5,19 @@ import frc.robot.devices.Camera;
 //hi Adrien (that was on purpose)
 
 public class Targeting {
-  private Camera camera = new Camera("Microsoft_LifeCam_HD-300"); // aka greg
-  double minTurn = .03;
-  double maxTurn = 0.05;
+  private static Camera camera = new Camera("Microsoft_LifeCam_HD-3000"); // aka greg
+  static double minTurn = .03;
+  static double maxTurn = 0.05;
 
-  double minX = 6;
-  double maxX = 25;
+  static double minX = 6;
+  static double maxX = 25;
   
-  public void init() { 
-    camera.setPipeline(1);
+  public static void init() { 
+    camera.setPipeline(0);
   }
 
   //returns value 0-1
-  public double calculate() {
+  public static double calculate() {
     var result = camera.getLatestResult();
     double rotationSpeed = 0.0;
     NtHelper.setBoolean("/robot/aiming/haveTargets", result.hasTargets()); //puts whether we do or don't have targets in the table 
@@ -36,7 +36,7 @@ public class Targeting {
     return rotationSpeed;
   }
 
-  public double getTurn(double x) { 
+  public static double getTurn(double x) { 
     
     //the two line bellow are just setting a reverse deadband
     if (x >= maxX) {

@@ -1,6 +1,7 @@
 {
   "SysId": {
     "Analysis Type": "Drivetrain",
+    "AnalyzerJSONLocation": "C:\\Users\\GuestRBE\\Desktop\\rbe\\2022\\sysid\\competition\\New folder\\sysid_data20220207-194156.json",
     "NetworkTables Settings": {
       "serverTeam": "2423"
     }
