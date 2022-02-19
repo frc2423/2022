@@ -67,7 +67,7 @@ public class StateMachine {
     try {
       Object returnObject = runStates.get(name).invoke(this);
     } catch (Exception e){
-      System.out.println(e + ": runState-> " + name);
+      System.out.println(e + ": runState-> " + name + " cause:"+ e.getCause());
     }
   }
 }

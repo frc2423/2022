@@ -32,6 +32,7 @@ public class SimpleAuto extends StateMachine {
             new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
         );
         follower.addTrajectory("line", line);
+        follower.setTrajectory("line");
     }
 
     @RunState(name = "shooter")

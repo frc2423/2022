@@ -29,8 +29,8 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.subsystem.Intake;
 
 public class TrajectoryFollower {
-    public Timer timer = new Timer ();
-    public Trajectory trajectory;
+    private Timer timer = new Timer ();
+    private Trajectory trajectory;
     private final RamseteController m_ramseteController = new RamseteController();
     private Drivetrain drivetrain = new Drivetrain(
       constants.trackWidth, 
@@ -40,9 +40,11 @@ public class TrajectoryFollower {
     );
     private Field2d m_field;
 
-    private HashMap<String, Trajectory> trajectoryMap = new HashMap<String, Trajectory>();
+    private HashMap<String, Trajectory> trajectoryMap;
 
     public TrajectoryFollower() {
+        trajectoryMap = new HashMap<String, Trajectory>();
+        m_field = new Field2d();
     }
 
     public void startFollowing() {
@@ -61,7 +63,6 @@ public class TrajectoryFollower {
     public void follow (){
         var currTime = timer.get();
         var desiredPose = trajectory.sample(currTime);
-       
 
         drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
         m_field.setRobotPose(drivetrain.getPose());
@@ -79,8 +80,7 @@ public class TrajectoryFollower {
         m_field.setRobotPose(drivetrain.getPose());
     }
 
-    public boolean isDone (){
-
+    public boolean isDone(){
         if (timer.get() > trajectory.getTotalTimeSeconds()){
             return true;
         }

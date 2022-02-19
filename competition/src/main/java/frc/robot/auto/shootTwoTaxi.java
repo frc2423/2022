@@ -68,6 +68,7 @@ public class shootTwoTaxi extends StateMachine{
         follower.addTrajectory("CargoAdvance", CargoAdvanceTrajectory);
         follower.addTrajectory("ShooterAdvance", ShooterAdvanceTrajectory);
         follower.addTrajectory("TaxiBack", TaxiBackTrajectory);
+        follower.setTrajectory("CargoAdvance");
     }
 
     @InitState(name = "CargoAdvance")
@@ -77,14 +78,12 @@ public class shootTwoTaxi extends StateMachine{
     }
 
     @RunState(name = "CargoAdvance")
-    public void CargoAdvance(){
+    public void CargoAdvanceRun(){
         follower.follow();
-
         if (follower.isDone()) {
             setState("Intake");
-            
         }
-        
+    
     }
 
     @InitState(name = "Intake")

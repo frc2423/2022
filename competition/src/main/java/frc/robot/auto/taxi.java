@@ -43,12 +43,13 @@ public class taxi extends StateMachine {
     public taxi(){
         super("Taxicab");
         follower.addTrajectory("CabRoute", cabTrajectory);
+        follower.setTrajectory("CabRoute");
     }
     @InitState(name = "Taxicab")
-        public void taxicabinit(){
-            follower.setTrajectory("CabRoute");
-            follower.startFollowing();
-        }
+    public void taxicabinit(){
+        follower.setTrajectory("CabRoute");
+        follower.startFollowing();
+    }
 
     @RunState(name = "Taxicab")
     public void taxicabrun(){
