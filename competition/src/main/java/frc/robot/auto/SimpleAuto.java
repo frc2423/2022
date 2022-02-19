@@ -43,6 +43,7 @@ public class SimpleAuto extends StateMachine {
     @InitState(name = "taxi")
     public void initTaxi(){
         follower.setTrajectory("line");
+        follower.startFollowing();
     }
 
     @RunState(name = "taxi")

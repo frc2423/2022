@@ -41,8 +41,12 @@ public class TrajectoryFollower {
 
     private HashMap<String, Trajectory> trajectoryMap = new HashMap<String, Trajectory>();
 
-    public TrajectoryFollower (){
+    public TrajectoryFollower() {
+    }
 
+    public void startFollowing() {
+        timer.reset();
+        timer.start();
     }
 
     public void addTrajectory (String name, Trajectory trajectoryName){
@@ -51,7 +55,6 @@ public class TrajectoryFollower {
 
     public void setTrajectory (String name){
         trajectory = trajectoryMap.get (name);
-
     }
 
     public void follow (){
@@ -68,7 +71,6 @@ public class TrajectoryFollower {
     }
 
     public void resetPosition (){
-        timer.start ();
         Devices.leftMotor.resetEncoder(0);
         Devices.rightMotor.resetEncoder(0);
         Devices.gyro.reset();
