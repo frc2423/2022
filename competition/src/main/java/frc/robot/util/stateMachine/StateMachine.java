@@ -6,12 +6,12 @@ import java.util.HashMap;
 
 public class StateMachine {
 
-  private HashMap<String, Method> states;
+  private HashMap<String, Method> initStates;
   private HashMap<String, Method> runStates;
   private String state = "";
 
   public StateMachine(String defaultState) {
-    states = new HashMap<String, Method>();
+    initStates = new HashMap<String, Method>();
     runStates = new HashMap<String, Method>();
     Method[] methods= this.getClass().getMethods(); //obtain all method objects
     for(Method method : methods){
@@ -21,7 +21,7 @@ public class StateMachine {
         if(annotation instanceof InitState){
           InitState myAnnotation = (InitState) annotation;
           //System.out.println("state name: " + myAnnotation.name());
-          states.put(myAnnotation.name(), method);
+          initStates.put(myAnnotation.name(), method);
         }
         // Gathers each method that has RunState annotations
         if(annotation instanceof RunState){
@@ -54,9 +54,12 @@ public class StateMachine {
 
   public void initState(String name){
     try {
-      Object returnObject = states.get(name).invoke(this);
+      var initFunction = initStates.get(name);
+      if (initFunction != null) {
+        initFunction.invoke(this);
+      }
     } catch (Exception e){
-      System.out.println(e + ": state-> " + name);
+      System.out.println(e + ": initState-> " + name);
     }
   }
 
