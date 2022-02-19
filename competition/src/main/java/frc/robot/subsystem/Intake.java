@@ -4,7 +4,7 @@ import frc.robot.Devices;
 import frc.robot.devices.NeoMotor;
 
 
-class Intake {
+public class Intake {
 
     private NeoMotor armMotor;
     private NeoMotor rollerMotor;

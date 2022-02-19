@@ -8,6 +8,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
+import frc.robot.auto.shootTwoTaxi;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Drivetrain;
 import edu.wpi.first.math.controller.RamseteController;
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
     Devices.gyro.getRotation()
   );
   private Field2d m_field;
+  private shootTwoTaxi auto = new shootTwoTaxi();
 
   @Override
   public void robotInit() {
@@ -86,35 +88,41 @@ public class Robot extends TimedRobot {
   }
 
   public void autonomousInit() {
-    timer = new Timer();
-    timer.start();
-    Devices.leftMotor.resetEncoder(0);
-    Devices.rightMotor.resetEncoder(0);
-    Devices.gyro.reset();
-    drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
-    m_field.setRobotPose(drivetrain.getPose());
+    // timer = new Timer();
+    // timer.start();
+    // Devices.leftMotor.resetEncoder(0);
+    // Devices.rightMotor.resetEncoder(0);
+    // Devices.gyro.reset();
+    // drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
+    // m_field.setRobotPose(drivetrain.getPose());
 
   }
 
   @Override
   public void autonomousPeriodic() {
-    var currTime = timer.get();
-    var desiredPose = m_trajectory.sample(currTime);
-    drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
-    m_field.setRobotPose(drivetrain.getPose());
-    ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(drivetrain.getPose(), desiredPose);
-    double[] motorValues = drivetrain.getMotorValues(refChassisSpeeds);
-    Devices.leftMotor.setPercent(motorValues[0]);
-    Devices.rightMotor.setPercent(motorValues[1]);
+    auto.run();
+    // var currTime = timer.get();
+    // var desiredPose = m_trajectory.sample(currTime);
+    // drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
+    // m_field.setRobotPose(drivetrain.getPose());
+    // ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(drivetrain.getPose(), desiredPose);
+    // double[] motorValues = drivetrain.getMotorValues(refChassisSpeeds);
+    // Devices.leftMotor.setPercent(motorValues[0]);
+    // Devices.rightMotor.setPercent(motorValues[1]);
     
-    System.out.println("Desired" + desiredPose + " Current:" + drivetrain.getPose());
-    NtHelper.setDouble("/robot/Desired/x", desiredPose.poseMeters.getX());
-    NtHelper.setDouble("/robot/Desired/y", desiredPose.poseMeters.getY());
-    NtHelper.setDouble("/robot/Desired/angle", desiredPose.poseMeters.getRotation().getDegrees());
-    NtHelper.setDouble("/robot/Current/x", drivetrain.getPose().getX());
-    NtHelper.setDouble("/robot/Current/y", drivetrain.getPose().getY());
-    NtHelper.setDouble("/robot/Current/angle", drivetrain.getPose().getRotation().getDegrees()); 
+    // System.out.println("Desired" + desiredPose + " Current:" + drivetrain.getPose());
+    // NtHelper.setDouble("/robot/Desired/x", desiredPose.poseMeters.getX());
+    // NtHelper.setDouble("/robot/Desired/y", desiredPose.poseMeters.getY());
+    // NtHelper.setDouble("/robot/Desired/angle", desiredPose.poseMeters.getRotation().getDegrees());
+    // NtHelper.setDouble("/robot/Current/x", drivetrain.getPose().getX());
+    // NtHelper.setDouble("/robot/Current/y", drivetrain.getPose().getY());
+    // NtHelper.setDouble("/robot/Current/angle", drivetrain.getPose().getRotation().getDegrees()); 
+
   }
+
+
+  
+
 
   @Override
   public void teleopInit() {
@@ -163,4 +171,8 @@ public class Robot extends TimedRobot {
     NtHelper.setBoolean("/robot/aiming/Button", Devices.controller.getAButton()); 
 
   }
+
+
+
+
 }
