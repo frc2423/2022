@@ -37,7 +37,6 @@ public class SimpleAuto extends StateMachine {
     @RunState(name = "shooter")
     public void runShooter(){
         setState("taxi");
-        System.out.println("runShooter");
     }
 
     @InitState(name = "taxi")
@@ -49,6 +48,5 @@ public class SimpleAuto extends StateMachine {
     @RunState(name = "taxi")
     public void runTaxi(){
         follower.follow();
-        System.out.println("runTaxi");
     }
 }
