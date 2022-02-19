@@ -4,7 +4,7 @@ import frc.robot.Devices;
 import frc.robot.devices.NeoMotor;
 
 
-class Intake {
+class Intake2 {
 
     private NeoMotor armMotor;
     private NeoMotor rollerMotor;
@@ -16,7 +16,7 @@ class Intake {
     private double topPosition;
     private double bottomPosition;
 
-    public Intake(double kP, double kI, double kD){
+    public Intake2(double kP, double kI, double kD){
         armMotor = Devices.intakeArmMotor;
         rollerMotor = Devices.intakeRollerMotor;
 
@@ -29,7 +29,7 @@ class Intake {
     //go up until hard stop and set encoder 0
     public void calibrate(){
         armMotor.setPercent(-0.4);
-        while (! isStopped()); // TODO Add limit switch and timeout
+        while (!isStopped()); // TODO Add limit switch and timeout
         topPosition = armMotor.getDistance();
         //bottomPosition = 
     }

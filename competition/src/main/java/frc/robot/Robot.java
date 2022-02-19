@@ -114,7 +114,12 @@ public class Robot extends TimedRobot {
     NtHelper.setDouble("/robot/Current/x", drivetrain.getPose().getX());
     NtHelper.setDouble("/robot/Current/y", drivetrain.getPose().getY());
     NtHelper.setDouble("/robot/Current/angle", drivetrain.getPose().getRotation().getDegrees()); 
+
   }
+
+
+  
+
 
   @Override
   public void teleopInit() {
@@ -163,4 +168,8 @@ public class Robot extends TimedRobot {
     NtHelper.setBoolean("/robot/aiming/Button", Devices.controller.getAButton()); 
 
   }
+
+
+
+
 }
