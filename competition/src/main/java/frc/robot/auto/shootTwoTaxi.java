@@ -80,7 +80,7 @@ public class shootTwoTaxi extends StateMachine{
     public void CargoAdvance(){
         follower.follow();
 
-        if (follower.isDone()){
+        if (follower.isDone()) {
             setState("Intake");
             
         }

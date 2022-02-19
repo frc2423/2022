@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
 import frc.robot.auto.shootTwoTaxi;
+import frc.robot.auto.taxi;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Drivetrain;
 import edu.wpi.first.math.controller.RamseteController;
@@ -38,7 +39,7 @@ public class Robot extends TimedRobot {
     Devices.gyro.getRotation()
   );
   private Field2d m_field;
-  private shootTwoTaxi auto = new shootTwoTaxi();
+  private taxi auto = new taxi();
 
   @Override
   public void robotInit() {

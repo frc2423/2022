@@ -55,7 +55,7 @@ public class TrajectoryFollower {
     }
 
     public void setTrajectory (String name){
-        trajectory = trajectoryMap.get (name);
+        trajectory = trajectoryMap.get(name);
     }
 
     public void follow (){
