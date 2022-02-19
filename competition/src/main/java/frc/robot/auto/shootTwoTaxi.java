@@ -38,25 +38,25 @@ import frc.robot.subsystem.Intake;
 public class shootTwoTaxi extends StateMachine{
 
     private Intake intake = new Intake ();
-    Trajectory CargoAdvance = TrajectoryGenerator.generateTrajectory(
+    Trajectory CargoAdvanceTrajectory = TrajectoryGenerator.generateTrajectory(
             //the line is going along the x axis
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
             List.of(),
             new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
             new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
         );
-    Trajectory ShooterAdvance = TrajectoryGenerator.generateTrajectory(
+    Trajectory ShooterAdvanceTrajectory = TrajectoryGenerator.generateTrajectory(
         //the line is going along the x axis
         new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
         List.of(),
-        new Pose2d(Units.feetToMeters(20), 0, Rotation2d.fromDegrees(0)),
+        new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
         new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
     );
-    Trajectory TaxiBack = TrajectoryGenerator.generateTrajectory(
+    Trajectory TaxiBackTrajectory = TrajectoryGenerator.generateTrajectory(
         //the line is going along the x axis
         new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
         List.of(),
-        new Pose2d(Units.feetToMeters(30), 0, Rotation2d.fromDegrees(0)),
+        new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
         new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
     );
     private TrajectoryFollower follower = new TrajectoryFollower();
@@ -65,9 +65,9 @@ public class shootTwoTaxi extends StateMachine{
 
     public shootTwoTaxi() {
         super("CargoAdvance");
-        follower.addTrajectory("CargoAdvance", CargoAdvance);
-        follower.addTrajectory("ShooterAdvance", ShooterAdvance);
-        follower.addTrajectory("TaxiBack", TaxiBack);
+        follower.addTrajectory("CargoAdvance", CargoAdvanceTrajectory);
+        follower.addTrajectory("ShooterAdvance", ShooterAdvanceTrajectory);
+        follower.addTrajectory("TaxiBack", TaxiBackTrajectory);
     }
 
     @InitState(name = "CargoAdvance")
@@ -79,8 +79,10 @@ public class shootTwoTaxi extends StateMachine{
     @RunState(name = "CargoAdvance")
     public void CargoAdvance(){
         follower.follow();
+
         if (follower.isDone()){
-            this.setState("Intake");
+            setState("Intake");
+            
         }
         
     }
@@ -95,7 +97,7 @@ public class shootTwoTaxi extends StateMachine{
     @RunState(name = "Intake")
     public void Intake (){
         if (timer.get() > 2){
-            this.setState("ShooterAdvance");
+            setState("ShooterAdvance");
         }
         //Seconds; subject to change
 
@@ -111,7 +113,7 @@ public class shootTwoTaxi extends StateMachine{
     public void ShooterAdvance (){
         follower.follow ();
         if (follower.isDone()){
-            this.setState ("ShootTwo");
+            setState ("ShootTwo");
         }
 
     }
@@ -127,7 +129,7 @@ public class shootTwoTaxi extends StateMachine{
     public void ShootTwo (){
         //Shoot both cargos
         if (timer.get() > 4){
-            this.setState ("TaxiBack");
+            setState ("TaxiBack");
         }
         //Seconds subject to change upon testing
     
