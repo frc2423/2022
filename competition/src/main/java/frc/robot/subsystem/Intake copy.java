@@ -47,6 +47,9 @@ class Intake2 {
         //Temporarily arbitrary
         
     }
+    public boolean isStopped(){
+        return true;
+    }
 
     //sets position to current plus something
     public void stepDown(){
