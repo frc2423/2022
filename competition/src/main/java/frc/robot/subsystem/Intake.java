@@ -13,7 +13,7 @@ public class Intake {
 
     private double topPosition = 0;
     private double bottomPosition = -15;
-    private double rollerSpeed = 0.1;
+    private double rollerSpeed = 0.5;
 
     public Intake(){
         armMotor = Devices.intakeArmMotor;
