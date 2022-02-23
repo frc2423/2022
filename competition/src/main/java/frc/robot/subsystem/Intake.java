@@ -7,16 +7,21 @@ import frc.robot.devices.NeoMotor;
 public class Intake {
 
     private NeoMotor armMotor;
+    private NeoMotor armMotorLeft;
     private NeoMotor rollerMotor;
     private double desiredPosition;
 
     private double topPosition = 0;
-    private double bottomPosition = 90;
+    private double bottomPosition = -15;
+    private double rollerSpeed = 0.1;
 
     public Intake(){
         armMotor = Devices.intakeArmMotor;
+        armMotorLeft = Devices.intakeArmFollowerMotor;
         rollerMotor = Devices.intakeRollerMotor;
-        intakeUp();
+      //  intakeUp();
+        armMotor.resetEncoder(0);
+        armMotorLeft.resetEncoder(0);
     }
 
     //sets position to current minus something
@@ -24,6 +29,7 @@ public class Intake {
         rollerMotor.setPercent(0);
         desiredPosition -= 2; 
         armMotor.setDistance(desiredPosition);
+        armMotorLeft.setDistance(desiredPosition);
         //Temporarily arbitrary
         
     }
@@ -33,6 +39,7 @@ public class Intake {
         rollerMotor.setPercent(0);
         desiredPosition += 2; 
         armMotor.setDistance(desiredPosition);
+        armMotorLeft.setDistance(desiredPosition);
     }
         //Temporarily arbitrary
 
@@ -41,13 +48,15 @@ public class Intake {
         rollerMotor.setPercent(0);
         desiredPosition = topPosition;
         armMotor.setDistance(desiredPosition);
+        armMotorLeft.setDistance(desiredPosition);
     }
 
     //sets position to its down position
       public void intakeDown(){
-        rollerMotor.setPercent(0.1);
+        rollerMotor.setPercent(rollerSpeed);
         desiredPosition = bottomPosition;
         armMotor.setDistance(desiredPosition);
+        armMotorLeft.setDistance(desiredPosition);
     }
 
     //sets setpoint to current postion
@@ -55,5 +64,10 @@ public class Intake {
         rollerMotor.setPercent(0);
         desiredPosition = armMotor.getEncoderCount();
         armMotor.setDistance(desiredPosition);
+        armMotorLeft.setDistance(desiredPosition);
+    }
+
+    public void reverse(){
+        rollerMotor.setPercent(-rollerSpeed);
     }
 }

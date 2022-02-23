@@ -11,6 +11,7 @@ import frc.robot.util.DriveHelper;
 import frc.robot.auto.shootTwoTaxi;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Drivetrain;
+import frc.robot.subsystem.Intake;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -30,7 +31,6 @@ public class Robot extends TimedRobot {
 
   private Trajectory m_trajectory;
   private Timer timer;
-  private final RamseteController m_ramseteController = new RamseteController();
   private Drivetrain drivetrain = new Drivetrain(
     constants.trackWidth, 
     constants.Ks, 
@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
   );
   private Field2d m_field;
   private shootTwoTaxi auto = new shootTwoTaxi();
+  private Intake intake = new Intake ();
 
   @Override
   public void robotInit() {
@@ -136,39 +137,69 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // double turnRate = DriveHelper.applyDeadband(-Devices.controller.getLeftX());
-    // double ySpeed = DriveHelper.applyDeadband(-Devices.controller.getLeftY());
+    double turnRate = DriveHelper.applyDeadband(-Devices.controller.getLeftX());
+    double ySpeed = DriveHelper.applyDeadband(-Devices.controller.getLeftY());
 
-    // double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
+    double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
 
-    // double leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
-    // double rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
+    double leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
+    double rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
 
-    // double[] motorValues = drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
+    double[] motorValues = drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
 
-    // Devices.leftMotor.setPercent(motorValues[0]);
-    // Devices.rightMotor.setPercent(motorValues[1]);
+    Devices.leftMotor.setPercent(motorValues[0]);
+    Devices.rightMotor.setPercent(motorValues[1]);
 
-    // NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());
-    // drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
-    // m_field.setRobotPose(drivetrain.getPose());
+    NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());
+    drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
+    m_field.setRobotPose(drivetrain.getPose());
 
-    double rotationSpeed = 0;
 
+    //Targeting Code
+    // double rotationSpeed = 0;
+
+    // if (Devices.controller.getAButton()){
+    //   rotationSpeed = Targeting.calculate();
+    // }
+
+    // double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
+    // double leftSpeed = arcadeSpeeds[0];
+    // double rightSpeed = arcadeSpeeds[1];
+    // Devices.leftMotor.setPercent(leftSpeed);
+    // Devices.rightMotor.setPercent(rightSpeed);
+
+    // NtHelper.setDouble("/robot/aiming/leftSpeed", leftSpeed); 
+    // NtHelper.setDouble("/robot/aiming/rightSpeed", rightSpeed);
+
+    // NtHelper.setBoolean("/robot/aiming/Button", Devices.controller.getAButton()); 
+
+
+    NtHelper.setDouble ("/robot/intake/leftdistance", Devices.intakeArmMotor.getDistance());
+    NtHelper.setDouble ("/robot/intake/rightdistance", Devices.intakeArmFollowerMotor.getDistance());
+
+    NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
+    NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
+
+    //runs intake
     if (Devices.controller.getAButton()){
-      rotationSpeed = Targeting.calculate();
+      intake.intakeDown();
+    }
+    else if (Devices.controller.getYButton()){
+      intake.intakeUp();
+    }
+    else if (Devices.controller.getXButton()){
+      intake.halt();
     }
 
-    double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
-    double leftSpeed = arcadeSpeeds[0];
-    double rightSpeed = arcadeSpeeds[1];
-    Devices.leftMotor.setPercent(leftSpeed);
-    Devices.rightMotor.setPercent(rightSpeed);
+      // if(Devices.controller.getAButton()) {
+      //   Devices.intakeArmMotor.setPercent(.1);
+      //   Devices.intakeArmFollowerMotor.setPercent(.1);
 
-    NtHelper.setDouble("/robot/aiming/leftSpeed", leftSpeed); 
-    NtHelper.setDouble("/robot/aiming/rightSpeed", rightSpeed);
+      // } else {
+      //   Devices.intakeArmMotor.setPercent(0);
+      //   Devices.intakeArmFollowerMotor.setPercent(0);
 
-    NtHelper.setBoolean("/robot/aiming/Button", Devices.controller.getAButton()); 
+      // }
 
   }
 
