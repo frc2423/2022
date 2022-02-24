@@ -43,6 +43,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    intake.zero();
+    intake.stop();
     Devices.init();
 
     Trajectory line = TrajectoryGenerator.generateTrajectory(
@@ -86,9 +88,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    telemetry();
   }
 
   public void autonomousInit() {
+    intake.zero();
+    intake.stop();
     // timer = new Timer();
     // timer.start();
     // Devices.leftMotor.resetEncoder(0);
@@ -127,6 +132,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    intake.zero();
+    intake.stop();
     Devices.leftMotor.resetEncoder(0);
         Devices.rightMotor.resetEncoder(0);
         Devices.gyro.reset();
@@ -173,13 +180,6 @@ public class Robot extends TimedRobot {
 
     // NtHelper.setBoolean("/robot/aiming/Button", Devices.controller.getAButton()); 
 
-
-    NtHelper.setDouble ("/robot/intake/leftdistance", Devices.intakeArmMotor.getDistance());
-    NtHelper.setDouble ("/robot/intake/rightdistance", Devices.intakeArmFollowerMotor.getDistance());
-
-    NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
-    NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
-
     //runs intake
     if (Devices.controller.getAButton()){
       intake.intakeDown();
@@ -188,8 +188,10 @@ public class Robot extends TimedRobot {
       intake.intakeUp();
     }
     else if (Devices.controller.getXButton()){
-      intake.halt();
+      intake.holdInPlace();
     }
+
+    telemetry();
 
       // if(Devices.controller.getAButton()) {
       //   Devices.intakeArmMotor.setPercent(.1);
@@ -200,10 +202,26 @@ public class Robot extends TimedRobot {
       //   Devices.intakeArmFollowerMotor.setPercent(0);
 
       // }
-
   }
 
 
+  @Override
+  public void disabledPeriodic() {
+    intake.zero();
+    intake.stop();
+    Devices.leftMotor.resetEncoder(0);
+    Devices.rightMotor.resetEncoder(0);
+    Devices.gyro.reset();
+    drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
+    Targeting.init();
+    telemetry();
+  }
 
+  public void telemetry() {
+    NtHelper.setDouble ("/robot/intake/leftdistance", Devices.intakeArmMotor.getDistance());
+    NtHelper.setDouble ("/robot/intake/rightdistance", Devices.intakeArmFollowerMotor.getDistance());
 
+    NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
+    NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
+  }
 }

@@ -12,16 +12,16 @@ public class Intake {
     private double desiredPosition;
 
     private double topPosition = 0;
-    private double bottomPosition = -15;
-    private double rollerSpeed = 0.5;
+    private double bottomPosition = -10.5;
+    private double rollerSpeed = 0.25;
 
     public Intake(){
         armMotor = Devices.intakeArmMotor;
         armMotorLeft = Devices.intakeArmFollowerMotor;
         rollerMotor = Devices.intakeRollerMotor;
       //  intakeUp();
-        armMotor.resetEncoder(0);
-        armMotorLeft.resetEncoder(0);
+        zero();
+        stop();
     }
 
     //sets position to current minus something
@@ -60,14 +60,26 @@ public class Intake {
     }
 
     //sets setpoint to current postion
-    public void halt(){
+    public void holdInPlace(){
         rollerMotor.setPercent(0);
         desiredPosition = armMotor.getEncoderCount();
         armMotor.setDistance(desiredPosition);
         armMotorLeft.setDistance(desiredPosition);
     }
 
+    public void stop() {
+        rollerMotor.setPercent(0);
+        armMotor.setPercent(0);
+        armMotorLeft.setPercent(0);
+    }
+
     public void reverse(){
         rollerMotor.setPercent(-rollerSpeed);
+    }
+
+    public void zero(){
+        armMotor.resetEncoder(0.00000);
+        armMotorLeft.resetEncoder(0.0000);
+        //0000000000000000000000000000000.0
     }
 }

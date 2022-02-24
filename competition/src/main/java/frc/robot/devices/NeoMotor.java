@@ -30,6 +30,10 @@ public class NeoMotor implements IMotor {
        setPercent(0);
     }
 
+    public void setIZone(double zone) {
+        pidController.setIZone(zone);
+    }
+
     public void setSpeed(double speed){
         motorValue = speed / encoder.getVelocityConversionFactor();
         motorControlType = CANSparkMax.ControlType.kVelocity;
