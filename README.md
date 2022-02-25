@@ -15,6 +15,8 @@ NavX: https://www.kauailabs.com/public_files/navx-mxp/navx-mxp.zip
 
 PhotonVision: https://docs.photonvision.org/en/latest/docs/programming/photonlib/adding-vendordep.html
 
+PathPlannerLib: https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Installing
+
 ## Documentation
 
 WPILib Docs: https://docs.wpilib.org/en/stable/index.html
@@ -28,3 +30,5 @@ Machine learning with Axon (could be useful for doing more advanced image proces
 Path planning (used for our autonomous modes): https://docs.wpilib.org/en/stable/docs/software/pathplanning/index.html
 
 Advanced Controls (PID, State-Space, filters, etc): https://docs.wpilib.org/en/stable/docs/software/advanced-controls/index.html
+
+PathPlannerLib usage: https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage
