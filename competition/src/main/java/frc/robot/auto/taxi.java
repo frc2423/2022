@@ -31,6 +31,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.subsystem.Intake;
 
 public class taxi extends StateMachine {
+    //Values subject to change upon completed trajectory integration
     Trajectory cabTrajectory = TrajectoryGenerator.generateTrajectory(
         //the line is going along the x axis
         new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
@@ -47,7 +48,6 @@ public class taxi extends StateMachine {
     }
     @InitState(name = "Taxicab")
     public void taxicabinit(){
-        follower.setTrajectory("CabRoute");
         follower.startFollowing();
     }
 

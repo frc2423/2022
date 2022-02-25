@@ -24,6 +24,9 @@ import frc.robot.util.TrajectoryFollower;
 import frc.robot.util.TrajectoryFollower;
 
 import java.util.List;
+
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -37,14 +40,9 @@ import frc.robot.subsystem.Intake;
 
 public class shootTwoTaxi extends StateMachine{
 
-    private Intake intake = new Intake ();
-    Trajectory CargoAdvanceTrajectory = TrajectoryGenerator.generateTrajectory(
-            //the line is going along the x axis
-            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-            List.of(),
-            new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
-            new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
-        );
+    private Intake intake = new Intake();
+    //TODO: Values subject to change upon completed trajcetory integration
+    Trajectory CargoAdvanceTrajectory = PathPlanner.loadPath("CargoAdvance3", constants.maxSpeedo, constants.maxAccel);
     Trajectory ShooterAdvanceTrajectory = TrajectoryGenerator.generateTrajectory(
         //the line is going along the x axis
         new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
@@ -73,7 +71,6 @@ public class shootTwoTaxi extends StateMachine{
 
     @InitState(name = "CargoAdvance")
     public void CargoAdvanceInit (){
-        follower.setTrajectory("CargoAdvance");
         follower.resetPosition();
     }
 

@@ -23,7 +23,7 @@ public class SimpleAuto extends StateMachine {
     
     public SimpleAuto() {
         super("shooter");
-
+        //TODO: Implement shooter follow-through and trajectory values
         line = TrajectoryGenerator.generateTrajectory(
             //the line is going along the x axis
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
@@ -33,6 +33,11 @@ public class SimpleAuto extends StateMachine {
         );
         follower.addTrajectory("line", line);
         follower.setTrajectory("line");
+    }
+
+    @InitState(name = "shooter")
+    public void runShooterInit(){
+        //Shooter initialization
     }
 
     @RunState(name = "shooter")
