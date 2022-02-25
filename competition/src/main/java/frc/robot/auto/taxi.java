@@ -54,6 +54,5 @@ public class taxi extends StateMachine {
     @RunState(name = "Taxicab")
     public void taxicabrun(){
         follower.follow();
-            
     }
 }

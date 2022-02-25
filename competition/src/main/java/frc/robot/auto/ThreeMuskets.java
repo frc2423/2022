@@ -54,6 +54,7 @@ public class ThreeMuskets extends StateMachine{
     public void firstShotRun(){
         //Shoot primary initialization cargo
         if (timer.get() > 4){
+            timer.stop();
             setState ("CargoAdvance");
         }
         //Seconds subject to change upon testing
@@ -85,7 +86,8 @@ public class ThreeMuskets extends StateMachine{
     public void shootTwoRun(){
         //Shoot both cargos
         if (timer.get() > 4){
-           setState ("TaxiBack");
+            timer.stop();
+            setState ("TaxiBack");
         }
         //Seconds subject to change upon testing
     }

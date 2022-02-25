@@ -49,6 +49,14 @@ public class Shooter {
         kickerMotor.setPercent(0);
     }
 
+    public void resetShooter(){
+        timer.stop();
+        state = "start";
+        beltStop();
+        kickerStop();
+        shootStop();
+    }
+
     public void shootOne() {
         switch (state) {
             case "start": 
@@ -74,8 +82,8 @@ public class Shooter {
                 break;
 
         }
-  
     }
+
     public void shootTwo() {
         switch (state) {
             case "start": 

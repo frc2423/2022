@@ -70,9 +70,11 @@ public class TrajectoryFollower {
         double[] motorValues = drivetrain.getMotorValues(refChassisSpeeds);
         Devices.leftMotor.setPercent(motorValues[0]);
         Devices.rightMotor.setPercent(motorValues[1]);
+        if (isDone()) timer.stop();
     }
 
     public void resetPosition (){
+        timer.stop();
         Devices.leftMotor.resetEncoder(0);
         Devices.rightMotor.resetEncoder(0);
         Devices.gyro.reset();
