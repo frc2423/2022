@@ -3,6 +3,7 @@ package frc.robot.subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Devices;
 import frc.robot.devices.NeoMotor;
+import frc.robot.util.NtHelper;
 
 
 public class Intake {
@@ -16,7 +17,8 @@ public class Intake {
     private DigitalInput rightLimit;
 
     private double topPosition = 0;
-    private double bottomPosition = -10.5;
+    private double bottomPosition = -11.5;
+    private double belowPosition = -13.5;
     private double rollerSpeed = 0.25;
 
     private String state = "Stop";
@@ -62,7 +64,8 @@ public class Intake {
     //sets position to its down position
       public void intakeDown(){
         rollerMotor.setPercent(rollerSpeed);
-        desiredPosition = bottomPosition;
+        //the below position is just making a posistion past the botton position so we can actually intake cargo
+        desiredPosition = (Devices.controller.getLeftBumper()) ? belowPosition : bottomPosition;
         armMotor.setDistance(desiredPosition);
         armMotorLeft.setDistance(desiredPosition);
     }
@@ -98,22 +101,32 @@ public class Intake {
             armMotor.resetEncoder(0);
         } 
         else {
-           armMotor.setPercent(-0.1);
+           armMotor.setPercent(0.1);
         }
 
         if (!leftLimit.get()){
             armMotorLeft.setPercent(0);
-            armMotorLeft.setPercent(0);
+            armMotorLeft.resetEncoder(0);
         }
         else {
-            armMotorLeft.setPercent(-0.1);
-
+            armMotorLeft.setPercent(0.1);
         }
 
-        return !rightLimit.get() && !leftLimit.get();
+        if (!rightLimit.get() || !leftLimit.get()){ //"||"just for testing because there is the bar in the way
+            armMotor.resetEncoder(0);
+            armMotorLeft.resetEncoder(0);
+            return true;
+        } 
+        else {
+            return false;
+        }
     }
 
     public void runIntake(){
+        NtHelper.setString("/robot/intake/state", state);
+        NtHelper.setBoolean("/robot/intake/leftLimit", leftLimit.get());
+        NtHelper.setBoolean("/robot/intake/rightLimit", rightLimit.get());
+
         switch (state){
             case "Stop":
                 stop();
@@ -134,14 +147,17 @@ public class Intake {
                 break;
             case "Up":
                 intakeUp();
-                if (leftLimit.get()){
+                if (!leftLimit.get()){
                     armMotorLeft.setPercent(0);
                 }
-                if (rightLimit.get()){
+                if (!rightLimit.get()){
                     armMotor.setPercent(0);
                 }
-                if (leftLimit.get() && rightLimit.get()){
+                if (!leftLimit.get() || !rightLimit.get()){ //"||"just for testing because there is the bar in the way
                     state = "Stop";
+                }
+                if (Devices.controller.getAButton()){
+                    state = "Calibrate"; //goes down once calibrated
                 }
                 break;
         }
