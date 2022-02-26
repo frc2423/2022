@@ -126,6 +126,7 @@ public class shootTwoTaxi extends StateMachine{
     public void TaxiBackInit (){
         follower.setTrajectory ("CargoAdvance");
         follower.resetPosition();
+        timer.stop();
     }
 
     @RunState(name = "TaxiBack")

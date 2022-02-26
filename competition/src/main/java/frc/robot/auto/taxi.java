@@ -38,15 +38,33 @@ public class taxi extends StateMachine {
     Trajectory cabTrajectory = PathPlanner.loadPath("TaxiTaxi", constants.maxSpeedo, constants.maxAccel);
     TrajectoryFollower follower = new TrajectoryFollower();
 
+    private Timer timer = new Timer();
+    private double timerDelay = 0;
+
     public taxi(){
-        super("Taxicab");
+        super("Wait");
         follower.addTrajectory("CabRoute", cabTrajectory);
         follower.setTrajectory("CabRoute");
         NtHelper.setString("/robot/auto/name", "taxi1");
     }
+
+    @InitState(name = "Wait")
+    public void waitInit(){
+        timer.start();
+        timerDelay = NtHelper.getDouble("/robot/auto/delay", 0);
+    }
+
+    @RunState(name = "Wait")
+    public void waitRun(){
+        if (timer.get() > timerDelay){
+            setState("Taxicab");
+        }
+    }
+
     @InitState(name = "Taxicab")
     public void taxicabinit(){
         follower.startFollowing();
+        timer.stop();
     }
 
     @RunState(name = "Taxicab")
