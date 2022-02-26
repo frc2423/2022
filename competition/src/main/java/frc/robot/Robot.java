@@ -30,7 +30,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 public class Robot extends TimedRobot {
 
   private Trajectory m_trajectory;
-  private Timer timer;
   private Drivetrain drivetrain = new Drivetrain(
     constants.trackWidth, 
     constants.Ks, 
@@ -45,45 +44,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     intake.zero();
     intake.stop();
-    Devices.init();
-
-    Trajectory line = TrajectoryGenerator.generateTrajectory(
-      //the line is going along the x axis
-      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-      List.of(),
-      new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
-      new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
-    );
-
-    Trajectory parabola = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-      List.of(new Translation2d(Units.feetToMeters(6),Units.feetToMeters(4))),
-      new Pose2d(Units.feetToMeters(16), Units.feetToMeters(1), Rotation2d.fromDegrees(0)),
-      new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
-    );
-
-    Trajectory curvy = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-      List.of(
-        new Translation2d(Units.feetToMeters(6),Units.feetToMeters(4)),
-        new Translation2d(Units.feetToMeters(16),Units.feetToMeters(1)),
-        new Translation2d(Units.feetToMeters(27),Units.feetToMeters(1)),
-        new Translation2d(Units.feetToMeters(31),Units.feetToMeters(0))
-      ),
-      new Pose2d(Units.feetToMeters(32), Units.feetToMeters(10), Rotation2d.fromDegrees(90)),
-      new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
-    );
-
-
-    m_trajectory = curvy;
-    // Create and push Field2d to SmartDashboard.
-    m_field = new Field2d();
-    SmartDashboard.putData(m_field);
-
-    // Push the trajectory to Field2d.
-    m_field.getObject("traj").setTrajectory(m_trajectory);
-      
-
   }
 
   @Override
@@ -94,49 +54,20 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     intake.zero();
     intake.stop();
-    // timer = new Timer();
-    // timer.start();
-    // Devices.leftMotor.resetEncoder(0);
-    // Devices.rightMotor.resetEncoder(0);
-    // Devices.gyro.reset();
-    // drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
-    // m_field.setRobotPose(drivetrain.getPose());
-
   }
 
   @Override
   public void autonomousPeriodic() {
     auto.run();
-    // var currTime = timer.get();
-    // var desiredPose = m_trajectory.sample(currTime);
-    // drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
-    // m_field.setRobotPose(drivetrain.getPose());
-    // ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(drivetrain.getPose(), desiredPose);
-    // double[] motorValues = drivetrain.getMotorValues(refChassisSpeeds);
-    // Devices.leftMotor.setPercent(motorValues[0]);
-    // Devices.rightMotor.setPercent(motorValues[1]);
-    
-    // System.out.println("Desired" + desiredPose + " Current:" + drivetrain.getPose());
-    // NtHelper.setDouble("/robot/Desired/x", desiredPose.poseMeters.getX());
-    // NtHelper.setDouble("/robot/Desired/y", desiredPose.poseMeters.getY());
-    // NtHelper.setDouble("/robot/Desired/angle", desiredPose.poseMeters.getRotation().getDegrees());
-    // NtHelper.setDouble("/robot/Current/x", drivetrain.getPose().getX());
-    // NtHelper.setDouble("/robot/Current/y", drivetrain.getPose().getY());
-    // NtHelper.setDouble("/robot/Current/angle", drivetrain.getPose().getRotation().getDegrees()); 
-
   }
-
-
-  
-
 
   @Override
   public void teleopInit() {
     intake.zero();
     intake.stop();
     Devices.leftMotor.resetEncoder(0);
-        Devices.rightMotor.resetEncoder(0);
-        Devices.gyro.reset();
+    Devices.rightMotor.resetEncoder(0);
+    Devices.gyro.reset();
     drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
     Targeting.init();
 
@@ -164,21 +95,14 @@ public class Robot extends TimedRobot {
 
     //Targeting Code
     // double rotationSpeed = 0;
-
     // if (Devices.controller.getAButton()){
     //   rotationSpeed = Targeting.calculate();
     // }
-
     // double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
     // double leftSpeed = arcadeSpeeds[0];
     // double rightSpeed = arcadeSpeeds[1];
     // Devices.leftMotor.setPercent(leftSpeed);
     // Devices.rightMotor.setPercent(rightSpeed);
-
-    // NtHelper.setDouble("/robot/aiming/leftSpeed", leftSpeed); 
-    // NtHelper.setDouble("/robot/aiming/rightSpeed", rightSpeed);
-
-    // NtHelper.setBoolean("/robot/aiming/Button", Devices.controller.getAButton()); 
 
     //runs intake
     intake.runIntake();
@@ -206,5 +130,14 @@ public class Robot extends TimedRobot {
 
     NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
     NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
+  }
+
+  public void telementryAuto(){
+    // NtHelper.setDouble("/robot/Desired/x", desiredPose.poseMeters.getX());
+    // NtHelper.setDouble("/robot/Desired/y", desiredPose.poseMeters.getY());
+    // NtHelper.setDouble("/robot/Desired/angle", desiredPose.poseMeters.getRotation().getDegrees());
+    // NtHelper.setDouble("/robot/Current/x", drivetrain.getPose().getX());
+    // NtHelper.setDouble("/robot/Current/y", drivetrain.getPose().getY());
+    // NtHelper.setDouble("/robot/Current/angle", drivetrain.getPose().getRotation().getDegrees()); 
   }
 }

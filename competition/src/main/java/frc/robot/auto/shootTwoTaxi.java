@@ -31,6 +31,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.subsystem.Intake;
+import frc.robot.subsystem.Shooter;
 
 /* Move towards cargo in straight line
  * Intake cargo
@@ -43,23 +44,12 @@ public class shootTwoTaxi extends StateMachine{
     private Intake intake = new Intake();
     //TODO: Values subject to change upon completed trajcetory integration
     Trajectory CargoAdvanceTrajectory = PathPlanner.loadPath("CargoAdvance3", constants.maxSpeedo, constants.maxAccel);
-    Trajectory ShooterAdvanceTrajectory = TrajectoryGenerator.generateTrajectory(
-        //the line is going along the x axis
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        List.of(),
-        new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
-        new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
-    );
-    Trajectory TaxiBackTrajectory = TrajectoryGenerator.generateTrajectory(
-        //the line is going along the x axis
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        List.of(),
-        new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
-        new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
-    );
+    Trajectory ShooterAdvanceTrajectory = PathPlanner.loadPath("ShooterAdvance3", constants.maxSpeedo, constants.maxAccel);
+    Trajectory TaxiBackTrajectory = PathPlanner.loadPath("Taxi3", constants.maxSpeedo, constants.maxAccel);
     private TrajectoryFollower follower = new TrajectoryFollower();
     private Timer timer = new Timer();
 
+    private Shooter shooter = new Shooter();
 
     public shootTwoTaxi() {
         super("CargoAdvance");
@@ -67,6 +57,7 @@ public class shootTwoTaxi extends StateMachine{
         follower.addTrajectory("ShooterAdvance", ShooterAdvanceTrajectory);
         follower.addTrajectory("TaxiBack", TaxiBackTrajectory);
         follower.setTrajectory("CargoAdvance");
+        NtHelper.setString("/robot/auto/name", "shootTwoTaxi3");
     }
 
     @InitState(name = "CargoAdvance")
@@ -123,7 +114,7 @@ public class shootTwoTaxi extends StateMachine{
 
     @RunState(name = "ShootTwo")
     public void ShootTwo (){
-        //Shoot both cargos
+        //shooter.shootTwo;
         if (timer.get() > 4){
             setState ("TaxiBack");
         }

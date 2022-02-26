@@ -25,6 +25,9 @@ import frc.robot.util.TrajectoryFollower;
 import frc.robot.util.TrajectoryFollower;
 
 import java.util.List;
+
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -32,19 +35,14 @@ import frc.robot.subsystem.Intake;
 
 public class taxi extends StateMachine {
     //Values subject to change upon completed trajectory integration
-    Trajectory cabTrajectory = TrajectoryGenerator.generateTrajectory(
-        //the line is going along the x axis
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        List.of(),
-        new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
-        new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
-    );
+    Trajectory cabTrajectory = PathPlanner.loadPath("TaxiTaxi", constants.maxSpeedo, constants.maxAccel);
     TrajectoryFollower follower = new TrajectoryFollower();
 
     public taxi(){
         super("Taxicab");
         follower.addTrajectory("CabRoute", cabTrajectory);
         follower.setTrajectory("CabRoute");
+        NtHelper.setString("/robot/auto/name", "taxi1");
     }
     @InitState(name = "Taxicab")
     public void taxicabinit(){

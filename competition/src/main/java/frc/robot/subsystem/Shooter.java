@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
 
 import frc.robot.devices.NeoMotor;
+import frc.robot.util.NtHelper;
 
 public class Shooter {
     private NeoMotor beltMotor;
@@ -115,6 +116,14 @@ public class Shooter {
     public void shootStop() {
         shooterMotor.setPercent(0);
     }
+
+    public void shooterInfo(){
+        NtHelper.setString("/robot/shooter/state", state);
+        NtHelper.setDouble("/robot/shooter/beltspeed", beltMotor.getSpeed());
+        NtHelper.setDouble("/robot/shooter/kickerspeed", kickerMotor.getSpeed());
+        NtHelper.setDouble("/robot/shooter/shooterspeed", shooterMotor.getSpeed());
+    }
+
 
 
 }

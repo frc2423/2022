@@ -4,11 +4,12 @@ import frc.robot.util.stateMachine.StateMachine;
 
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
-
+import frc.robot.util.NtHelper;
 import frc.robot.util.TrajectoryFollower;
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Intake;
+import frc.robot.subsystem.Shooter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -17,30 +18,24 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.List;
+
+import com.pathplanner.lib.PathPlanner;
 public class ThreeMuskets extends StateMachine{
+    //private Shooter shooter = new Shooter();
 
     private Intake intake = new Intake();
-    Trajectory IntakeAimTrajectory = TrajectoryGenerator.generateTrajectory(
-        //the line is going along the x axis
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        List.of(),
-        new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
-        new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
-    );
-    Trajectory TaxiTrajectory = TrajectoryGenerator.generateTrajectory(
-        //the line is going along the x axis
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        List.of(),
-        new Pose2d(Units.feetToMeters(10), 0, Rotation2d.fromDegrees(0)),
-        new TrajectoryConfig(Units.feetToMeters(constants.maxSpeedo), Units.feetToMeters(constants.maxAccel))
-    );
+    Trajectory IntakeAimTrajectory = PathPlanner.loadPath("IntakeAim4", constants.maxSpeedo, constants.maxAccel);
+    Trajectory TaxiTrajectory = PathPlanner.loadPath("Taxi4", constants.maxSpeedo, constants.maxAccel);
 
     private TrajectoryFollower follower = new TrajectoryFollower();
     private Timer timer = new Timer();
 
     public ThreeMuskets() {
         super("FirstShot");
-        //
+        NtHelper.setString("/robot/auto/name", "threeMuskets4");
+        follower.addTrajectory("IntakeAim4", IntakeAimTrajectory);
+        follower.addTrajectory("Taxi4", TaxiTrajectory);
+        follower.setTrajectory("IntakeAim4");
     }
 
     @InitState(name = "FirstShot")
@@ -52,7 +47,7 @@ public class ThreeMuskets extends StateMachine{
 
     @RunState(name = "FirstShot")
     public void firstShotRun(){
-        //Shoot primary initialization cargo
+        //shooter.shootOne();
         if (timer.get() > 4){
             timer.stop();
             setState ("CargoAdvance");
@@ -62,7 +57,6 @@ public class ThreeMuskets extends StateMachine{
 
     @InitState(name = "CargoAdvance")
     public void cargoAdvanceInit(){
-        follower.setTrajectory("IntakeAimTrajectory");
         follower.resetPosition();
         intake.intakeDown();
     }
@@ -84,7 +78,7 @@ public class ThreeMuskets extends StateMachine{
 
     @RunState(name = "ShootTwo")
     public void shootTwoRun(){
-        //Shoot both cargos
+        //shooter.shootTwo();
         if (timer.get() > 4){
             timer.stop();
             setState ("TaxiBack");
@@ -94,7 +88,7 @@ public class ThreeMuskets extends StateMachine{
 
     @InitState (name = "TaxiBack")
     public void taxiBackInit(){
-        follower.setTrajectory("TaxiTrajectory");
+        follower.setTrajectory("Taxi4");
         follower.resetPosition();
     }
 
