@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
@@ -12,24 +11,14 @@ import frc.robot.auto.shootTwoTaxi;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Drivetrain;
 import frc.robot.subsystem.Intake;
-import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.util.Targeting;
-import java.util.List;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
 public class Robot extends TimedRobot {
 
-  private Trajectory m_trajectory;
   private Drivetrain drivetrain = new Drivetrain(
     constants.trackWidth, 
     constants.Ks, 

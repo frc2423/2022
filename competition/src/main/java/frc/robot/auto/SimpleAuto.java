@@ -9,14 +9,7 @@ import frc.robot.util.TrajectoryFollower;
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Shooter;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-
-import java.util.List;
 
 import com.pathplanner.lib.PathPlanner;
 

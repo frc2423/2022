@@ -9,12 +9,7 @@ import frc.robot.util.TrajectoryFollower;
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Intake;
-import frc.robot.subsystem.Shooter;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.util.Units;
+
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.List;
@@ -90,6 +85,7 @@ public class ThreeMuskets extends StateMachine{
     public void taxiBackInit(){
         follower.setTrajectory("Taxi4");
         follower.resetPosition();
+        timer.stop();
     }
 
     @RunState (name = "TaxiBack")

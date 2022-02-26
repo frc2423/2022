@@ -11,12 +11,6 @@ import frc.robot.subsystem.Intake;
 import frc.robot.subsystem.Shooter;
 
 import com.pathplanner.lib.PathPlanner;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 
 public class ThreeMuskets5 extends StateMachine{
