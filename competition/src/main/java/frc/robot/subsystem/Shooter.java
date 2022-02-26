@@ -72,7 +72,7 @@ public class Shooter {
                 beltForward();
                 kicker();
                 revUp();
-                if (timer.get() > 2) state= "shoot";
+                if (timer.get() > 2) state= "stop";
                 break;
             case "stop":
                 beltStop();

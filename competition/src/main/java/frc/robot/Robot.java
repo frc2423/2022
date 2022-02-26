@@ -181,27 +181,10 @@ public class Robot extends TimedRobot {
     // NtHelper.setBoolean("/robot/aiming/Button", Devices.controller.getAButton()); 
 
     //runs intake
-    if (Devices.controller.getAButton()){
-      intake.intakeDown();
-    }
-    else if (Devices.controller.getYButton()){
-      intake.intakeUp();
-    }
-    else if (Devices.controller.getXButton()){
-      intake.holdInPlace();
-    }
+    intake.runIntake();
 
     telemetry();
 
-      // if(Devices.controller.getAButton()) {
-      //   Devices.intakeArmMotor.setPercent(.1);
-      //   Devices.intakeArmFollowerMotor.setPercent(.1);
-
-      // } else {
-      //   Devices.intakeArmMotor.setPercent(0);
-      //   Devices.intakeArmFollowerMotor.setPercent(0);
-
-      // }
   }
 
 

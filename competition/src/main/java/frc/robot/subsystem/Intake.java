@@ -1,5 +1,6 @@
 package frc.robot.subsystem;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Devices;
 import frc.robot.devices.NeoMotor;
 
@@ -11,14 +12,21 @@ public class Intake {
     private NeoMotor rollerMotor;
     private double desiredPosition;
 
+    private DigitalInput leftLimit;
+    private DigitalInput rightLimit;
+
     private double topPosition = 0;
     private double bottomPosition = -10.5;
     private double rollerSpeed = 0.25;
+
+    private String state = "Stop";
 
     public Intake(){
         armMotor = Devices.intakeArmMotor;
         armMotorLeft = Devices.intakeArmFollowerMotor;
         rollerMotor = Devices.intakeRollerMotor;
+        leftLimit = Devices.leftLimit;
+        rightLimit = Devices.rightLimit;
       //  intakeUp();
         zero();
         stop();
@@ -82,4 +90,63 @@ public class Intake {
         armMotorLeft.resetEncoder(0.0000);
         //0000000000000000000000000000000.0
     }
+
+    public boolean calibrate(){
+
+        if (!rightLimit.get()){
+            armMotor.setPercent(0);
+            armMotor.resetEncoder(0);
+        } 
+        else {
+           armMotor.setPercent(-0.1);
+        }
+
+        if (!leftLimit.get()){
+            armMotorLeft.setPercent(0);
+            armMotorLeft.setPercent(0);
+        }
+        else {
+            armMotorLeft.setPercent(-0.1);
+
+        }
+
+        return !rightLimit.get() && !leftLimit.get();
+    }
+
+    public void runIntake(){
+        switch (state){
+            case "Stop":
+                stop();
+                if (Devices.controller.getAButton()){
+                    state = "Calibrate";
+                }
+                break;
+            case "Calibrate":
+                if (calibrate()){
+                    state = "Down";
+                }
+                break;
+            case "Down":
+                intakeDown();
+                if (Devices.controller.getYButton()){
+                    state = "Up";
+                }
+                break;
+            case "Up":
+                intakeUp();
+                if (leftLimit.get()){
+                    armMotorLeft.setPercent(0);
+                }
+                if (rightLimit.get()){
+                    armMotor.setPercent(0);
+                }
+                if (leftLimit.get() && rightLimit.get()){
+                    state = "Stop";
+                }
+                break;
+        }
+    }
+
+
+    
 }

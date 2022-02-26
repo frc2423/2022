@@ -1,12 +1,13 @@
 package frc.robot;
 
 import frc.robot.devices.NeoMotor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.util.Units;
 import frc.robot.devices.*;
 
 public class Devices {
-    static XboxController controller = new XboxController(0);
+    public static XboxController controller = new XboxController(0);
     public static NeoMotor leftMotor = new NeoMotor(1); // front left
     private static NeoMotor leftFollowerMotor = new NeoMotor (2); // back left
     public static NeoMotor rightMotor = new NeoMotor(3); // front right
@@ -20,6 +21,9 @@ public class Devices {
     public static NeoMotor beltMotor = new NeoMotor(8);
     public static NeoMotor kickerMotor = new NeoMotor(9);
     public static NeoMotor shooterMotor = new NeoMotor(10);
+
+    public static DigitalInput leftLimit = new DigitalInput(1);
+    public static DigitalInput rightLimit = new DigitalInput(2);
 
     static void init() {
         rightMotor.setInverted(true);
