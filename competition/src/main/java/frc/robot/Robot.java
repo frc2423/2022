@@ -2,6 +2,11 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+// belt motor id = 8
+// kicker id = 9
+// shooter motor = 10
+
+
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -11,11 +16,13 @@ import frc.robot.auto.shootTwoTaxi;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Drivetrain;
 import frc.robot.subsystem.Intake;
+import frc.robot.subsystem.Shooter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.util.Targeting;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+
 
 public class Robot extends TimedRobot {
 
@@ -28,6 +35,7 @@ public class Robot extends TimedRobot {
   private Field2d m_field;
   private shootTwoTaxi auto = new shootTwoTaxi();
   private Intake intake = new Intake ();
+  private Shooter shooter = new Shooter ();
 
   @Override
   public void robotInit() {
@@ -83,15 +91,29 @@ public class Robot extends TimedRobot {
 
 
     //Targeting Code
-    // double rotationSpeed = 0;
-    // if (Devices.controller.getAButton()){
-    //   rotationSpeed = Targeting.calculate();
-    // }
-    // double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
-    // double leftSpeed = arcadeSpeeds[0];
-    // double rightSpeed = arcadeSpeeds[1];
-    // Devices.leftMotor.setPercent(leftSpeed);
-    // Devices.rightMotor.setPercent(rightSpeed);
+    double rotationSpeed = 0;
+    if (Devices.controller.getLeftTriggerAxis() > 0.2 || Devices.controller.getRawAxis(0) < -0.2){
+      rotationSpeed = Targeting.calculate();
+
+      arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
+      leftSpeed = arcadeSpeeds[0];
+      rightSpeed = arcadeSpeeds[1];
+      Devices.leftMotor.setPercent(leftSpeed);
+      Devices.rightMotor.setPercent(rightSpeed); 
+    }
+
+    // Shooting code
+    if (Devices.controller.getRightTriggerAxis() > 0.2 || Devices.controller.getRawAxis(0) > 0.2){
+      shooter.shootOne();
+    }
+
+    // Testing! please delete
+   // double KeyToJoystick = Devices.controller.getRawAxis(0);
+   // System.out.println(KeyToJoystick);
+
+    
+
+   
 
     //runs intake
     intake.runIntake();

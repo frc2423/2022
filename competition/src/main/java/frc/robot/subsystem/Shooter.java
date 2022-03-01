@@ -16,7 +16,7 @@ public class Shooter {
     private double beltSpeed = 0.2;
     private double kickerSpeed = 0.2;
     private double shooterSpeed = 0.8;
-    //Motor values subject to change followin implementation and testing
+    //Motor values subject to change following implementation and testing
 
     private String state = "start";
 
@@ -59,6 +59,7 @@ public class Shooter {
     }
 
     public void shootOne() {
+        System.out.println(state);
         switch (state) {
             case "start": 
                 timer.reset();
@@ -84,6 +85,7 @@ public class Shooter {
 
         }
     }
+    //Comment out breaks? *Ask Alexandra
 
     public void shootTwo() {
         switch (state) {
