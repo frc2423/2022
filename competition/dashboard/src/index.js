@@ -1,6 +1,7 @@
 // https://svgjs.dev/docs/3.0/getting-started/
 import { SVG, G } from "@svgdotjs/svg.js";
 import imagePath from "./oie_transparent.png";
+import intakeTopArm from './images/intake_top_arm.png';
 
 const draw = SVG().addTo("body").size(500, 700);
 const group = draw.group().attr({
@@ -19,7 +20,7 @@ group.add(blueRect);
 
 draw.image(imagePath).size(116, 75).translate(0, 100);
 const upArm = draw
-  .image("src/images/intake_top_arm.png")
+  .image(intakeTopArm)
   .size(120, 100)
   // .translate(189.5, 171.5)
   .attr({
