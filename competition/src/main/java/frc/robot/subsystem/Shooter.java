@@ -5,25 +5,39 @@ import frc.robot.Devices;
 
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.NtHelper;
+import frc.robot.util.stateMachine.StateMachine;
+import frc.robot.util.stateMachine.InitState;
+import frc.robot.util.stateMachine.RunState;
 
-public class Shooter {
+public class Shooter extends StateMachine{
     private NeoMotor beltMotor;
     private NeoMotor kickerMotor;
     private NeoMotor shooterMotor;
 
     private Timer timer = new Timer();
 
-    private double beltSpeed = 0.2;
-    private double kickerSpeed = 0.2;
-    private double shooterSpeed = 0.8;
+    private double beltSpeed = -0.2;
+    private double kickerSpeed = -0.2;
+    private double shooterSpeed = -0.8;
+
+    private double shootDuration;
+    private double revDuration;
     //Motor values subject to change following implementation and testing
 
-    private String state = "start";
 
-    public Shooter(){
+    public Shooter(double revDuration, double shootDuration){
+        super("shooter");
         beltMotor = Devices.beltMotor;
         kickerMotor = Devices.kickerMotor;
         shooterMotor = Devices.shooterMotor;
+        this.shootDuration = shootDuration;
+        this.revDuration = revDuration;
+        this.setState("stop");
+        this.shooterInfo();
+    }
+
+    public String getState() {
+        return super.state;
     }
 
     public void setShooterSpeed(double speed){
@@ -38,10 +52,6 @@ public class Shooter {
         beltMotor.setPercent(0);
     }
 
-    public void revUp () {
-        shooterMotor.setSpeed(shooterSpeed);
-    }
-
     public void kicker() {
         kickerMotor.setPercent(kickerSpeed);
     }
@@ -50,74 +60,68 @@ public class Shooter {
         kickerMotor.setPercent(0);
     }
 
-    public void resetShooter(){
-        timer.stop();
-        state = "start";
-        beltStop();
-        kickerStop();
-        shootStop();
-    }
-
-    public void shootOne() {
-        System.out.println(state);
-        switch (state) {
-            case "start": 
-                timer.reset();
-                timer.start();
-                state = "rev";
-                break;
-            case "rev":
-                revUp();
-                if (timer.get() > 1) state= "shoot";
-                break;
-            case "shoot":
-                beltForward();
-                kicker();
-                revUp();
-                if (timer.get() > 2) state= "stop";
-                break;
-            case "stop":
-                beltStop();
-                kickerStop();
-                shootStop();
-                timer.stop();
-                break;
-
-        }
-    }
-    //Comment out breaks? *Ask Alexandra
-
-    public void shootTwo() {
-        switch (state) {
-            case "start": 
-                timer.reset();
-                timer.start();
-                state = "rev";
-                break;
-            case "rev":
-                revUp();
-                if (timer.get() > 1) state= "shoot";
-                break;
-            case "shoot":
-                beltForward();
-                kicker();
-                revUp();
-                if (timer.get() > 2) state= "shoot";
-                break;
-            case "stop":
-                beltStop();
-                kickerStop();
-                shootStop();
-                timer.stop();
-                break;
-
-        }
-  
-    }
-
-    public void shootStop() {
+    public void shooterStop() {
         shooterMotor.setPercent(0);
     }
+
+
+    @InitState(name="stop") 
+    public void runStoppedInit() {
+        // initialize stopped (runs once)
+        beltStop();
+        kickerStop();
+        shooterStop();
+        timer.stop();
+    }
+
+    @RunState(name="stop") 
+    public void runStopped() {
+        // run stopped (runs a bunch)
+    }
+
+    @InitState(name="start")
+    public void runStartInit() {
+        // initialize shooter
+        timer.reset();
+        timer.start();
+      
+        //state = "start";
+        
+    }
+
+    @RunState(name="start")
+    public void runStart() {
+        // start shooter sequence
+        this.setState("rev");
+    }
+
+    @InitState(name="rev")
+    public void runRevInit() {
+        // initialize rev
+        shooterMotor.setPercent(shooterSpeed);
+    }
+
+    @RunState(name="rev") 
+    public void runRev() {
+        // run rev
+        if (timer.get() > this.revDuration) this.setState("shoot");
+
+    }
+
+    @InitState(name="shoot")
+    public void runShootInit() {
+        beltForward();
+        kicker();
+        //revUp();
+        // initialize shooting
+    }
+
+    @RunState(name="shoot")
+    public void runShoot() {
+        if (timer.get() > this.shootDuration + this.revDuration) this.setState("stop");
+        // run shooting
+    }
+
 
     public void shooterInfo(){
         NtHelper.setString("/robot/shooter/state", state);

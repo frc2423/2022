@@ -8,7 +8,7 @@ public class StateMachine {
 
   private HashMap<String, Method> initStates;
   private HashMap<String, Method> runStates;
-  private String state = "";
+  protected String state = "";
 
   public StateMachine(String defaultState) {
     initStates = new HashMap<String, Method>();

@@ -19,8 +19,8 @@ public class Devices {
     public static Gyro gyro = new Gyro();
 
     public static NeoMotor beltMotor = new NeoMotor(8);
-    public static NeoMotor kickerMotor = new NeoMotor(9);
-    public static NeoMotor shooterMotor = new NeoMotor(10);
+    public static NeoMotor kickerMotor = new NeoMotor(10);
+    public static NeoMotor shooterMotor = new NeoMotor(9);
 
     public static DigitalInput leftLimit = new DigitalInput(1);
     public static DigitalInput rightLimit = new DigitalInput(2);

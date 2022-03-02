@@ -35,7 +35,8 @@ public class Robot extends TimedRobot {
   private Field2d m_field;
   private shootTwoTaxi auto = new shootTwoTaxi();
   private Intake intake = new Intake ();
-  private Shooter shooter = new Shooter ();
+  private Shooter teleopShooter = new Shooter (1, 2);
+  private Shooter autoShooter = new Shooter (1, 1);
 
   @Override
   public void robotInit() {
@@ -87,7 +88,7 @@ public class Robot extends TimedRobot {
 
     NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());
     drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
-    m_field.setRobotPose(drivetrain.getPose());
+    // m_field.setRobotPose(drivetrain.getPose());
 
 
     //Targeting Code
@@ -102,21 +103,17 @@ public class Robot extends TimedRobot {
       Devices.rightMotor.setPercent(rightSpeed); 
     }
 
+    teleopShooter.run();
     // Shooting code
     if (Devices.controller.getRightTriggerAxis() > 0.2 || Devices.controller.getRawAxis(0) > 0.2){
-      shooter.shootOne();
+      if (teleopShooter.getState() == "stop"){
+        teleopShooter.setState("start"); 
+      }  
     }
-
-    // Testing! please delete
-   // double KeyToJoystick = Devices.controller.getRawAxis(0);
-   // System.out.println(KeyToJoystick);
-
-    
-
-   
 
     //runs intake
     intake.runIntake();
+   
 
     telemetry();
 
