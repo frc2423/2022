@@ -3,12 +3,18 @@ const { defineConfig } = require('vite')
 
 module.exports = defineConfig({
   build: {
-    rollupOptions: {
-      output: {
-        entryFileNames: `assets/[name].js`,
-        chunkFileNames: `assets/[name].js`,
-        assetFileNames: `assets/[name].[ext]`
-      }
-    }
-  }
+    lib: {
+      entry: path.resolve(__dirname, 'src/index.js'),
+      formats: ['es'],
+      fileName: () => 'dashboard.js',
+    },
+    // rollupOptions: {
+    //   output: {
+    //     entryFileNames: `assets/[name].js`,
+    //     chunkFileNames: `assets/[name].js`,
+    //     assetFileNames: `assets/[name].[ext]`
+    //   }
+    // }
+  },
+  
 })

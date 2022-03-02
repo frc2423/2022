@@ -84,3 +84,13 @@ driveBase.attr({
 //   })
 //   .M(10, 80)
 //   .A(150, 75, 30, 0, 0, 150, 80);
+
+export default {
+    elements: {
+        'img': {
+            properties: {
+                src: { type: 'String' },
+            }
+        }
+    }
+}
