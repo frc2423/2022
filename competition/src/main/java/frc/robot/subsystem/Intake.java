@@ -20,7 +20,7 @@ public class Intake extends StateMachine{
     private DigitalInput leftLimit;
     private DigitalInput rightLimit;
 
-    private double topPosition = -1;
+    private double topPosition = 1;
     private double bottomPosition = -13.5;
     private double belowPosition = -13.5;
     private double rollerSpeed = 0.45;
