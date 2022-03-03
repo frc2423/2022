@@ -20,13 +20,13 @@ public class Intake extends StateMachine{
     private DigitalInput leftLimit;
     private DigitalInput rightLimit;
 
-    private double topPosition = .5;
+    private double topPosition = -1;
     private double bottomPosition = -13.5;
     private double belowPosition = -13.5;
     private double rollerSpeed = 0.45;
-    private double calibrateSped = 0.1;
+    private double calibrateSpeed = 0.1;
 
-    private String state = "Stop";
+    private String state = "Calibrate";
 
     public Intake(){
         super("Stop");
@@ -109,30 +109,23 @@ public class Intake extends StateMachine{
 
     public boolean calibrate(){
 
-        if (!rightLimit.get()){
-            armMotor.setPercent(0);
-            armMotor.resetEncoder(0);
-        } 
+        if (!isRightPressed()){
+            armMotor.setPercent(calibrateSpeed);
+        }
         else {
-           armMotor.setPercent(calibrateSped);
+           armMotor.setPercent(0);
+           armMotor.resetEncoder(0);
         }
 
-        if (!leftLimit.get()){
+        if (!isLeftPressed()){
+            armMotorLeft.setPercent(calibrateSpeed);
+        }
+        else {
             armMotorLeft.setPercent(0);
             armMotorLeft.resetEncoder(0);
         }
-        else {
-            armMotorLeft.setPercent(calibrateSped);
-        }
-
-        if (!rightLimit.get() || !leftLimit.get()){ //"||"just for testing because there is the bar in the way
-            armMotor.resetEncoder(0);
-            armMotorLeft.resetEncoder(0);
-            return true;
-        } 
-        else {
-            return false;
-        }
+        return (isRightPressed() && isLeftPressed());
+     
     }
 
     @InitState(name="Stop")
@@ -178,13 +171,21 @@ public class Intake extends StateMachine{
 
     }
 
+    public boolean isLeftPressed(){
+        return !leftLimit.get();
+    }
+
+    public boolean isRightPressed(){
+        return !rightLimit.get();
+    }
+
     @RunState(name="Up")
     public void upRun(){
         intakeUp();
-            if (!leftLimit.get()){
+            if (isLeftPressed()){
                 armMotorLeft.setPercent(0);
             }
-            if (!rightLimit.get()){
+            if (isRightPressed()){
                 armMotor.setPercent(0);
             }
             if (!leftLimit.get() || !rightLimit.get()){ //"||"just for testing because there is the bar in the way
@@ -204,14 +205,15 @@ public class Intake extends StateMachine{
         NtHelper.setBoolean("/robot/intake/rightLimit", rightLimit.get());
 
         switch (state){
+            case "Calibrate":
+                if (calibrate()){
+                    System.out.println("calibrated");
+                    state = "Stop";
+                }
+                break;
             case "Stop":
                 stop();
                 if (Devices.controller.getAButton()){
-                    state = "Calibrate";
-                }
-                break;
-            case "Calibrate":
-                if (calibrate()){
                     state = "Down";
                 }
                 break;
@@ -223,13 +225,13 @@ public class Intake extends StateMachine{
                 break;
             case "Up":
                 intakeUp();
-                if (!leftLimit.get()){
+                if (isLeftPressed()){
                     armMotorLeft.setPercent(0);
                 }
-                if (!rightLimit.get()){
+                if (isRightPressed()){
                     armMotor.setPercent(0);
                 }
-                if (!leftLimit.get() || !rightLimit.get()){ //"||"just for testing because there is the bar in the way
+                if (isLeftPressed() && isRightPressed()){ //"||"just for testing because there is the bar in the way
                     state = "Stop";
                 }
                 if (Devices.controller.getAButton()){
