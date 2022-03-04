@@ -37,13 +37,13 @@ public class Devices {
         intakeArmMotor.setPid(.02, 0.0001, 0);
         intakeArmFollowerMotor.setPid(.02, 0.0001, 0);
 
-        intakeArmMotor.setIZone(1);
-        intakeArmFollowerMotor.setIZone(1);
+        intakeArmMotor.setIZone(2);
+        intakeArmFollowerMotor.setIZone(2);
 
         intakeArmFollowerMotor.setInverted(true);
         
 
-        shooterMotor.setPid(0.01, 0, 0);
+        //shooterMotor.setPid(0.01, 0, 0);
         //intakeArmFollowerMotor.follow(intakeArmMotor);
     }
 }

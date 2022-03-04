@@ -14,7 +14,7 @@ public class Shooter extends StateMachine{
     private NeoMotor kickerMotor;
     private NeoMotor shooterMotor;
 
-    private Timer timer = new Timer();
+    // private Timer timer = new Timer();
 
     private double beltSpeed = -0.2;
     private double kickerSpeed = -0.2;
@@ -40,25 +40,25 @@ public class Shooter extends StateMachine{
         return super.state;
     }
 
-    public void setShooterSpeed(double speed){
-        shooterSpeed = speed;
-    }
+    // public void setShooterSpeed(double speed){
+    //     shooterSpeed = speed;
+    // }
 
-    public void beltForward() {
-        beltMotor.setPercent(beltSpeed);
-    }
+    // public void beltForward() {
+    //     beltMotor.setPercent(beltSpeed);
+    // }
 
-    public void beltStop() {
-        beltMotor.setPercent(0);
-    }
+    // public void beltStop() {
+    //     beltMotor.setPercent(0);
+    // }
 
     public void kicker() {
         kickerMotor.setPercent(kickerSpeed);
     }
 
-    public void kickerStop() {
-        kickerMotor.setPercent(0);
-    }
+    // public void kickerStop() {
+    //     kickerMotor.setPercent(0);
+    // }
 
     public void shooterStop() {
         shooterMotor.setPercent(0);

@@ -32,7 +32,6 @@ public class Robot extends TimedRobot {
     constants.Kv, 
     Devices.gyro.getRotation()
   );
-  private Field2d m_field;
   private shootTwoTaxi auto = new shootTwoTaxi();
   private Intake intake = new Intake ();
   private Shooter teleopShooter = new Shooter (1, 2);
@@ -42,6 +41,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     intake.zero();
     intake.stop();
+    Devices.init();
   }
 
   @Override
@@ -88,7 +88,6 @@ public class Robot extends TimedRobot {
 
     NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());
     drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
-    // m_field.setRobotPose(drivetrain.getPose());
 
 
     //Targeting Code
