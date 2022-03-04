@@ -34,8 +34,7 @@ public class Robot extends TimedRobot {
   );
   private shootTwoTaxi auto = new shootTwoTaxi();
   private Intake intake = new Intake ();
-  private Shooter teleopShooter = new Shooter (1, 2);
-  private Shooter autoShooter = new Shooter (1, 1);
+  private Shooter shooter = new Shooter ();
 
   @Override
   public void robotInit() {
@@ -92,30 +91,20 @@ public class Robot extends TimedRobot {
 
     //Targeting Code
     double rotationSpeed = 0;
-    if (Devices.controller.getLeftTriggerAxis() > 0.2 || Devices.controller.getRawAxis(0) < -0.2){
-      rotationSpeed = Targeting.calculate();
+    if (Devices.controller.getRightTriggerAxis() > 0.2){
+      System.out.println("SHOOT!");
+      shooter.shoot();
 
-      arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
-      leftSpeed = arcadeSpeeds[0];
-      rightSpeed = arcadeSpeeds[1];
-      Devices.leftMotor.setPercent(leftSpeed);
-      Devices.rightMotor.setPercent(rightSpeed); 
+    }
+    else {
+      shooter.stop();
     }
 
-    teleopShooter.run();
-    // Shooting code
-    if (Devices.controller.getRightTriggerAxis() > 0.2 || Devices.controller.getRawAxis(0) > 0.2){
-      if (teleopShooter.getState() == "stop"){
-        teleopShooter.setState("start"); 
-      }  
-    }
+  
+    shooter.run();
 
     //runs intake
     intake.runIntake();
-   
-
-    telemetry();
-
   }
 
 
@@ -128,7 +117,6 @@ public class Robot extends TimedRobot {
     Devices.gyro.reset();
     drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
     Targeting.init();
-    telemetry();
   }
 
   public void telemetry() {
@@ -137,6 +125,9 @@ public class Robot extends TimedRobot {
 
     NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
     NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
+  
+    shooter.shooterInfo();
+
   }
 
   public void telementryAuto(){
