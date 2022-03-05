@@ -19,7 +19,7 @@ public class Shooter extends StateMachine{
 
     private double beltSpeed = -0.2;
     private double kickerSpeed = -0.2;
-    private double shooterSpeed = -.2; //-0.8;
+    private double shooterSpeed = -3500; //-10; //-.2; //-0.8; //-3500?
 
     private double revDuration = 1;
 
@@ -31,6 +31,11 @@ public class Shooter extends StateMachine{
         beltMotor = Devices.beltMotor;
         kickerMotor = Devices.kickerMotor;
         shooterMotor = Devices.shooterMotor;
+
+        NtHelper.setDouble("/robot/shooter/shootermotorp", 0.0);
+        NtHelper.setDouble("/robot/shooter/shootermotori", 0.0); 
+        NtHelper.setDouble("/robot/shooter/shootermotord", 0.0);
+        NtHelper.setDouble("/robot/shooter/shootermotorf", 0.0);
     }
 
     public void shoot() {
@@ -91,7 +96,6 @@ public class Shooter extends StateMachine{
         timer.reset();
         timer.start();
         // initialize rev
-        shooterMotor.setPercent(shooterSpeed);
     }
 
     @RunState(name="rev") 
@@ -106,7 +110,7 @@ public class Shooter extends StateMachine{
             // Devices.rightMotor.setPercent(rightSpeed); 
         }
         
-        shooterMotor.setPercent(shooterSpeed);
+        shooterMotor.setSpeed(shooterSpeed);
 
         if (timer.get() > this.revDuration) this.setState("shoot");
 
@@ -120,17 +124,26 @@ public class Shooter extends StateMachine{
     public void runShoot() {
         beltForward();
         kicker();
-        shooterMotor.setPercent(shooterSpeed);
-
+        Devices.leftMotor.setPercent(0);
+        Devices.rightMotor.setPercent(0); 
         // run shooting
+        shooterMotor.setPercent(-Devices.controller.getRightTriggerAxis() * 0.65);
     }
 
 
     public void shooterInfo(){
         NtHelper.setString("/robot/shooter/state", getState());
-        NtHelper.setDouble("/robot/shooter/beltspeed", beltMotor.getSpeed());
-        NtHelper.setDouble("/robot/shooter/kickerspeed", kickerMotor.getSpeed());
+        // NtHelper.setDouble("/robot/shooter/beltspeed", beltMotor.getSpeed());
+        // NtHelper.setDouble("/robot/shooter/kickerspeed", kickerMotor.getSpeed());
         NtHelper.setDouble("/robot/shooter/shooterspeed", shooterMotor.getSpeed());
+        NtHelper.setDouble("/robot/shooter/desiredshooterspeed", shooterSpeed);
+
+        shooterMotor.setPidf(NtHelper.getDouble("/robot/shooter/shootermotorp", 0.0),
+        NtHelper.getDouble("/robot/shooter/shootermotori", 0.0), 
+        NtHelper.getDouble("/robot/shooter/shootermotord", 0.0),
+        NtHelper.getDouble("/robot/shooter/shootermotorf", 0.0));
+
+        NtHelper.setDouble("/robot/shooter/foundMotorP", NtHelper.getDouble("/robot/shooter/shootermotorp", 0.0));
     }
 
 
