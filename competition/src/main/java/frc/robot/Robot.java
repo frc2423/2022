@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Relay.Direction;
+import edu.wpi.first.wpilibj.Relay.Value;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
 import frc.robot.auto.shootTwoTaxi;
@@ -16,6 +18,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.util.Targeting;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.Relay;
 
 public class Robot extends TimedRobot {
 
@@ -27,16 +30,19 @@ public class Robot extends TimedRobot {
   );
   private shootTwoTaxi auto = new shootTwoTaxi();
   private Intake intake = new Intake ();
+  private Relay relay = new Relay(3);
 
   @Override
   public void robotInit() {
     intake.zero();
     intake.stop();
     Devices.init();
+    relay.set(Value.kOn);
   }
 
   @Override
   public void robotPeriodic() {
+    relay.set(Value.kForward);
     telemetry();
   }
 
@@ -52,6 +58,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    relay.setDirection(Direction.kForward);
     intake.zero();
     intake.stop();
     Devices.leftMotor.resetEncoder(0);
