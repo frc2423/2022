@@ -15,6 +15,11 @@ public class Devices {
     public static NeoMotor intakeArmMotor = new NeoMotor (5);
     public static NeoMotor intakeArmFollowerMotor = new NeoMotor (6);
     public static NeoMotor intakeRollerMotor = new NeoMotor (7);
+
+    //public static NeoMotor climberLeftMotor = new NeoMotor(???);
+    //public static NeoMotor climberRightMotor = new NeoMotor(???);
+
+    
     // i don't understand this :( yelling out commands and collecting information each time around the loop, or so they say. 
     public static Gyro gyro = new Gyro();
 
@@ -42,7 +47,9 @@ public class Devices {
 
         intakeArmFollowerMotor.setInverted(true);
         
-
+        // climberLeftMotor.setPid(.02, 0.0001, 0);
+        // climberRightMotor.setPid(.02, 0.0001, 0);
+        
         //shooterMotor.setPid(0.01, 0, 0);
         //intakeArmFollowerMotor.follow(intakeArmMotor);
     }
