@@ -72,20 +72,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    double turnRate = DriveHelper.applyDeadband(-Devices.controller.getLeftX());
-    double ySpeed = DriveHelper.applyDeadband(-Devices.controller.getLeftY());
-
-    double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
-
-    double leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
-    double rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
-
-    double[] motorValues = drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
-
-    Devices.leftMotor.setPercent(motorValues[0]);
-    Devices.rightMotor.setPercent(motorValues[1]);
-
-    NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());
     drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
 
 
@@ -93,11 +79,24 @@ public class Robot extends TimedRobot {
     double rotationSpeed = 0;
     if (Devices.controller.getRightTriggerAxis() > 0.2){
       System.out.println("SHOOT!");
+      
       shooter.shoot();
 
     }
     else {
       shooter.stop();
+      double turnRate = DriveHelper.applyDeadband(-Devices.controller.getLeftX());
+      double ySpeed = DriveHelper.applyDeadband(-Devices.controller.getLeftY());
+  
+      double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
+  
+      double leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
+      double rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
+  
+      double[] motorValues = drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
+  
+      Devices.leftMotor.setPercent(motorValues[0]);
+      Devices.rightMotor.setPercent(motorValues[1]);
     }
 
   
@@ -125,9 +124,8 @@ public class Robot extends TimedRobot {
 
     NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
     NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
-  
+    NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());  
     shooter.shooterInfo();
-
   }
 
   public void telementryAuto(){

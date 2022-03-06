@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
 
 import frc.robot.devices.NeoMotor;
+import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.InitState;
@@ -102,12 +103,14 @@ public class Shooter extends StateMachine{
     public void runRev() {
         if (autoMode == true){
             double rotationSpeed = Targeting.calculate();
-
-            // arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
-            // leftSpeed = arcadeSpeeds[0];
-            // rightSpeed = arcadeSpeeds[1];
-            // Devices.leftMotor.setPercent(leftSpeed);
-            // Devices.rightMotor.setPercent(rightSpeed); 
+            double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
+            double leftSpeed = arcadeSpeeds[0];
+            double rightSpeed = arcadeSpeeds[1];
+            Devices.leftMotor.setPercent(leftSpeed);
+            Devices.rightMotor.setPercent(rightSpeed); 
+        } else {
+            Devices.leftMotor.setPercent(0);
+            Devices.rightMotor.setPercent(0); 
         }
         
         shooterMotor.setSpeed(shooterSpeed);

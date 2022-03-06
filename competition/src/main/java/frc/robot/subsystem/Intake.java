@@ -23,7 +23,7 @@ public class Intake extends StateMachine{
     private double topPosition = 1;
     private double bottomPosition = -13.5;
     private double belowPosition = -13.5;
-    private double rollerSpeed = 0.45;
+    private double rollerSpeed = 0.60;
     private double calibrateSpeed = 0.1;
 
     private String state = "Calibrate";
