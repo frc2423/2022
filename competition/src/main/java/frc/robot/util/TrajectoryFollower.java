@@ -1,12 +1,6 @@
 package frc.robot.util;
 
-import frc.robot.util.stateMachine.InitState;
-import frc.robot.util.stateMachine.RunState;
-import frc.robot.util.stateMachine.StateMachine;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.util.NtHelper;
-import frc.robot.util.DriveHelper;
 import frc.robot.Devices;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Drivetrain;
@@ -15,18 +9,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import frc.robot.util.Targeting;
-
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import frc.robot.subsystem.Intake;
 
 public class TrajectoryFollower {
     private Timer timer = new Timer ();
@@ -38,13 +22,11 @@ public class TrajectoryFollower {
       constants.Kv, 
       Devices.gyro.getRotation()
     );
-    private Field2d m_field;
 
     private HashMap<String, Trajectory> trajectoryMap;
 
     public TrajectoryFollower() {
         trajectoryMap = new HashMap<String, Trajectory>();
-        m_field = new Field2d();
     }
 
     public void startFollowing() {
@@ -65,7 +47,6 @@ public class TrajectoryFollower {
         var desiredPose = trajectory.sample(currTime);
 
         drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
-        m_field.setRobotPose(drivetrain.getPose());
         ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(drivetrain.getPose(), desiredPose);
         double[] motorValues = drivetrain.getMotorValues(refChassisSpeeds);
         Devices.leftMotor.setPercent(motorValues[0]);
@@ -79,7 +60,6 @@ public class TrajectoryFollower {
         Devices.rightMotor.resetEncoder(0);
         Devices.gyro.reset();
         drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
-        m_field.setRobotPose(drivetrain.getPose());
     }
 
     public boolean isDone(){
