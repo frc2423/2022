@@ -14,6 +14,7 @@ import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
 import frc.robot.auto.shootTwoTaxi;
 import frc.robot.constants.constants;
+import frc.robot.devices.NeoMotor;
 import frc.robot.subsystem.Drivetrain;
 import frc.robot.subsystem.Intake;
 import frc.robot.subsystem.Shooter;
@@ -33,8 +34,9 @@ public class Robot extends TimedRobot {
     Devices.gyro.getRotation()
   );
   private shootTwoTaxi auto = new shootTwoTaxi();
-  private Intake intake = new Intake ();
+  
   private Shooter shooter = new Shooter ();
+  private Intake intake = new Intake (shooter);
 
   @Override
   public void robotInit() {
@@ -74,10 +76,10 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
 
-
+    
     //Targeting Code
     double rotationSpeed = 0;
-    if (Devices.controller.getRightTriggerAxis() > 0.2){
+    if (Devices.controller.getRightTriggerAxis() > 0.2 || Devices.controller.getRawAxis(0) > 0.2){
       System.out.println("SHOOT!");
       
       shooter.shoot();

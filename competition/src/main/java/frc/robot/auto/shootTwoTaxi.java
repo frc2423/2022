@@ -21,7 +21,8 @@ import frc.robot.subsystem.Shooter;
 
 public class shootTwoTaxi extends StateMachine{
 
-    private Intake intake = new Intake();
+    private Shooter shooter = new Shooter();
+    private Intake intake = new Intake(shooter);
     //TODO: Values subject to change upon completed trajcetory integration
     Trajectory CargoAdvanceTrajectory = PathPlanner.loadPath("CargoAdvance3", constants.maxSpeedo, constants.maxAccel);
     Trajectory ShooterAdvanceTrajectory = PathPlanner.loadPath("ShooterAdvance3", constants.maxSpeedo, constants.maxAccel);

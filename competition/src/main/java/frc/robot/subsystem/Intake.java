@@ -15,6 +15,8 @@ public class Intake extends StateMachine{
     private NeoMotor armMotor;
     private NeoMotor armMotorLeft;
     private NeoMotor rollerMotor;
+    private NeoMotor beltMotor;
+    private double beltSpeed = -0.2;
     private double desiredPosition;
 
     private DigitalInput leftLimit;
@@ -27,9 +29,11 @@ public class Intake extends StateMachine{
     private double calibrateSpeed = 0.1;
 
     private String state = "Calibrate";
+    private Shooter shooter;
 
-    public Intake(){
+    public Intake(Shooter shooter){
         super("Stop");
+        this.shooter = shooter;
         armMotor = Devices.intakeArmMotor;
         armMotorLeft = Devices.intakeArmFollowerMotor;
         rollerMotor = Devices.intakeRollerMotor;
@@ -38,6 +42,15 @@ public class Intake extends StateMachine{
       //  intakeUp();
         // zero(); //0.0000
         // stop();
+        
+    }
+
+    public void beltForward() {
+        beltMotor.setPercent(beltSpeed);
+    }
+
+    public void beltStop() {
+        beltMotor.setPercent(0);
     }
 
     //sets position to current minus something
@@ -136,7 +149,7 @@ public class Intake extends StateMachine{
     @RunState(name="Stop")
     public void stopRun(){
         stop();
-        if (Devices.controller.getAButton()){
+        if (Devices.controller.getAButton() || Devices.controller.getRawAxis(1) <  -0.2){
             setState("Calibrate");
         }
     }
@@ -161,7 +174,9 @@ public class Intake extends StateMachine{
     @RunState(name="Down")
     public void runDown(){
         intakeDown();
-            if (Devices.controller.getYButton()){
+        this.beltForward();
+            if (Devices.controller.getYButton() || Devices.controller.getRawAxis(1) < -0.2){
+                
                 setState("Up");
             }
     }
@@ -181,6 +196,9 @@ public class Intake extends StateMachine{
 
     @RunState(name="Up")
     public void upRun(){
+        if (shooter.getState() != "shoot"){
+            this.beltStop();
+        }
         intakeUp();
             if (isLeftPressed()){
                 armMotorLeft.setPercent(0);
@@ -199,34 +217,34 @@ public class Intake extends StateMachine{
 
 
 
-    public void runIntake(){
+ public void runIntake(){
         NtHelper.setString("/robot/intake/state", state);
         NtHelper.setBoolean("/robot/intake/leftLimit", leftLimit.get());
         NtHelper.setBoolean("/robot/intake/rightLimit", rightLimit.get());
-
         switch (state){
             case "Calibrate":
                 if (calibrate()){
-                    System.out.println("calibrated");
                     state = "Stop";
                 }
                 break;
             case "Stop":
                 stop();
-                if (Devices.controller.getAButton()){
+                if (Devices.controller.getAButton() || Devices.controller.getRawAxis(1) < -0.2){
                     state = "Down";
                 }
                 break;
             case "Down":
                 intakeDown();
-                if (Devices.controller.getYButton()){
+                if (Devices.controller.getYButton() || Devices.controller.getRawAxis(1) > 0.2){
                     state = "Up";
+                    //Shooter.beltForward
                 }
                 break;
             case "Up":
                 intakeUp();
                 if (isLeftPressed()){
                     armMotorLeft.setPercent(0);
+                    //Shooter.beltStop
                 }
                 if (isRightPressed()){
                     armMotor.setPercent(0);

@@ -14,7 +14,8 @@ import com.pathplanner.lib.PathPlanner;
 import edu.wpi.first.wpilibj.Timer;
 
 public class ThreeMuskets5 extends StateMachine{
-    private Intake intake = new Intake();
+    private Shooter shooter = new Shooter();
+    private Intake intake = new Intake(shooter);
     Trajectory CargoAdvance1 = PathPlanner.loadPath("CargoAdvance15", constants.maxSpeedo, constants.maxAccel);
     Trajectory CargoAdvance2 = PathPlanner.loadPath("ShooterAdvance15", constants.maxSpeedo, constants.maxAccel);
     Trajectory ShooterAdvance1 = PathPlanner.loadPath("CargoAdvance25", constants.maxSpeedo, constants.maxAccel);

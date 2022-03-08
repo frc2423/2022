@@ -9,16 +9,16 @@ import frc.robot.util.TrajectoryFollower;
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Intake;
-
+import frc.robot.subsystem.Shooter;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.List;
 
 import com.pathplanner.lib.PathPlanner;
 public class ThreeMuskets extends StateMachine{
-    //private Shooter shooter = new Shooter();
+    private Shooter shooter = new Shooter();
 
-    private Intake intake = new Intake();
+    private Intake intake = new Intake(shooter);
     Trajectory IntakeAimTrajectory = PathPlanner.loadPath("IntakeAim4", constants.maxSpeedo, constants.maxAccel);
     Trajectory TaxiTrajectory = PathPlanner.loadPath("Taxi4", constants.maxSpeedo, constants.maxAccel);
 
