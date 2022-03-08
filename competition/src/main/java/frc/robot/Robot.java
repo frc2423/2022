@@ -12,22 +12,18 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
-import frc.robot.auto.shootTwoTaxi;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Drivetrain;
 import frc.robot.subsystem.Intake;
 import frc.robot.subsystem.Shooter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.util.Targeting;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.auto.Auto;
 
 
 public class Robot extends TimedRobot {
-
-  private Field2d m_field = new Field2d();
 
   private Drivetrain drivetrain = new Drivetrain(
     constants.trackWidth, 
@@ -50,7 +46,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     telemetry();
-    m_field.setRobotPose(drivetrain.getPose());
   }
 
   public void autonomousInit() {
@@ -125,7 +120,7 @@ public class Robot extends TimedRobot {
 
   public void telemetry() {
     NtHelper.setString("/robot/auto/name", "taxi1");
-    
+
     //uh oh
     NtHelper.setDouble ("/robot/intake/leftdistance", Devices.intakeArmMotor.getDistance());
     NtHelper.setDouble ("/robot/intake/rightdistance", Devices.intakeArmFollowerMotor.getDistance());
