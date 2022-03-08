@@ -2,5 +2,14 @@
   "NetworkTables Settings": {
     "mode": "Client",
     "serverTeam": "2423"
+  },
+  "robot": {
+    "intake": {
+      "open": true
+    },
+    "open": true,
+    "shooter": {
+      "open": true
+    }
   }
 }
