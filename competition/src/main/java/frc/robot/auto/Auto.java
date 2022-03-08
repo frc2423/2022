@@ -60,7 +60,6 @@ public class Auto extends StateMachine {
 
     @RunState(name = "run")
     public void runRun(){
-        System.out.println("WAAAAAAAAAAAAAAAAAA");
         selectedAutonomous.run();
     }
 }
