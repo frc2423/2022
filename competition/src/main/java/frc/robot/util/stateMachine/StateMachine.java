@@ -8,7 +8,7 @@ public class StateMachine {
 
   private HashMap<String, Method> initStates;
   private HashMap<String, Method> runStates;
-  protected String state = "";
+  private String state = "";
   private String defaultState;
 
   public StateMachine(String defaultState) {
@@ -35,6 +35,14 @@ public class StateMachine {
     }
     setState(defaultState);
   }
+
+  /**
+   * Gets the current state of the state machine.
+   */
+  public String getState(){
+    return this.state;
+  }
+
 
   /**
   * Calls the function associated with the current state.

@@ -50,7 +50,7 @@ public class Shooter extends StateMachine{
     }
 
     public String getState() {
-        return super.state;
+        return super.getState();
     }
 
     public void setShooterSpeed(double speed){
