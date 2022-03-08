@@ -1,5 +1,6 @@
 package frc.robot.subsystem;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
 
@@ -10,6 +11,8 @@ import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.Targeting;
+import edu.wpi.first.wpilibj.RobotController;
+
 
 public class Shooter extends StateMachine{
     private NeoMotor beltMotor;
@@ -20,10 +23,10 @@ public class Shooter extends StateMachine{
 
     private double beltSpeed = -0.2;
     private double kickerSpeed = -0.2;
-    private double shooterSpeed = -3500; //-10; //-.2; //-0.8; //-3500?
+    private double shooterSpeed = -56;//-3500; //-10; //-.2; //-0.8; //-3500?
 
     private double revDuration = 1;
-
+    private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
     private boolean autoMode = false;
     //Motor values subject to change following implementation and testing
 
@@ -77,6 +80,12 @@ public class Shooter extends StateMachine{
         shooterMotor.setPercent(0);
     }
 
+    public void setShooterVolt(double speed){
+        double voltage = feedForward.calculate(speed);
+        double percent = voltage / RobotController.getBatteryVoltage();
+        shooterMotor.setPercent(percent);
+    }
+
 
     @InitState(name="stop") 
     public void runStoppedInit() {
@@ -113,7 +122,8 @@ public class Shooter extends StateMachine{
             Devices.rightMotor.setPercent(0); 
         }
         
-        shooterMotor.setSpeed(shooterSpeed);
+       // shooterMotor.setSpeed(shooterSpeed);
+       setShooterVolt(shooterSpeed);
 
         if (timer.get() > this.revDuration) this.setState("shoot");
 
@@ -130,7 +140,8 @@ public class Shooter extends StateMachine{
         Devices.leftMotor.setPercent(0);
         Devices.rightMotor.setPercent(0); 
         // run shooting
-        shooterMotor.setPercent(-Devices.controller.getRightTriggerAxis() * 0.65);
+        //shooterMotor.setPercent(-Devices.controller.getRightTriggerAxis() * 0.65);
+        setShooterVolt(shooterSpeed);
     }
 
 
