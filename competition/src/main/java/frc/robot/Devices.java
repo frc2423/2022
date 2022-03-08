@@ -24,8 +24,8 @@ public class Devices {
     public static Gyro gyro = new Gyro();
 
     public static NeoMotor beltMotor = new NeoMotor(8);
-    // public static NeoMotor kickerMotor = new NeoMotor(9);
-    // public static NeoMotor shooterMotor = new NeoMotor(10);
+    public static NeoMotor kickerMotor = new NeoMotor(10);
+    public static NeoMotor shooterMotor = new NeoMotor(9);
 
     public static DigitalInput leftLimit = new DigitalInput(1);
     public static DigitalInput rightLimit = new DigitalInput(2);
@@ -52,5 +52,6 @@ public class Devices {
         
         //shooterMotor.setPid(0.01, 0, 0);
         //intakeArmFollowerMotor.follow(intakeArmMotor);
+        shooterMotor.setPidf(0, 0, 0, .000);
     }
 }

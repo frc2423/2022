@@ -35,6 +35,14 @@ public class StateMachine {
   }
 
   /**
+   * Gets the current state of the state machine.
+   */
+  public String getState(){
+    return this.state;
+  }
+
+
+  /**
   * Calls the function associated with the current state.
   * <p>Run this method periodically.</p>
   */

@@ -4,126 +4,150 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
 
 import frc.robot.devices.NeoMotor;
+import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
+import frc.robot.util.stateMachine.StateMachine;
+import frc.robot.util.stateMachine.InitState;
+import frc.robot.util.stateMachine.RunState;
+import frc.robot.util.Targeting;
 
-public class Shooter {
-    public Shooter(){}
-    // private NeoMotor beltMotor;
-    // private NeoMotor kickerMotor;
-    // private NeoMotor shooterMotor;
+public class Shooter extends StateMachine{
+    private NeoMotor beltMotor;
+    private NeoMotor kickerMotor;
+    private NeoMotor shooterMotor;
 
-    // private Timer timer = new Timer();
+    private Timer timer = new Timer();
 
-    // private double beltSpeed = 0.2;
-    // private double kickerSpeed = 0.2;
-    // private double shooterSpeed = 0.8;
-    // //Motor values subject to change followin implementation and testing
+    private double beltSpeed = -0.2;
+    private double kickerSpeed = -0.2;
+    private double shooterSpeed = -3500; //-10; //-.2; //-0.8; //-3500?
 
-    // private String state = "start";
+    private double revDuration = 1;
 
-    // public Shooter(){
-    //     beltMotor = Devices.beltMotor;
-    //     kickerMotor = Devices.kickerMotor;
-    //     shooterMotor = Devices.shooterMotor;
-    // }
+    private boolean autoMode = false;
+    //Motor values subject to change following implementation and testing
 
-    // public void setShooterSpeed(double speed){
-    //     shooterSpeed = speed;
-    // }
+    public Shooter() {
+        super("stop");
+        beltMotor = Devices.beltMotor;
+        kickerMotor = Devices.kickerMotor;
+        shooterMotor = Devices.shooterMotor;
 
-    // public void beltForward() {
-    //     beltMotor.setPercent(beltSpeed);
-    // }
+        NtHelper.setDouble("/robot/shooter/shootermotorp", 0.0);
+        NtHelper.setDouble("/robot/shooter/shootermotori", 0.0); 
+        NtHelper.setDouble("/robot/shooter/shootermotord", 0.0);
+        NtHelper.setDouble("/robot/shooter/shootermotorf", 0.0);
+    }
 
-    // public void beltStop() {
-    //     beltMotor.setPercent(0);
-    // }
+    public void shoot() {
+        if (getState() == "stop"){
+            this.setState("rev");
+        }
+    }
 
-    // public void revUp () {
-    //     shooterMotor.setSpeed(shooterSpeed);
-    // }
+    public void stop() {
+        this.setState("stop");
+    }
 
-    // public void kicker() {
-    //     kickerMotor.setPercent(kickerSpeed);
-    // }
+    public String getState() {
+        return super.getState();
+    }
 
-    // public void kickerStop() {
-    //     kickerMotor.setPercent(0);
-    // }
+    public void setShooterSpeed(double speed){
+        shooterSpeed = speed;
+    }
 
-    // public void resetShooter(){
-    //     timer.stop();
-    //     state = "start";
-    //     beltStop();
-    //     kickerStop();
-    //     shootStop();
-    // }
+    public void beltForward() {
+        beltMotor.setPercent(beltSpeed);
+    }
 
-    // public void shootOne() {
-    //     switch (state) {
-    //         case "start": 
-    //             timer.reset();
-    //             timer.start();
-    //             state = "rev";
-    //             break;
-    //         case "rev":
-    //             revUp();
-    //             if (timer.get() > 1) state= "shoot";
-    //             break;
-    //         case "shoot":
-    //             beltForward();
-    //             kicker();
-    //             revUp();
-    //             if (timer.get() > 2) state= "stop";
-    //             break;
-    //         case "stop":
-    //             beltStop();
-    //             kickerStop();
-    //             shootStop();
-    //             timer.stop();
-    //             break;
+    public void beltStop() {
+        beltMotor.setPercent(0);
+    }
 
-    //     }
-    // }
+    public void kicker() {
+        kickerMotor.setPercent(kickerSpeed);
+    }
 
-    // public void shootTwo() {
-    //     switch (state) {
-    //         case "start": 
-    //             timer.reset();
-    //             timer.start();
-    //             state = "rev";
-    //             break;
-    //         case "rev":
-    //             revUp();
-    //             if (timer.get() > 1) state= "shoot";
-    //             break;
-    //         case "shoot":
-    //             beltForward();
-    //             kicker();
-    //             revUp();
-    //             if (timer.get() > 2) state= "shoot";
-    //             break;
-    //         case "stop":
-    //             beltStop();
-    //             kickerStop();
-    //             shootStop();
-    //             timer.stop();
-    //             break;
+    public void kickerStop() {
+        kickerMotor.setPercent(0);
+    }
 
-    //     }
-  
-    // }
+    public void shooterStop() {
+        shooterMotor.setPercent(0);
+    }
 
-    // public void shootStop() {
-    //     shooterMotor.setPercent(0);
-    // }
 
-    // public void shooterInfo(){
-    //     NtHelper.setString("/robot/shooter/state", state);
-    //     NtHelper.setDouble("/robot/shooter/beltspeed", beltMotor.getSpeed());
-    //     NtHelper.setDouble("/robot/shooter/kickerspeed", kickerMotor.getSpeed());
-    //     NtHelper.setDouble("/robot/shooter/shooterspeed", shooterMotor.getSpeed());
-    // }
+    @InitState(name="stop") 
+    public void runStoppedInit() {
+        // initialize stopped (runs once)
+        beltStop();
+        kickerStop();
+        shooterStop();
+        timer.stop();
+    }
+
+    @RunState(name="stop") 
+    public void runStopped() {
+        // run stopped (runs a bunch)
+    }
+
+    @InitState(name="rev")
+    public void runRevInit() {
+        timer.reset();
+        timer.start();
+        // initialize rev
+    }
+
+    @RunState(name="rev") 
+    public void runRev() {
+        if (autoMode == true){
+            double rotationSpeed = Targeting.calculate();
+            double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
+            double leftSpeed = arcadeSpeeds[0];
+            double rightSpeed = arcadeSpeeds[1];
+            Devices.leftMotor.setPercent(leftSpeed);
+            Devices.rightMotor.setPercent(rightSpeed); 
+        } else {
+            Devices.leftMotor.setPercent(0);
+            Devices.rightMotor.setPercent(0); 
+        }
+        
+        shooterMotor.setSpeed(shooterSpeed);
+
+        if (timer.get() > this.revDuration) this.setState("shoot");
+
+    }
+
+    @InitState(name="shoot")
+    public void runShootInit() {
+    }
+    
+    @RunState(name="shoot")
+    public void runShoot() {
+        beltForward();
+        kicker();
+        Devices.leftMotor.setPercent(0);
+        Devices.rightMotor.setPercent(0); 
+        // run shooting
+        shooterMotor.setPercent(-Devices.controller.getRightTriggerAxis() * 0.65);
+    }
+
+
+    public void shooterInfo(){
+        NtHelper.setString("/robot/shooter/state", getState());
+        // NtHelper.setDouble("/robot/shooter/beltspeed", beltMotor.getSpeed());
+        // NtHelper.setDouble("/robot/shooter/kickerspeed", kickerMotor.getSpeed());
+        NtHelper.setDouble("/robot/shooter/shooterspeed", shooterMotor.getSpeed());
+        NtHelper.setDouble("/robot/shooter/desiredshooterspeed", shooterSpeed);
+
+        shooterMotor.setPidf(NtHelper.getDouble("/robot/shooter/shootermotorp", 0.0),
+        NtHelper.getDouble("/robot/shooter/shootermotori", 0.0), 
+        NtHelper.getDouble("/robot/shooter/shootermotord", 0.0),
+        NtHelper.getDouble("/robot/shooter/shootermotorf", 0.0));
+
+        NtHelper.setDouble("/robot/shooter/foundMotorP", NtHelper.getDouble("/robot/shooter/shootermotorp", 0.0));
+    }
 
 
 
