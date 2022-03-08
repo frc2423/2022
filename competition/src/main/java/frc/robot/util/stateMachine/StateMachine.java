@@ -9,8 +9,10 @@ public class StateMachine {
   private HashMap<String, Method> initStates;
   private HashMap<String, Method> runStates;
   private String state = "";
+  private String defaultState;
 
   public StateMachine(String defaultState) {
+    this.defaultState = defaultState;
     initStates = new HashMap<String, Method>();
     runStates = new HashMap<String, Method>();
     Method[] methods= this.getClass().getMethods(); //obtain all method objects
@@ -77,5 +79,9 @@ public class StateMachine {
     } catch (Exception e){
       System.out.println(e + ": runState-> " + name + " cause:"+ e.getCause());
     }
+  }
+
+  public String getDefaultState(){
+    return defaultState;
   }
 }
