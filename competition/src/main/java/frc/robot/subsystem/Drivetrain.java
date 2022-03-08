@@ -8,26 +8,30 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain {
     private DifferentialDriveOdometry odometryFinder;
     private DifferentialDriveKinematics kinematics;
     private SimpleMotorFeedforward feedforward;
+    private Field2d field = new Field2d();
 
     public Drivetrain(double trackWidth, double Ks, double Kv, Rotation2d initialRotation) {
         odometryFinder = new DifferentialDriveOdometry(initialRotation);
         kinematics = new DifferentialDriveKinematics(trackWidth);
         feedforward = new SimpleMotorFeedforward(Ks, Kv);
-
+        SmartDashboard.putData("Field", field);
     }
 
     public void updateOdometry(Rotation2d rotation, double leftdistance, double rightdistance) {
         odometryFinder.update(rotation, leftdistance, rightdistance);
+        field.setRobotPose(getPose());
     }
 
     public void odometryReset(Pose2d pose, Rotation2d rotation) {
         odometryFinder.resetPosition(pose, rotation);
-
+        field.setRobotPose(getPose());
     }
 
     public Pose2d getPose() {
