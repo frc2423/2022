@@ -123,7 +123,6 @@ public class Robot extends TimedRobot {
   }
 
   public void telemetry() {
-    NtHelper.setString("/robot/auto/name", "taxi1");
 
     //uh oh
     NtHelper.setDouble ("/robot/intake/leftdistance", Devices.intakeArmMotor.getDistance());
