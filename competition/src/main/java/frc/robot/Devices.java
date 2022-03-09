@@ -8,27 +8,27 @@ import frc.robot.devices.*;
 
 public class Devices {
     public static XboxController controller = new XboxController(0);
+    public static Gyro gyro = new Gyro();
+    // Drivetrain motors
     public static NeoMotor leftMotor = new NeoMotor(1); // front left
     private static NeoMotor leftFollowerMotor = new NeoMotor (2); // back left
     public static NeoMotor rightMotor = new NeoMotor(3); // front right
     private static NeoMotor rightFollowerMotor = new NeoMotor (4); // back right
+    // Intake motors
     public static NeoMotor intakeArmMotor = new NeoMotor (5);
     public static NeoMotor intakeArmFollowerMotor = new NeoMotor (6);
     public static NeoMotor intakeRollerMotor = new NeoMotor (7);
-
-    //public static NeoMotor climberLeftMotor = new NeoMotor(???);
-    //public static NeoMotor climberRightMotor = new NeoMotor(???);
-
-    
-    // i don't understand this :( yelling out commands and collecting information each time around the loop, or so they say. 
-    public static Gyro gyro = new Gyro();
-
+    // Intake limit switches
+    public static DigitalInput leftLimit = new DigitalInput(1);
+    public static DigitalInput rightLimit = new DigitalInput(2);
+    // Belt and shooter motors
     public static NeoMotor beltMotor = new NeoMotor(8);
     public static NeoMotor kickerMotor = new NeoMotor(10);
     public static NeoMotor shooterMotor = new NeoMotor(9);
+    // Climber motors
+    //public static NeoMotor climberLeftMotor = new NeoMotor(???);
+    //public static NeoMotor climberRightMotor = new NeoMotor(???);
 
-    public static DigitalInput leftLimit = new DigitalInput(1);
-    public static DigitalInput rightLimit = new DigitalInput(2);
 
     static void init() {
         rightMotor.setInverted(true);
@@ -41,17 +41,11 @@ public class Devices {
 
         intakeArmMotor.setPid(.02, 0.0001, 0);
         intakeArmFollowerMotor.setPid(.02, 0.0001, 0);
-
         intakeArmMotor.setIZone(2);
         intakeArmFollowerMotor.setIZone(2);
-
         intakeArmFollowerMotor.setInverted(true);
         
         // climberLeftMotor.setPid(.02, 0.0001, 0);
         // climberRightMotor.setPid(.02, 0.0001, 0);
-        
-        //shooterMotor.setPid(0.01, 0, 0);
-        //intakeArmFollowerMotor.follow(intakeArmMotor);
-        shooterMotor.setPidf(0, 0, 0, .000);
     }
 }

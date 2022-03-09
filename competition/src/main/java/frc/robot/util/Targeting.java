@@ -1,8 +1,5 @@
 package frc.robot.util;
-//imports 
 import frc.robot.devices.Camera;
-
-//hi Adrien (that was on purpose)
 
 public class Targeting {
   private static Camera camera = new Camera("Microsoft_LifeCam_HD-3000"); // aka greg
@@ -71,4 +68,3 @@ public class Targeting {
   }
   
 }
-
