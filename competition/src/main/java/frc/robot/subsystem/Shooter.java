@@ -23,7 +23,7 @@ public class Shooter extends StateMachine{
 
     private double beltSpeed = -0.2;
     private double kickerSpeed = -0.2;
-    private double shooterSpeed = -56;//-3500; //-10; //-.2; //-0.8; //-3500?
+    private double shooterSpeed = -60;//-3500; //-10; //-.2; //-0.8; //-3500?
 
     private double revDuration = 1;
     private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);

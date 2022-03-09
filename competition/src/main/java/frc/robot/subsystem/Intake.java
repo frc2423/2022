@@ -27,6 +27,8 @@ public class Intake extends StateMachine{
     private double calibrateSpeed = 0.1;
 
     private String state = "Calibrate";
+    private NeoMotor beltMotor;
+    private double beltSpeed = -0.2;
 
     public Intake(){
         super("Stop");
@@ -35,9 +37,18 @@ public class Intake extends StateMachine{
         rollerMotor = Devices.intakeRollerMotor;
         leftLimit = Devices.leftLimit;
         rightLimit = Devices.rightLimit;
+        beltMotor = Devices.beltMotor;
       //  intakeUp();
         // zero(); //0.0000
         // stop();
+    }
+
+    public void beltForward() {
+        beltMotor.setPercent(beltSpeed);
+    }
+
+    public void beltStop() {
+        beltMotor.setPercent(0);
     }
 
     //sets position to current minus something
@@ -77,6 +88,7 @@ public class Intake extends StateMachine{
             rollerMotor.setPercent(rollerSpeed);
         }*/
         rollerMotor.setPercent(rollerSpeed);
+        beltForward();
 
         desiredPosition = /*(Devices.controller.getLeftBumper()) ? belowPosition :*/ bottomPosition;
         armMotor.setDistance(desiredPosition);
@@ -130,6 +142,7 @@ public class Intake extends StateMachine{
 
     @InitState(name="Stop")
     public void stopInit(){
+        beltStop();
 
     }
 

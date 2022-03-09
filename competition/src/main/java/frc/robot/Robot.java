@@ -2,11 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-// belt motor id = 8
-// kicker id = 9
-// shooter motor = 10
-
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
