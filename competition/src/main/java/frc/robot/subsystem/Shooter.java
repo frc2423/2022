@@ -42,6 +42,10 @@ public class Shooter extends StateMachine{
         NtHelper.setDouble("/robot/shooter/shootermotorf", 0.0);
     }
 
+    public void setAuto(boolean bool){
+        autoMode = bool;
+    }
+
     public void shoot() {
         if (getState() == "stop"){
             this.setState("rev");
