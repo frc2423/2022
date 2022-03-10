@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.util.Units;
 import frc.robot.devices.*;
+import edu.wpi.first.wpilibj.Relay;
 
 public class Devices {
     public static XboxController controller = new XboxController(0);
@@ -28,7 +29,8 @@ public class Devices {
     // Climber motors
     //public static NeoMotor climberLeftMotor = new NeoMotor(???);
     //public static NeoMotor climberRightMotor = new NeoMotor(???);
-
+    //relay stuff for LEDs on stinky (the camera) - please don't lose it again
+    public static final Relay camLed = new Relay(0);
 
     static void init() {
         rightMotor.setInverted(true);

@@ -17,7 +17,7 @@ import frc.robot.util.Targeting;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.auto.Auto;
 import edu.wpi.first.cameraserver.CameraServer;
-
+import edu.wpi.first.wpilibj.Relay;
 
 
 public class Robot extends TimedRobot {
@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
     Devices.init();
     CameraServer.startAutomaticCapture();
     NtHelper.setBoolean("/robot/shooter/isAuto", true);
+    Devices.camLed.set(Relay.Value.kOn);
   }
 
   @Override
