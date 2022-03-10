@@ -2,7 +2,7 @@ package frc.robot.util;
 import frc.robot.devices.Camera;
 
 public class Targeting {
-  private static Camera camera = new Camera("Microsoft_LifeCam_HD-3000"); // aka greg
+  private static Camera camera = new Camera("Microsoft_LifeCam_HD-3000 (1)"); // aka greg
   static double minTurn = .03;
   static double maxTurn = 0.05;
 

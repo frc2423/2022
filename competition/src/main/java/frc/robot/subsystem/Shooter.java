@@ -121,6 +121,7 @@ public class Shooter extends StateMachine{
             double rightSpeed = arcadeSpeeds[1];
             Devices.leftMotor.setPercent(leftSpeed);
             Devices.rightMotor.setPercent(rightSpeed); 
+            System.out.println("doing the thing "+ rotationSpeed);
         } else {
             Devices.leftMotor.setPercent(0);
             Devices.rightMotor.setPercent(0); 
