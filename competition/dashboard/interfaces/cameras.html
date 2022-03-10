@@ -1,0 +1,24 @@
+<dashboard-tab
+    tab-name="Cameras"
+    slot="tab"
+    source-provider="NetworkTables"
+    selected=""
+>
+    <frc-camera
+        source-provider="NetworkTables"
+        style="--image-width:818.625px; --image-height:613.969px; --crosshair-width:2px; --crosshair-color:#ffffff; --image-display:block; transform: translate(825.368px, 1.50586e-06px); width: 818.625px; height: 620.656px;"
+        source-key="/cameraPublisher/usbCamera0"
+        streams="[]"
+    ></frc-camera>
+    <frc-camera
+        source-provider="NetworkTables"
+        style="--image-width:825.969px; --image-height:619.477px; --crosshair-width:2px; --crosshair-color:#ffffff; --image-display:block; width: 825.969px; height: 624.406px; transform: translate(0.00851px, 0.00112825px);"
+        streams="[&quot;http://10.24.23.11:1183/stream.mjpg?1646786939275&quot;]"
+        hide-crosshair=""
+    ></frc-camera>
+    <frc-label
+        text="stinky cam"
+        source-provider="NetworkTables"
+        style="transform: translate(381.349px, 621.325px);"
+    ></frc-label>
+</dashboard-tab>

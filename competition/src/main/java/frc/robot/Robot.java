@@ -16,6 +16,8 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.util.Targeting;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.auto.Auto;
+import edu.wpi.first.cameraserver.CameraServer;
+
 
 
 public class Robot extends TimedRobot {
@@ -36,6 +38,8 @@ public class Robot extends TimedRobot {
     intake.zero();
     intake.stop();
     Devices.init();
+    CameraServer.startAutomaticCapture();
+    NtHelper.setBoolean("/robot/shooter/isAuto", true);
   }
 
   @Override
@@ -74,7 +78,7 @@ public class Robot extends TimedRobot {
     double rotationSpeed = 0;
     if (Devices.controller.getRightTriggerAxis() > 0.2){
       System.out.println("SHOOT!");
-      
+      shooter.setAuto(NtHelper.getBoolean("/robot/shooter/isAuto", true));
       shooter.shoot();
 
     }
@@ -114,7 +118,6 @@ public class Robot extends TimedRobot {
   }
 
   public void telemetry() {
-    NtHelper.setString("/robot/auto/name", "taxi1");
 
     //uh oh
     NtHelper.setDouble ("/robot/intake/leftdistance", Devices.intakeArmMotor.getDistance());

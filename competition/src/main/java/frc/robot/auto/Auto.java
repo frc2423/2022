@@ -21,6 +21,8 @@ public class Auto extends StateMachine {
         shootTwo = new shootTwoTaxi();
         threeMuskets = new ThreeMuskets();
         fiveMuskets = new ThreeMuskets5();
+
+        NtHelper.setString("/robot/auto/name", "noAuto");
     }
 
     public void getAuto(){
