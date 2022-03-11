@@ -1,6 +1,7 @@
 package frc.robot;
 
 import frc.robot.devices.NeoMotor;
+import frc.robot.util.ColourSensor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.util.Units;
@@ -31,6 +32,9 @@ public class Devices {
     //public static NeoMotor climberRightMotor = new NeoMotor(???);
     //relay stuff for LEDs on stinky (the camera) - please don't lose it again
     public static final Relay camLed = new Relay(0);
+    //color sensor thing
+    public static ColourSensor colourSensor = new ColourSensor();
+
 
     static void init() {
         rightMotor.setInverted(true);
@@ -46,6 +50,9 @@ public class Devices {
         intakeArmMotor.setIZone(2);
         intakeArmFollowerMotor.setIZone(2);
         intakeArmFollowerMotor.setInverted(true);
+        
+        colourSensor.addColor("red", .475, .382, .142);
+        colourSensor.addColor("blue", .17, .42, .39);
         
         // climberLeftMotor.setPid(.02, 0.0001, 0);
         // climberRightMotor.setPid(.02, 0.0001, 0);

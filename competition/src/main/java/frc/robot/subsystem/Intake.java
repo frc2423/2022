@@ -3,10 +3,13 @@ package frc.robot.subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Devices;
 import frc.robot.devices.NeoMotor;
+import frc.robot.util.ColourSensor;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DriverStation;
 
 //we are children dont judge us :P
 
@@ -29,6 +32,10 @@ public class Intake extends StateMachine{
     private String state = "Calibrate";
     private NeoMotor beltMotor;
     private double beltSpeed = -0.2;
+    private ColourSensor colourSensor;
+    private Alliance currentAlliance = DriverStation.getAlliance();
+    private String desiredColor;
+    private String otherColor;
 
     public Intake(){
         super("Stop");
@@ -38,13 +45,45 @@ public class Intake extends StateMachine{
         leftLimit = Devices.leftLimit;
         rightLimit = Devices.rightLimit;
         beltMotor = Devices.beltMotor;
+        colourSensor = Devices.colourSensor;
+        
+        if (currentAlliance == Alliance.Blue) {
+            desiredColor = "blue";
+            otherColor = "red";
+        }
+        else {
+            desiredColor = "red";
+            otherColor = "blue";
+        }
+
       //  intakeUp();
         // zero(); //0.0000
         // stop();
     }
 
     public void beltForward() {
-        beltMotor.setPercent(beltSpeed);
+        if (colourSensor.isColor(desiredColor)){
+            System.out.println("red");
+            Double currentCount = NtHelper.getDouble("/robot/cargocount", 0);
+
+            if (currentCount == 0){
+                beltMotor.setPercent(beltSpeed);
+            }
+            else if (currentCount == 1){
+                beltMotor.setPercent(0);
+            }
+
+            NtHelper.setDouble("/robot/cargocount", currentCount++);
+        }
+        else if(colourSensor.isColor(otherColor)){
+            beltMotor.setPercent(-beltSpeed);
+        }
+        else{
+            System.out.println("none");
+            beltMotor.setPercent(beltSpeed);
+        }
+
+
     }
 
     public void beltStop() {
@@ -148,6 +187,8 @@ public class Intake extends StateMachine{
 
     @RunState(name="Stop")
     public void stopRun(){
+        //System.out.println("color " + colourSensor.getRawColor().red + "  " + colourSensor.getRawColor().green + "  " + colourSensor.getRawColor().blue);
+
         stop();
         if (Devices.controller.getAButton()){
             setState("Calibrate");
@@ -194,6 +235,7 @@ public class Intake extends StateMachine{
 
     @RunState(name="Up")
     public void upRun(){
+
         intakeUp();
             if (isLeftPressed()){
                 armMotorLeft.setPercent(0);
@@ -225,6 +267,8 @@ public class Intake extends StateMachine{
                 }
                 break;
             case "Stop":
+            //System.out.println("color " + colourSensor.getRawColor().red + "  " + colourSensor.getRawColor().green + "  " + colourSensor.getRawColor().blue);
+
                 stop();
                 if (Devices.controller.getAButton()){
                     state = "Down";
