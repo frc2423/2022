@@ -27,6 +27,7 @@ public class Auto extends StateMachine {
 
     public void getAuto(){
         String name = NtHelper.getString("/robot/auto/name", "noAuto");
+        System.out.println(name);
         switch (name) {
             case "taxi1":
                 selectedAutonomous = taxi;
@@ -57,6 +58,7 @@ public class Auto extends StateMachine {
     @InitState(name = "run")
     public void initRun(){
         getAuto();
+        System.out.println (selectedAutonomous);
         selectedAutonomous.setState(selectedAutonomous.getDefaultState());
     }
 
