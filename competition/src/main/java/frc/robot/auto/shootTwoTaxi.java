@@ -29,7 +29,7 @@ public class shootTwoTaxi extends StateMachine{
     private TrajectoryFollower follower = new TrajectoryFollower();
     private Timer timer = new Timer();
 
-    private Shooter shooter = new Shooter();
+    // private Shooter shooter = new Shooter();
 
     public shootTwoTaxi() {
         super("CargoAdvance");

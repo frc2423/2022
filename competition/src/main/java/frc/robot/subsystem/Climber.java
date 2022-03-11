@@ -1,5 +1,6 @@
 package frc.robot.subsystem;
 
+import frc.robot.Devices;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.InitState;
@@ -18,7 +19,8 @@ public class Climber extends StateMachine {
 
     public Climber() {
         super("stop");
-        desiredPosition = 10; // !!!PLACEHOLDER VALUE!!!
+        // leftMotor = Devices.climberLeftMotor;
+        // rightMotor = Devices.climberRightMotor;
     }
 
     public void resetClimber() {

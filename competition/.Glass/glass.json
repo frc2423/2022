@@ -1,1 +1,68 @@
-{}
+{
+  "NetworkTables": {
+    "SmartDashboard": {
+      "open": true
+    },
+    "Usage": {
+      "open": true
+    },
+    "robot": {
+      "intake": {
+        "open": true
+      },
+      "open": true,
+      "shooter": {
+        "open": true
+      }
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
+      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro"
+    }
+  },
+  "NetworkTables Settings": {
+    "mode": "Client",
+    "serverTeam": "10.24.23.2"
+  },
+  "Plots": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "height": 671,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/robot/shooter/shooterspeed"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/robot/shooter/desiredshooterspeed"
+            }
+          ]
+        }
+      ]
+    },
+    "Plot <1>": {
+      "plots": [
+        {
+          "height": 326
+        }
+      ],
+      "window": {
+        "visible": false
+      }
+    }
+  }
+}

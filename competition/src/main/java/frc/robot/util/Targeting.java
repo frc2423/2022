@@ -1,11 +1,10 @@
 package frc.robot.util;
-//imports 
+import javax.naming.spi.DirStateFactory.Result;
+
 import frc.robot.devices.Camera;
 
-//hi Adrien (that was on purpose)
-
 public class Targeting {
-  private static Camera camera = new Camera("Microsoft_LifeCam_HD-3000"); // aka greg
+  private static Camera camera = new Camera("Microsoft_LifeCam_HD-3000 (1)"); // aka greg
   static double minTurn = .03;
   static double maxTurn = 0.05;
 
@@ -36,6 +35,10 @@ public class Targeting {
     return rotationSpeed;
   }
 
+  public static boolean hasTargets(){
+    return camera.getLatestResult().hasTargets();  
+  }
+
   public static double getTurn(double x) { 
     
     //the two line bellow are just setting a reverse deadband
@@ -49,6 +52,7 @@ public class Targeting {
     //checks if we are at the target
     if (x >= -minX && x <= minX) {
       return 0;
+
     }
 
     //Sets the speed depending on the distance of target
@@ -71,4 +75,3 @@ public class Targeting {
   }
   
 }
-
