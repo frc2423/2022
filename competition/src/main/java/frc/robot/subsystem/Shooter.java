@@ -114,6 +114,7 @@ public class Shooter extends StateMachine{
 
     @RunState(name="rev") 
     public void runRev() {
+        boolean isAimed = true;
         if (autoMode == true){
             double rotationSpeed = Targeting.calculate();
             double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
@@ -122,15 +123,16 @@ public class Shooter extends StateMachine{
             Devices.leftMotor.setPercent(leftSpeed);
             Devices.rightMotor.setPercent(rightSpeed); 
             System.out.println("doing the thing "+ rotationSpeed);
+            isAimed = rotationSpeed == 0 && Targeting.hasTargets();
         } else {
             Devices.leftMotor.setPercent(0);
-            Devices.rightMotor.setPercent(0); 
+            Devices.rightMotor.setPercent(0);
         }
         
        // shooterMotor.setSpeed(shooterSpeed);
        setShooterVolt(shooterSpeed);
 
-        if (timer.get() > this.revDuration) this.setState("shoot");
+        if (timer.get() > this.revDuration && isAimed) this.setState("shoot");
 
     }
 
