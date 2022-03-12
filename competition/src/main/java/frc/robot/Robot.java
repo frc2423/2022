@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.auto.Auto;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Relay;
+import frc.robot.util.RateLimiter;
 
 
 public class Robot extends TimedRobot {
@@ -31,6 +32,8 @@ public class Robot extends TimedRobot {
   private Intake intake = new Intake ();
   private Shooter shooter = new Shooter ();
   private Auto auto = new Auto();
+  private RateLimiter speedLimiter = new RateLimiter(0.7, 1.2);
+  private RateLimiter turnLimiter = new RateLimiter(2, 3.5);
 
 
   @Override
@@ -86,8 +89,8 @@ public class Robot extends TimedRobot {
     }
     else {
       shooter.stop();
-      double turnRate = DriveHelper.applyDeadband(-Devices.controller.getRightX());
-      double ySpeed = DriveHelper.applyDeadband(-Devices.controller.getLeftY());
+      double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX()));
+      double ySpeed = speedLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getLeftY()));
   
       double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
   
