@@ -5,6 +5,8 @@ import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+
 import frc.robot.util.NtHelper;
 import frc.robot.constants.constants;
 import edu.wpi.first.wpilibj.Timer;
@@ -14,7 +16,7 @@ import com.pathplanner.lib.PathPlanner;
 
 public class taxi extends StateMachine {
     //Values subject to change upon completed trajectory integration
-    Trajectory cabTrajectory = PathPlanner.loadPath("TaxiTaxi", constants.maxSpeedo, constants.maxAccel);
+    Trajectory cabTrajectory = PathPlanner.loadPath("TaxiTaxi", constants.maxSpeedo, constants.maxAccel, true);
     TrajectoryFollower follower = new TrajectoryFollower();
 
 
@@ -22,11 +24,16 @@ public class taxi extends StateMachine {
     private double timerDelay = 5;
 
     public taxi(){
-        super("Wait");
+        super("Stop");
         follower.addTrajectory("CabRoute", cabTrajectory);
-        follower.setTrajectory("CabRoute");
         NtHelper.setString("/robot/auto/name", "taxi1");
         NtHelper.setDouble("/robot/auto/delayTimer", timerDelay);
+    }
+
+    @RunState(name = "Stop")
+    public void stop(){
+        timer.reset();
+        setState("Wait");
     }
 
     @InitState(name = "Wait")
@@ -34,6 +41,7 @@ public class taxi extends StateMachine {
         timer.start();
         timerDelay = NtHelper.getDouble("/robot/auto/delay", timerDelay);
         NtHelper.setString("/robot/auto/state", "Wait");
+        follower.setTrajectory("CabRoute");
     }
 
     @RunState(name = "Wait")

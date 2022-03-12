@@ -32,16 +32,21 @@ public class shootTwoTaxi extends StateMachine{
     // private Shooter shooter = new Shooter();
 
     public shootTwoTaxi() {
-        super("CargoAdvance");
+        super("Stop");
         follower.addTrajectory("CargoAdvance", CargoAdvanceTrajectory);
         follower.addTrajectory("ShooterAdvance", ShooterAdvanceTrajectory);
         follower.addTrajectory("TaxiBack", TaxiBackTrajectory);
-        follower.setTrajectory("CargoAdvance");
         NtHelper.setString("/robot/auto/name", "shootTwoTaxi3");
+    }
+
+    @RunState(name = "Stop")
+    public void stopState(){
+        setState("CargoAdvance");
     }
 
     @InitState(name = "CargoAdvance")
     public void CargoAdvanceInit (){
+        follower.setTrajectory("CargoAdvance");
         follower.resetPosition();
     }
 

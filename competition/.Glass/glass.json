@@ -19,12 +19,38 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
-      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro"
+      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "CabRoute": {
+          "style": "Line",
+          "weight": 1.0
+        },
+        "CargoAdvance": {
+          "style": "Line",
+          "weight": 1.0
+        },
+        "CargoAdvance1": {
+          "style": "Line"
+        },
+        "traj": {
+          "arrowSize": 6,
+          "arrowWeight": 3.0,
+          "style": "Line",
+          "weight": 1.0
+        },
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Settings": {
     "mode": "Client",
-    "serverTeam": "10.24.23.2"
+    "serverTeam": "10.24.23.2",
+    "visible": false
   },
   "Plots": {
     "Plot <0>": {

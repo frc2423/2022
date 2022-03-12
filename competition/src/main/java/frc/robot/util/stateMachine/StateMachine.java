@@ -10,6 +10,7 @@ public class StateMachine {
   private HashMap<String, Method> runStates;
   private String state = "";
   private String defaultState;
+  private boolean initCalled = false;
 
   public StateMachine(String defaultState) {
     this.defaultState = defaultState;
@@ -50,7 +51,11 @@ public class StateMachine {
   */
   public void run(){
     String name = this.state;
-    runState(name);
+    if (initCalled) {
+      runState(name);
+    } else {
+      initState(name);
+    }
   }
 
   /**
@@ -59,10 +64,11 @@ public class StateMachine {
   */
   public void setState(String name){
     state = name;
-    initState(name);
+    initCalled = false;
   }
 
   public void initState(String name){
+    initCalled = true;
     try {
       var initFunction = initStates.get(name);
       if (initFunction != null) {

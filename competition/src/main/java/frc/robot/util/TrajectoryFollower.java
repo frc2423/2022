@@ -40,6 +40,11 @@ public class TrajectoryFollower {
 
     public void setTrajectory (String name){
         trajectory = trajectoryMap.get(name);
+        var initialPose = trajectory.getStates().get(0).poseMeters;
+        drivetrain.odometryReset(initialPose, initialPose.getRotation());
+        Devices.gyro.setAngle(-initialPose.getRotation().getDegrees());
+        drivetrain.setTrajectory("traj", trajectory);
+        
     }
 
     public void follow (){

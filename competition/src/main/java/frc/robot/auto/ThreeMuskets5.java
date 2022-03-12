@@ -31,12 +31,12 @@ public class ThreeMuskets5 extends StateMachine{
         follower.addTrajectory("CargoAdvance2", CargoAdvance2);
         follower.addTrajectory("ShooterAdvance2", ShooterAdvance2);
         follower.addTrajectory("Taxi", Taxi);
-        follower.setTrajectory("CargoAdvance1");
     }
 
     @InitState(name = "CargoAdvance")
     public void CargoAdvanceInit(){
-        follower.setTrajectory("CargoAdvance");
+        follower.setTrajectory("CargoAdvance1");
+        // follower.setTrajectory("CargoAdvance");
     }
 
     @RunState(name = "CargoAdvance")
