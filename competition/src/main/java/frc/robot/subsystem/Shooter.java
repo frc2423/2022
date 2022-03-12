@@ -22,8 +22,8 @@ public class Shooter extends StateMachine{
     private Timer timer = new Timer();
 
     private double beltSpeed = -0.2;
-    private double kickerSpeed = -0.2;
-    private double shooterSpeed = -60;//-3500; //-10; //-.2; //-0.8; //-3500?
+    private double kickerSpeed = -0.3;
+    private double shooterSpeed = -45;//-3500; //-10; //-.2; //-0.8; //-3500?
 
     private double revDuration = 1;
     private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
@@ -154,11 +154,16 @@ public class Shooter extends StateMachine{
 
 
     public void shooterInfo(){
+        shooterSpeed = NtHelper.getDouble("/robot/shooter/desiredshooterspeed", shooterSpeed);
+        kickerSpeed = NtHelper.getDouble("/robot/shooter/desiredkickerspeed", kickerSpeed);
+
+
         NtHelper.setString("/robot/shooter/state", getState());
         // NtHelper.setDouble("/robot/shooter/beltspeed", beltMotor.getSpeed());
         // NtHelper.setDouble("/robot/shooter/kickerspeed", kickerMotor.getSpeed());
         NtHelper.setDouble("/robot/shooter/shooterspeed", shooterMotor.getSpeed());
         NtHelper.setDouble("/robot/shooter/desiredshooterspeed", shooterSpeed);
+        NtHelper.setDouble("/robot/shootr/desiredkickerspeed", kickerSpeed);
 
         shooterMotor.setPidf(NtHelper.getDouble("/robot/shooter/shootermotorp", 0.0),
         NtHelper.getDouble("/robot/shooter/shootermotori", 0.0), 
