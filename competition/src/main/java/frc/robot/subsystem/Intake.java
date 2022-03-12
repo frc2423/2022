@@ -1,12 +1,17 @@
 package frc.robot.subsystem;
 
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Devices;
 import frc.robot.devices.NeoMotor;
+import frc.robot.util.ColourSensor;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 
 //we are children dont judge us :P
 
@@ -29,6 +34,13 @@ public class Intake extends StateMachine{
     private String state = "Calibrate";
     private NeoMotor beltMotor;
     private double beltSpeed = -0.2;
+    private ColourSensor colourSensor;
+    private Alliance currentAlliance = DriverStation.getAlliance();
+    private String desiredColor;
+    private String otherColor;
+    private boolean colorLog = false;
+    private String colorState = "No ball";
+    private Timer timer = new Timer();
 
     public Intake(){
         super("Stop");
@@ -38,13 +50,111 @@ public class Intake extends StateMachine{
         leftLimit = Devices.leftLimit;
         rightLimit = Devices.rightLimit;
         beltMotor = Devices.beltMotor;
+        colourSensor = Devices.colourSensor;
+        
+        if (currentAlliance == Alliance.Blue) {
+            desiredColor = "blue";
+            otherColor = "red";
+        }
+        else {
+            desiredColor = "red";
+            otherColor = "blue";
+        }
+
       //  intakeUp();
         // zero(); //0.0000
         // stop();
     }
+    private void beltForward(){
+        Double currentCount = NtHelper.getDouble("/robot/cargocount", 0);
+        NtHelper.setString("/robot/intake/currentcolorstate", colorState);
 
-    public void beltForward() {
-        beltMotor.setPercent(beltSpeed);
+        switch(colorState){
+            case "No ball":
+                NtHelper.setString("/robot/intake/currentcolor", "No color detected");
+                beltMotor.setPercent(beltSpeed);
+                
+                if (colourSensor.isColor(desiredColor)){
+                    colorState = "DesiredBall";
+                    currentCount = currentCount+1;
+                    NtHelper.setDouble("/robot/cargocount", currentCount);
+                }
+                if (colourSensor.isColor(otherColor)){
+                    colorState = "OtherBall";
+                    timer.reset();
+                    timer.start();
+                    rollerSpeed = (-rollerSpeed);
+                }
+                break;
+            case "DesiredBall":
+                NtHelper.setString("/robot/intake/currentcolor", desiredColor);
+
+                if (currentCount == 0 || currentCount == 1){
+                    beltMotor.setPercent(beltSpeed);
+                }
+                else if (currentCount > 1){
+                    beltMotor.setPercent(0);
+                }
+
+                if (!colourSensor.isColor(desiredColor)){
+                    colorState = "No ball";
+                }
+                
+                if (colourSensor.isColor(otherColor)){
+                    colorState = "OtherBall";
+                    rollerSpeed = (-rollerSpeed);
+                    timer.reset();
+                    timer.start();
+
+                }
+
+                break;
+            case "OtherBall":
+                NtHelper.setString("/robot/intake/currentcolor", otherColor);
+                beltMotor.setPercent(-beltSpeed);
+                if ((currentCount == 1 && colourSensor.isColor(desiredColor)) || timer.get() > 2){
+                    colorState = "No ball";
+                    rollerSpeed = (-rollerSpeed);
+                    timer.stop();
+                }
+                break;
+        }
+    }
+
+
+
+    public void beltForward2() {
+        NtHelper.setBoolean("/robot/intake/colorlog", colorLog);
+        if (colourSensor.isColor(desiredColor)){
+            NtHelper.setString("/robot/intake/currentcolor", desiredColor);
+            Double currentCount = NtHelper.getDouble("/robot/cargocount", 0);
+
+            if (currentCount == 0 || currentCount == 1){
+                beltMotor.setPercent(beltSpeed);
+            }
+            else if (currentCount > 1){
+                beltMotor.setPercent(0);
+            }
+            if (!colorLog){
+                currentCount = currentCount+1;
+            NtHelper.setDouble("/robot/cargocount", currentCount);
+            }
+            colorLog = true;
+        }
+        else if(colourSensor.isColor(otherColor)){
+            beltMotor.setPercent(-beltSpeed);
+            rollerSpeed = (-rollerSpeed);
+        }
+        else{
+            NtHelper.setString("/robot/intake/currentcolor", "No color detected");
+            beltMotor.setPercent(beltSpeed);
+            colorLog = false;
+            if (rollerSpeed < 0){
+                rollerSpeed = -rollerSpeed;
+            }
+        }
+
+
     }
 
     public void beltStop() {
@@ -148,6 +258,8 @@ public class Intake extends StateMachine{
 
     @RunState(name="Stop")
     public void stopRun(){
+        //System.out.println("color " + colourSensor.getRawColor().red + "  " + colourSensor.getRawColor().green + "  " + colourSensor.getRawColor().blue);
+
         stop();
         if (Devices.controller.getAButton()){
             setState("Calibrate");
@@ -194,6 +306,7 @@ public class Intake extends StateMachine{
 
     @RunState(name="Up")
     public void upRun(){
+
         intakeUp();
             if (isLeftPressed()){
                 armMotorLeft.setPercent(0);
@@ -225,6 +338,8 @@ public class Intake extends StateMachine{
                 }
                 break;
             case "Stop":
+            //System.out.println("color " + colourSensor.getRawColor().red + "  " + colourSensor.getRawColor().green + "  " + colourSensor.getRawColor().blue);
+
                 stop();
                 if (Devices.controller.getAButton()){
                     state = "Down";

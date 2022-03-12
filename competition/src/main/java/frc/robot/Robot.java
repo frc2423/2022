@@ -67,6 +67,7 @@ public class Robot extends TimedRobot {
     Devices.gyro.reset();
     drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
     Targeting.init();
+    NtHelper.setDouble("/robot/cargocount", 0);
 
   }
 
@@ -85,7 +86,7 @@ public class Robot extends TimedRobot {
     }
     else {
       shooter.stop();
-      double turnRate = DriveHelper.applyDeadband(-Devices.controller.getLeftX());
+      double turnRate = DriveHelper.applyDeadband(-Devices.controller.getRightX());
       double ySpeed = DriveHelper.applyDeadband(-Devices.controller.getLeftY());
   
       double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);

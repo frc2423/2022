@@ -138,6 +138,7 @@ public class Shooter extends StateMachine{
 
     @InitState(name="shoot")
     public void runShootInit() {
+        NtHelper.setDouble("/robot/cargocount", 0);
     }
     
     @RunState(name="shoot")
