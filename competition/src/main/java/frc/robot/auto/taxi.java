@@ -4,9 +4,6 @@ import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.Trajectory.State;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-
 import frc.robot.util.NtHelper;
 import frc.robot.constants.constants;
 import edu.wpi.first.wpilibj.Timer;
@@ -16,6 +13,7 @@ import com.pathplanner.lib.PathPlanner;
 
 public class taxi extends StateMachine {
     //Values subject to change upon completed trajectory integration
+    // Trajectory cabTrajectory;
     Trajectory cabTrajectory = PathPlanner.loadPath("TaxiTaxi", constants.maxSpeedo, constants.maxAccel, true);
     TrajectoryFollower follower = new TrajectoryFollower();
 
@@ -25,9 +23,9 @@ public class taxi extends StateMachine {
 
     public taxi(){
         super("Stop");
-        follower.addTrajectory("CabRoute", cabTrajectory);
         NtHelper.setString("/robot/auto/name", "taxi1");
         NtHelper.setDouble("/robot/auto/delayTimer", timerDelay);
+        follower.addTrajectory("CabRoute", cabTrajectory);
     }
 
     @RunState(name = "Stop")
