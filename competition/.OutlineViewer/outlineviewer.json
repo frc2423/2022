@@ -16,9 +16,6 @@
     "intake": {
       "open": true
     },
-    "open": true,
-    "shooter": {
-      "open": true
-    }
+    "open": true
   }
 }
