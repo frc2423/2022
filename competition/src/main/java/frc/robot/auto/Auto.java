@@ -26,7 +26,7 @@ public class Auto extends StateMachine {
     }
 
     public void getAuto(){
-        String name = NtHelper.getString("/robot/auto/name", "noAuto");
+        String name = NtHelper.getString("/robot/auto/name", "taxi1");
         System.out.println(name);
         switch (name) {
             case "taxi1":
@@ -46,7 +46,7 @@ public class Auto extends StateMachine {
                 break;
             default:
                 selectedAutonomous = taxi; // I'm sure this will cause no problems in the future :)
-                break;
+                break; //you evil evil man.... Adrien
         }
     }
 
