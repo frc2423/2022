@@ -25,7 +25,7 @@ public class ShootTwoTaxi extends StateMachine{
     //TODO: Values subject to change upon completed trajcetory integration
     Trajectory CargoAdvanceTrajectory = PathPlanner.loadPath("CargoAdvance3", constants.maxSpeedo, constants.maxAccel);
     Trajectory ShooterAdvanceTrajectory = PathPlanner.loadPath("ShooterAdvance3", constants.maxSpeedo, constants.maxAccel);
-    Trajectory TaxiBackTrajectory = PathPlanner.loadPath("Taxi3", constants.maxSpeedo, constants.maxAccel);
+    Trajectory TaxiBackTrajectory = PathPlanner.loadPath("Taxi", constants.maxSpeedo, constants.maxAccel);
     private TrajectoryFollower follower = new TrajectoryFollower();
     private Timer timer = new Timer();
 
