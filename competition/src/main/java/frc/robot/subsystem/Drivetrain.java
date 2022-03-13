@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.trajectory.Trajectory;
 
 public class Drivetrain {
     private DifferentialDriveOdometry odometryFinder;
@@ -54,4 +55,8 @@ public class Drivetrain {
         double[] returnArray = { leftPercent, rightPercent };
         return returnArray;
     }
+
+    public void setTrajectory(String name, Trajectory trajectory) {
+        field.getObject(name).setTrajectory(trajectory);
+      }
 }
