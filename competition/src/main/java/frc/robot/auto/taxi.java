@@ -10,7 +10,7 @@ import frc.robot.util.TrajectoryFollower;
 import com.pathplanner.lib.PathPlanner;
 
 
-public class taxi extends StateMachine {
+public class Taxi extends StateMachine {
     // Values subject to change upon completed trajectory integration
     Trajectory trajectory = PathPlanner.loadPath("Taxi", constants.maxSpeedo, constants.maxAccel, true);
     TrajectoryFollower follower = new TrajectoryFollower();
@@ -19,7 +19,7 @@ public class taxi extends StateMachine {
     private Timer timer = new Timer();
     private double timerDelay = 5;
 
-    public taxi(){
+    public Taxi(){
         super("Stop");
         follower.addTrajectory("Taxi", trajectory);
     }

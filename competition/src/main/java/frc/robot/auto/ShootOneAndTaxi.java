@@ -14,14 +14,14 @@ import edu.wpi.first.wpilibj.Timer;
 import com.pathplanner.lib.PathPlanner;
 
 
-public class SimpleAuto extends StateMachine {
+public class ShootOneAndTaxi extends StateMachine {
 
     private Trajectory line;
     private TrajectoryFollower follower = new TrajectoryFollower();
     //private Shooter shooter = new Shooter();
     private Timer timer = new Timer();
 
-    public SimpleAuto() {
+    public ShootOneAndTaxi() {
         super("Stop");
         //TODO: Implement shooter follow-through and trajectory values
         line = PathPlanner.loadPath("TaxiTaxi", constants.maxSpeedo, constants.maxAccel);
@@ -36,8 +36,6 @@ public class SimpleAuto extends StateMachine {
 
     @InitState(name = "shooter")
     public void runShooterInit(){
-        //Shooter initialization
-        follower.setTrajectory("line");
         timer.start();
     }
 

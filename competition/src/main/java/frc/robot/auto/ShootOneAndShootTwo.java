@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import java.util.List;
 
 import com.pathplanner.lib.PathPlanner;
-public class ThreeMuskets extends StateMachine{
+public class ShootOneAndShootTwo extends StateMachine{
     //private Shooter shooter = new Shooter();
 
     private Intake intake = new Intake();
@@ -25,7 +25,7 @@ public class ThreeMuskets extends StateMachine{
     private TrajectoryFollower follower = new TrajectoryFollower();
     private Timer timer = new Timer();
 
-    public ThreeMuskets() {
+    public ShootOneAndShootTwo() {
         super("FirstShot");
         NtHelper.setString("/robot/auto/name", "threeMuskets4");
         follower.addTrajectory("IntakeAim4", IntakeAimTrajectory);

@@ -9,40 +9,40 @@ public class Auto extends StateMachine {
 
     StateMachine selectedAutonomous;
     StateMachine taxi;
-    StateMachine simple1;
-    StateMachine shootTwo;
-    StateMachine threeMuskets;
-    StateMachine fiveMuskets;
+    StateMachine shootOneAndTaxi;
+    StateMachine shootTwoTaxi;
+    StateMachine shootOneAndShootTwo;
+    StateMachine shootTwoAndShootOne;
     
     public Auto(){
         super("init");
-        taxi = new taxi();
-        simple1 = new SimpleAuto();
-        shootTwo = new shootTwoTaxi();
-        threeMuskets = new ThreeMuskets();
-        fiveMuskets = new ThreeMuskets5();
+        taxi = new Taxi();
+        shootOneAndTaxi = new ShootOneAndTaxi();
+        shootTwoTaxi = new ShootTwoTaxi();
+        shootOneAndShootTwo = new ShootOneAndShootTwo();
+        shootTwoAndShootOne = new ShootTwoAndShootOne();
 
         NtHelper.setString("/robot/auto/name", "noAuto");
     }
 
     public void getAuto(){
-        String name = NtHelper.getString("/robot/auto/name", "taxi1");
+        String name = NtHelper.getString("/robot/auto/name", "taxi");
         System.out.println(name);
         switch (name) {
-            case "taxi1":
+            case "taxi":
                 selectedAutonomous = taxi;
                 break;
-            case "simpleAuto2":
-                selectedAutonomous = simple1;
+            case "shootOneAndTaxi":
+                selectedAutonomous = shootOneAndTaxi;
                 break;
-            case "shootTwoTaxi3":
-                selectedAutonomous = shootTwo;
+            case "shootTwoTaxi":
+                selectedAutonomous = shootTwoTaxi;
                 break;
-            case "threeMuskets4":
-                selectedAutonomous = threeMuskets;
+            case "shootOneAndShootTwo":
+                selectedAutonomous = shootOneAndShootTwo;
                 break;
-            case "threeMuskets5ive":
-                selectedAutonomous = fiveMuskets;
+            case "shootTwoAndShootOne":
+                selectedAutonomous = shootTwoAndShootOne;
                 break;
             default:
                 selectedAutonomous = taxi; // I'm sure this will cause no problems in the future :)

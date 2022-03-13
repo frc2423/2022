@@ -19,7 +19,7 @@ import frc.robot.subsystem.Shooter;
  * Move backwards to taxi
  */ 
 
-public class shootTwoTaxi extends StateMachine{
+public class ShootTwoTaxi extends StateMachine{
 
     private Intake intake = new Intake();
     //TODO: Values subject to change upon completed trajcetory integration
@@ -31,7 +31,7 @@ public class shootTwoTaxi extends StateMachine{
 
     // private Shooter shooter = new Shooter();
 
-    public shootTwoTaxi() {
+    public ShootTwoTaxi() {
         super("Stop");
         follower.addTrajectory("CargoAdvance", CargoAdvanceTrajectory);
         follower.addTrajectory("ShooterAdvance", ShooterAdvanceTrajectory);

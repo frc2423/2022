@@ -13,7 +13,7 @@ import frc.robot.subsystem.Shooter;
 import com.pathplanner.lib.PathPlanner;
 import edu.wpi.first.wpilibj.Timer;
 
-public class ThreeMuskets5 extends StateMachine{
+public class ShootTwoAndShootOne extends StateMachine{
     private Intake intake = new Intake();
     Trajectory CargoAdvance1 = PathPlanner.loadPath("CargoAdvance15", constants.maxSpeedo, constants.maxAccel);
     Trajectory CargoAdvance2 = PathPlanner.loadPath("ShooterAdvance15", constants.maxSpeedo, constants.maxAccel);
@@ -24,7 +24,7 @@ public class ThreeMuskets5 extends StateMachine{
     private TrajectoryFollower follower = new TrajectoryFollower();
     private Timer timer = new Timer();
     
-    public ThreeMuskets5(){
+    public ShootTwoAndShootOne(){
         super("CargoAdvance");
         follower.addTrajectory("CargoAdvance1", CargoAdvance1);
         follower.addTrajectory("ShooterAdvance1", ShooterAdvance1);
