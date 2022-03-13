@@ -30,11 +30,11 @@ public class ThreeMuskets extends StateMachine{
         NtHelper.setString("/robot/auto/name", "threeMuskets4");
         follower.addTrajectory("IntakeAim4", IntakeAimTrajectory);
         follower.addTrajectory("Taxi4", TaxiTrajectory);
-        follower.setTrajectory("IntakeAim4");
     }
 
     @InitState(name = "FirstShot")
     public void firstShotInit(){
+        follower.setTrajectory("IntakeAim4");
         timer.reset();
         timer.start();
         //TODO: Implement shooter code following general shooter implementation

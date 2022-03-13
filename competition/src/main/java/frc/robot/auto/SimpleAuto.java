@@ -22,17 +22,22 @@ public class SimpleAuto extends StateMachine {
     private Timer timer = new Timer();
 
     public SimpleAuto() {
-        super("shooter");
+        super("Stop");
         //TODO: Implement shooter follow-through and trajectory values
         line = PathPlanner.loadPath("TaxiTaxi", constants.maxSpeedo, constants.maxAccel);
         follower.addTrajectory("line", line);
-        follower.setTrajectory("line");
         NtHelper.setString("/robot/auto/name", "simpleAuto2");
+    }
+
+    @RunState(name = "Stop")
+    public void stopState(){
+        setState("shooter");
     }
 
     @InitState(name = "shooter")
     public void runShooterInit(){
         //Shooter initialization
+        follower.setTrajectory("line");
         timer.start();
     }
 
