@@ -28,7 +28,7 @@ public class Intake extends StateMachine{
     private double topPosition = 1;
     private double bottomPosition = -13.5;
     private double belowPosition = -13.5;
-    private double rollerSpeed = 0.60;
+    private double rollerSpeed = 0.50;
     private double calibrateSpeed = 0.1;
 
     private String state = "Calibrate";
@@ -314,7 +314,7 @@ public class Intake extends StateMachine{
             if (isRightPressed()){
                 armMotor.setPercent(0);
             }
-            if (!leftLimit.get() || !rightLimit.get()){ //"||"just for testing because there is the bar in the way
+            if (!leftLimit.get() && !rightLimit.get()){ 
                 setState("Stop");
             }
             if (Devices.controller.getAButton()){
