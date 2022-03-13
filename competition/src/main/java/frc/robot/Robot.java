@@ -89,13 +89,8 @@ public class Robot extends TimedRobot {
     }
     else {
       shooter.stop();
-<<<<<<< HEAD
       double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX()));
       double ySpeed = speedLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getLeftY()));
-=======
-      double turnRate = DriveHelper.applyDeadband(-Devices.controller.getRightX());
-      double ySpeed = DriveHelper.applyDeadband(-Devices.controller.getLeftY());
->>>>>>> d49bb55 (wip)
   
       double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
   
