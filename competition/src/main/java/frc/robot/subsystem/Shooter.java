@@ -130,7 +130,7 @@ public class Shooter extends StateMachine{
         }
         
        // shooterMotor.setSpeed(shooterSpeed);
-       setShooterVolt(shooterSpeed);
+        setShooterVolt(shooterSpeed);
 
         if (timer.get() > this.revDuration && isAimed) this.setState("shoot");
 
@@ -164,7 +164,7 @@ public class Shooter extends StateMachine{
         NtHelper.getDouble("/robot/shooter/shootermotori", 0.0), 
         NtHelper.getDouble("/robot/shooter/shootermotord", 0.0),
         NtHelper.getDouble("/robot/shooter/shootermotorf", 0.0));
-
+        NtHelper.setBoolean("/robot/shooter/isAuto", autoMode);
         NtHelper.setDouble("/robot/shooter/foundMotorP", NtHelper.getDouble("/robot/shooter/shootermotorp", 0.0));
     }
 

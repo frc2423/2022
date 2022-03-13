@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
     Devices.gyro.getRotation()
   );
   private Intake intake = new Intake ();
-  private Shooter shooter = new Shooter ();
+  public static Shooter shooter = new Shooter ();
   private Auto auto = new Auto();
   private RateLimiter speedLimiter = new RateLimiter(0.7, 1.2);
   private RateLimiter turnLimiter = new RateLimiter(2, 3.5);
@@ -42,7 +42,6 @@ public class Robot extends TimedRobot {
     intake.stop();
     Devices.init();
     CameraServer.startAutomaticCapture();
-    NtHelper.setBoolean("/robot/shooter/isAuto", true);
     Devices.camLed.set(Relay.Value.kOn);
   }
 

@@ -22,7 +22,7 @@ public class Auto extends StateMachine {
         shootOneAndShootTwo = new ShootOneAndShootTwo();
         shootTwoAndShootOne = new ShootTwoAndShootOne();
 
-        NtHelper.setString("/robot/auto/name", "noAuto");
+        NtHelper.setString("/robot/auto/name", "shootOneAndTaxi");
     }
 
     public void getAuto(){
@@ -46,7 +46,7 @@ public class Auto extends StateMachine {
                 break;
             default:
                 selectedAutonomous = taxi; // I'm sure this will cause no problems in the future :)
-                break;
+                break; // Adrien, you evil evil man
         }
     }
 
