@@ -46,7 +46,7 @@ public class Auto extends StateMachine {
                 break;
             default:
                 selectedAutonomous = taxi; // I'm sure this will cause no problems in the future :)
-                break; //you evil evil man.... Adrien
+                break;
         }
     }
 
@@ -58,7 +58,6 @@ public class Auto extends StateMachine {
     @InitState(name = "run")
     public void initRun(){
         getAuto();
-        System.out.println (selectedAutonomous);
         selectedAutonomous.setState(selectedAutonomous.getDefaultState());
     }
 

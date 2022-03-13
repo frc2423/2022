@@ -5,8 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Relay.Direction;
-import edu.wpi.first.wpilibj.Relay.Value;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
 import frc.robot.constants.constants;
@@ -50,7 +48,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    // relay.set(Value.kForward);
     telemetry();
   }
 
@@ -66,7 +63,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // relay.setDirection(Direction.kForward);
     intake.zero();
     intake.stop();
     Devices.leftMotor.resetEncoder(0);
