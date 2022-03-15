@@ -2,16 +2,9 @@ package frc.robot.auto;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.NtHelper;
 import frc.robot.Subsystems;
-import frc.robot.constants.constants;
-import edu.wpi.first.wpilibj.Timer;
-
-import com.pathplanner.lib.PathPlanner;
-
-
 
 /* Move towards cargo in straight line
  * Intake cargo
@@ -21,16 +14,10 @@ import com.pathplanner.lib.PathPlanner;
 
 public class ShootTwoTaxi extends StateMachine{
     //TODO: Values subject to change upon completed trajcetory integration
-    Trajectory CargoAdvanceTrajectory = PathPlanner.loadPath("CargoAdvance3", constants.maxSpeedo, constants.maxAccel);
-    Trajectory ShooterAdvanceTrajectory = PathPlanner.loadPath("ShooterAdvance3", constants.maxSpeedo, constants.maxAccel);
-    Trajectory TaxiBackTrajectory = PathPlanner.loadPath("Taxi", constants.maxSpeedo, constants.maxAccel);
     private Timer timer = new Timer();
 
     public ShootTwoTaxi() {
         super("Stop");
-        Subsystems.follower.addTrajectory("CargoAdvance", CargoAdvanceTrajectory);
-        Subsystems.follower.addTrajectory("ShooterAdvance", ShooterAdvanceTrajectory);
-        Subsystems.follower.addTrajectory("TaxiBack", TaxiBackTrajectory);
         NtHelper.setString("/robot/auto/name", "shootTwoTaxi3");
     }
 

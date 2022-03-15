@@ -3,28 +3,14 @@ package frc.robot.auto;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
-import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.Subsystems;
-import frc.robot.constants.constants;
-import com.pathplanner.lib.PathPlanner;
 import edu.wpi.first.wpilibj.Timer;
 
 public class ShootTwoAndShootOne extends StateMachine{
-    Trajectory CargoAdvance1 = PathPlanner.loadPath("CargoAdvance15", constants.maxSpeedo, constants.maxAccel);
-    Trajectory CargoAdvance2 = PathPlanner.loadPath("ShooterAdvance15", constants.maxSpeedo, constants.maxAccel);
-    Trajectory ShooterAdvance1 = PathPlanner.loadPath("CargoAdvance25", constants.maxSpeedo, constants.maxAccel);
-    Trajectory ShooterAdvance2 = PathPlanner.loadPath("ShooterAdvance25", constants.maxSpeedo, constants.maxAccel);
-    Trajectory Taxi = PathPlanner.loadPath("Taxi5", constants.maxSpeedo, constants.maxAccel);
-
     private Timer timer = new Timer();
     
     public ShootTwoAndShootOne(){
         super("CargoAdvance");
-        Subsystems.follower.addTrajectory("CargoAdvance1", CargoAdvance1);
-        Subsystems.follower.addTrajectory("ShooterAdvance1", ShooterAdvance1);
-        Subsystems.follower.addTrajectory("CargoAdvance2", CargoAdvance2);
-        Subsystems.follower.addTrajectory("ShooterAdvance2", ShooterAdvance2);
-        Subsystems.follower.addTrajectory("Taxi", Taxi);
     }
 
     @InitState(name = "CargoAdvance")

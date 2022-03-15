@@ -1,7 +1,8 @@
 package frc.robot;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.*;
-
+import frc.robot.auto.Auto;
+import frc.robot.auto.Trajectories;
 
 /**
  * Static accessor for all robot subsystems.
@@ -12,7 +13,8 @@ public class Subsystems {
     public static Intake intake;
     public static Shooter shooter;
     public static TrajectoryFollower follower;
-
+    public static Auto auto;
+    
     static void init() {
         climber = new Climber();
         drivetrain = new Drivetrain(
@@ -23,7 +25,9 @@ public class Subsystems {
         );
         intake = new Intake();
         shooter = new Shooter();
-        follower = new TrajectoryFollower();
+        follower = new TrajectoryFollower(Trajectories.getTrajectories());
+        auto = new Auto();
+
 
         intake.zero();
         intake.stop();

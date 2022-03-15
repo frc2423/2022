@@ -20,7 +20,6 @@ import frc.robot.util.RateLimiter;
 
 public class Robot extends TimedRobot {
 
-  private Auto auto = new Auto();
   private RateLimiter speedLimiter = new RateLimiter(0.7, 1.2);
   private RateLimiter turnLimiter = new RateLimiter(2, 3.5);
 
@@ -30,7 +29,7 @@ public class Robot extends TimedRobot {
     Devices.init();
     Subsystems.init();
     CameraServer.startAutomaticCapture();
-    Devices.camLed.set(Relay.Value.kOn);
+    Devices.camLed.set(Relay.Value.kForward);
   }
 
   @Override
@@ -45,7 +44,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    auto.run();
+    Subsystems.auto.run();
   }
 
   @Override
