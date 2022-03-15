@@ -7,6 +7,7 @@ import frc.robot.util.NtHelper;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
 import frc.robot.util.DriveHelper;
+import frc.robot.util.Rotation;
 
 /* Move towards cargo in straight line
  * Intake cargo
@@ -18,6 +19,7 @@ public class ShootTwoTaxi extends StateMachine{
     //TODO: Values subject to change upon completed trajcetory integration
     private Timer timer = new Timer();
     private double angle;
+    private Rotation rotate;
 
     public ShootTwoTaxi() {
         super("Stop");
@@ -70,16 +72,18 @@ public class ShootTwoTaxi extends StateMachine{
     @InitState(name = "Rotate")
     public void rotateInit(){
         angle = Devices.gyro.getAngle() + 180;
+        rotate = new Rotation(.1, .3, angle - 5, angle + 5);
     }
 
     @RunState(name = "Rotate")
     public void rotate(){
-        double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, .3, false);
+        double rotationSpeed = rotate.calculate(Devices.gyro.getAngle());
+        double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
         Devices.leftMotor.setPercent(leftSpeed);
         Devices.rightMotor.setPercent(rightSpeed); 
-        if(Devices.gyro.getAngle() > angle-10){
+        if(rotate.isDone(Devices.gyro.getAngle())){
             setState("ShooterAdvance");
         }
     }
