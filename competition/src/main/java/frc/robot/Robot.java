@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
     Devices.init();
     Subsystems.init();
     CameraServer.startAutomaticCapture();
-    Devices.camLed.set(Relay.Value.kOn);
+    Devices.camLed.set(Relay.Value.kForward);
   }
 
   @Override

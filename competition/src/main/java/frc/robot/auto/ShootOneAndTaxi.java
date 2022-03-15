@@ -13,21 +13,19 @@ import edu.wpi.first.wpilibj.Timer;
 
 import com.pathplanner.lib.PathPlanner;
 import frc.robot.Robot;
+import frc.robot.Subsystems;
 
 
 public class ShootOneAndTaxi extends StateMachine {
 
     private Trajectory line;
-    private TrajectoryFollower follower = new TrajectoryFollower();
     //private Shooter shooter = new Shooter();
     private Timer timer = new Timer();
 
     public ShootOneAndTaxi() {
         super("Stop");
         // TODO: Implement shooter follow-through and trajectory values
-        line = PathPlanner.loadPath("Taxi", constants.maxSpeedo, constants.maxAccel, true);
-        follower.addTrajectory("line", line);
-        NtHelper.setString("/robot/auto/name", "simpleAuto2");
+         NtHelper.setString("/robot/auto/name", "simpleAuto2");
     }
 
     @RunState(name = "Stop")
@@ -54,13 +52,13 @@ public class ShootOneAndTaxi extends StateMachine {
     public void initTaxi(){
         Robot.shooter.stop();
         Robot.shooter.run();
-        follower.setTrajectory("line");
-        follower.startFollowing();
+        Subsystems.follower.setTrajectory("line");
+        Subsystems.follower.startFollowing();
         timer.stop();
     }
 
     @RunState(name = "taxi")
     public void runTaxi(){
-        follower.follow();
+        Subsystems.follower.follow();
     }
 }

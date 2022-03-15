@@ -4,6 +4,7 @@ import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.util.NtHelper;
+import frc.robot.Subsystems;
 import frc.robot.constants.constants;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.TrajectoryFollower;
@@ -23,19 +24,12 @@ public class ShootTwoTaxi extends StateMachine{
 
     private Intake intake = new Intake();
     //TODO: Values subject to change upon completed trajcetory integration
-    Trajectory CargoAdvanceTrajectory = PathPlanner.loadPath("CargoAdvance3", constants.maxSpeedo, constants.maxAccel);
-    Trajectory ShooterAdvanceTrajectory = PathPlanner.loadPath("ShooterAdvance3", constants.maxSpeedo, constants.maxAccel);
-    Trajectory TaxiBackTrajectory = PathPlanner.loadPath("Taxi", constants.maxSpeedo, constants.maxAccel);
-    private TrajectoryFollower follower = new TrajectoryFollower();
     private Timer timer = new Timer();
 
     // private Shooter shooter = new Shooter();
 
     public ShootTwoTaxi() {
         super("Stop");
-        follower.addTrajectory("CargoAdvance", CargoAdvanceTrajectory);
-        follower.addTrajectory("ShooterAdvance", ShooterAdvanceTrajectory);
-        follower.addTrajectory("TaxiBack", TaxiBackTrajectory);
         NtHelper.setString("/robot/auto/name", "shootTwoTaxi3");
     }
 
@@ -46,14 +40,14 @@ public class ShootTwoTaxi extends StateMachine{
 
     @InitState(name = "CargoAdvance")
     public void CargoAdvanceInit (){
-        follower.setTrajectory("CargoAdvance");
-        follower.resetPosition();
+        Subsystems.follower.setTrajectory("CargoAdvance");
+        Subsystems.follower.resetPosition();
     }
 
     @RunState(name = "CargoAdvance")
     public void CargoAdvanceRun(){
-        follower.follow();
-        if (follower.isDone()) {
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
             setState("Intake");
         }
     
@@ -77,14 +71,14 @@ public class ShootTwoTaxi extends StateMachine{
 
     @InitState(name = "ShooterAdvance")
     public void ShooterAdvanceInit (){
-        follower.setTrajectory("ShooterAdvance");
-        follower.resetPosition();
+        Subsystems.follower.setTrajectory("ShooterAdvance");
+        Subsystems.follower.resetPosition();
     }
 
     @RunState(name = "ShooterAdvance")
     public void ShooterAdvance (){
-        follower.follow ();
-        if (follower.isDone()){
+        Subsystems.follower.follow ();
+        if (Subsystems.follower.isDone()){
             setState ("ShootTwo");
         }
 
@@ -109,14 +103,14 @@ public class ShootTwoTaxi extends StateMachine{
 
     @InitState(name = "TaxiBack")
     public void TaxiBackInit (){
-        follower.setTrajectory ("CargoAdvance");
-        follower.resetPosition();
+        Subsystems.follower.setTrajectory ("CargoAdvance");
+        Subsystems.follower.resetPosition();
         timer.stop();
     }
 
     @RunState(name = "TaxiBack")
     public void TaxiBack (){
-        follower.follow ();
+        Subsystems.follower.follow ();
     }
 
 

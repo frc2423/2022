@@ -6,6 +6,7 @@ import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.NtHelper;
 import frc.robot.util.TrajectoryFollower;
 import edu.wpi.first.math.trajectory.Trajectory;
+import frc.robot.Subsystems;
 import frc.robot.constants.constants;
 import frc.robot.subsystem.Intake;
 import frc.robot.subsystem.Shooter;
@@ -15,34 +16,25 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class ShootTwoAndShootOne extends StateMachine{
     private Intake intake = new Intake();
-    Trajectory CargoAdvance1 = PathPlanner.loadPath("CargoAdvance15", constants.maxSpeedo, constants.maxAccel);
-    Trajectory CargoAdvance2 = PathPlanner.loadPath("ShooterAdvance15", constants.maxSpeedo, constants.maxAccel);
-    Trajectory ShooterAdvance1 = PathPlanner.loadPath("CargoAdvance25", constants.maxSpeedo, constants.maxAccel);
-    Trajectory ShooterAdvance2 = PathPlanner.loadPath("ShooterAdvance25", constants.maxSpeedo, constants.maxAccel);
     Trajectory Taxi = PathPlanner.loadPath("Taxi5", constants.maxSpeedo, constants.maxAccel);
 
-    private TrajectoryFollower follower = new TrajectoryFollower();
     private Timer timer = new Timer();
     
     public ShootTwoAndShootOne(){
         super("CargoAdvance");
-        follower.addTrajectory("CargoAdvance1", CargoAdvance1);
-        follower.addTrajectory("ShooterAdvance1", ShooterAdvance1);
-        follower.addTrajectory("CargoAdvance2", CargoAdvance2);
-        follower.addTrajectory("ShooterAdvance2", ShooterAdvance2);
-        follower.addTrajectory("Taxi", Taxi);
+        Subsystems.follower.addTrajectory("Taxi", Taxi);
     }
 
     @InitState(name = "CargoAdvance")
     public void CargoAdvanceInit(){
-        follower.setTrajectory("CargoAdvance1");
-        // follower.setTrajectory("CargoAdvance");
+        Subsystems.follower.setTrajectory("CargoAdvance1");
+        // Subsystems.follower.setTrajectory("CargoAdvance");
     }
 
     @RunState(name = "CargoAdvance")
     public void CargoAdvanceRun(){
-        follower.follow();
-        if (follower.isDone()) {
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
             setState("FirstIntake");
         }
     }
@@ -63,13 +55,13 @@ public class ShootTwoAndShootOne extends StateMachine{
 
     @InitState(name = "FirstShooterAdvance")
     public void FirstShooterAdvanceInit(){
-        follower.setTrajectory("FirstShooterAdvance");
+        Subsystems.follower.setTrajectory("FirstShooterAdvance");
     }
 
     @RunState(name = "FirstShooterAdvance")
     public void FirstShooterAdvanceRun(){
-        follower.follow();
-        if (follower.isDone()) {
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
             setState("ShootTwo");
         }
     }
@@ -90,13 +82,13 @@ public class ShootTwoAndShootOne extends StateMachine{
 
     @InitState(name = "SecondCargoAdvance")
     public void SecondCargoAdvanceInit(){
-        follower.setTrajectory("SecondCargoAdvance");
+        Subsystems.follower.setTrajectory("SecondCargoAdvance");
     }
 
     @RunState(name = "SecondCargoAdvance")
     public void SecondCargoAdvanceRun(){
-        follower.follow();
-        if (follower.isDone()) {
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
             setState("SecondIntake");
         }
     }
@@ -117,13 +109,13 @@ public class ShootTwoAndShootOne extends StateMachine{
 
     @InitState(name = "SecondShooterAdvance")
     public void SecondShooterAdvanceInit(){
-        follower.setTrajectory("SecondShooterAdvance");
+        Subsystems.follower.setTrajectory("SecondShooterAdvance");
     }
 
     @RunState(name = "SecondShooterAdvance")
     public void SecondShooterAdvanceRun(){
-        follower.follow();
-        if (follower.isDone()) {
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
             setState("ShootOne");
         }
     }
@@ -144,13 +136,13 @@ public class ShootTwoAndShootOne extends StateMachine{
 
     @InitState(name = "Taxi")
     public void TaxiInit(){
-        follower.setTrajectory("Taxi");
+        Subsystems.follower.setTrajectory("Taxi");
         timer.stop();
     }
 
     @RunState(name = "Taxi")
     public void TaxiRun(){
-        follower.follow();
+        Subsystems.follower.follow();
     }
 
 

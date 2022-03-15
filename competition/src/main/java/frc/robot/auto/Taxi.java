@@ -31,7 +31,7 @@ public class Taxi extends StateMachine {
     @InitState(name = "Wait")
     public void waitInit(){
         timer.start();
-        Subsystems.trajectoryFollower.setTrajectory("Taxi");   
+        Subsystems.follower.setTrajectory("Taxi");   
     }
 
     @RunState(name = "Wait")
@@ -43,12 +43,12 @@ public class Taxi extends StateMachine {
 
     @InitState(name = "Taxi")
     public void taxiInit(){
-        Subsystems.trajectoryFollower.startFollowing();
+        Subsystems.follower.startFollowing();
         timer.stop();
     }
 
     @RunState(name = "Taxi")
     public void taxiRun(){
-        Subsystems.trajectoryFollower.follow();
+        Subsystems.follower.follow();
     }
 }
