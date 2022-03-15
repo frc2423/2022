@@ -5,17 +5,11 @@ import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.NtHelper;
-import frc.robot.util.TrajectoryFollower;
-import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.Subsystems;
-import frc.robot.constants.constants;
 import frc.robot.subsystem.Intake;
 
 import edu.wpi.first.wpilibj.Timer;
 
-import java.util.List;
-
-import com.pathplanner.lib.PathPlanner;
 public class ShootOneAndShootTwo extends StateMachine{
     //private Shooter shooter = new Shooter();
 

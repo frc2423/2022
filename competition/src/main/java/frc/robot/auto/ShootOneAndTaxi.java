@@ -1,20 +1,13 @@
 package frc.robot.auto;
 
 import frc.robot.util.stateMachine.StateMachine;
-
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.NtHelper;
-import frc.robot.util.TrajectoryFollower;
 import edu.wpi.first.math.trajectory.Trajectory;
-import frc.robot.constants.constants;
-import frc.robot.subsystem.Shooter;
 import edu.wpi.first.wpilibj.Timer;
-
-import com.pathplanner.lib.PathPlanner;
 import frc.robot.Robot;
 import frc.robot.Subsystems;
-
 
 public class ShootOneAndTaxi extends StateMachine {
 

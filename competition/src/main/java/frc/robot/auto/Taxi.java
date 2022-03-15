@@ -3,18 +3,11 @@ package frc.robot.auto;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
-import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.Subsystems;
-import frc.robot.constants.constants;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.util.TrajectoryFollower;
-import com.pathplanner.lib.PathPlanner;
-
 
 public class Taxi extends StateMachine {
-    // Values subject to change upon completed trajectory integration
-
-
+    
     private Timer timer = new Timer();
     private double timerDelay = 5;
 
