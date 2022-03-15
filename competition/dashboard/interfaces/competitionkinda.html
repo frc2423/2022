@@ -1,0 +1,81 @@
+<dashboard-tab
+    tab-name="TeleOperated"
+    slot="tab"
+    source-provider="NetworkTables"
+    selected=""
+>
+    <vaadin-number-field
+        has-controls=""
+        label="Ball Count"
+        max="2"
+        value="2"
+        tabindex="0"
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(0.00260598px, 41.3527px); width: 142.643px; height: 85px;"
+        has-value=""
+        hascontrols=""
+    ></vaadin-number-field>
+    <frc-toggle-group
+        source-provider="NetworkTables"
+        style="transform: translate(216.865px, 37.7466px);"
+        options="[&quot;Outtake&quot;,&quot;Idle&quot;,&quot;Intake&quot;]"
+        value="Outtake"
+    ></frc-toggle-group>
+    <style>
+        .header {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+    <frc-toggle-switch
+        source-provider="NetworkTables"
+        style="transform: translate(-0.000543494px, 342.662px); width: 150.667px; height: 39.9896px;"
+        toggled=""
+    ></frc-toggle-switch>
+    <frc-toggle-group
+        source-provider="NetworkTables"
+        style="transform: translate(438.344px, 33.676px); width: 161.976px; height: 336.198px;"
+        source-key="/robot/climber/state"
+        options="[&quot;Climb&quot;,&quot;Up&quot;,&quot;Stop&quot;,&quot;Down&quot;]"
+        value="Stop"
+    ></frc-toggle-group>
+
+
+
+    <frc-label
+        text="Low"
+        source-provider="NetworkTables"
+        style="width: 35.1354px; height: 21.3229px; transform: translate(2.87002px, 385.961px);"
+    ></frc-label>
+    <frc-label
+        text="High"
+        source-provider="NetworkTables"
+        style="transform: translate(111.338px, 385.998px);"
+    ></frc-label>
+    <frc-toggle-switch
+        source-provider="NetworkTables"
+        style="transform: translate(0.00613699px, 467.329px); width: 152.656px; height: 41.9792px;"
+    ></frc-toggle-switch>
+    <frc-label
+        text="SHOOTER"
+        source-provider="NetworkTables"
+        style="transform: translate(28px, 416.004px); width: 103.792px; height: 29.3333px;"
+        class="header"
+    ></frc-label>
+    <frc-label
+        text="Auto"
+        source-provider="NetworkTables"
+        style="transform: translate(113.994px, 446.66px);"
+    ></frc-label>
+    <frc-label
+        text="Manual"
+        source-provider="NetworkTables"
+        style="transform: translate(1.33328px, 446.003px);"
+    ></frc-label>
+</dashboard-tab>
+<dashboard-tab
+    slot="tab"
+    tab-name="Autonomous"
+    source-provider="NetworkTables"
+></dashboard-tab>
