@@ -1,32 +1,26 @@
 package frc.robot.auto;
 
 import frc.robot.util.stateMachine.StateMachine;
-
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.NtHelper;
-import frc.robot.util.TrajectoryFollower;
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.constants.constants;
-import frc.robot.subsystem.Shooter;
 import edu.wpi.first.wpilibj.Timer;
-
 import com.pathplanner.lib.PathPlanner;
-import frc.robot.Robot;
+import frc.robot.Subsystems;
 
 
 public class ShootOneAndTaxi extends StateMachine {
 
     private Trajectory line;
-    private TrajectoryFollower follower = new TrajectoryFollower();
-    //private Shooter shooter = new Shooter();
     private Timer timer = new Timer();
 
     public ShootOneAndTaxi() {
         super("Stop");
         // TODO: Implement shooter follow-through and trajectory values
         line = PathPlanner.loadPath("Taxi", constants.maxSpeedo, constants.maxAccel, true);
-        follower.addTrajectory("line", line);
+        Subsystems.follower.addTrajectory("line", line);
         NtHelper.setString("/robot/auto/name", "simpleAuto2");
     }
 
@@ -37,14 +31,14 @@ public class ShootOneAndTaxi extends StateMachine {
 
     @InitState(name = "shooter")
     public void runShooterInit(){
-        Robot.shooter.setAuto(false);
+        Subsystems.shooter.setAuto(false);
         timer.start();
     }
 
     @RunState(name = "shooter")
     public void runShooter(){
-        Robot.shooter.shoot();
-        Robot.shooter.run();
+        Subsystems.shooter.shoot();
+        Subsystems.shooter.run();
         if (timer.get() > 4){
             setState("taxi");
         }
@@ -52,15 +46,15 @@ public class ShootOneAndTaxi extends StateMachine {
 
     @InitState(name = "taxi")
     public void initTaxi(){
-        Robot.shooter.stop();
-        Robot.shooter.run();
-        follower.setTrajectory("line");
-        follower.startFollowing();
+        Subsystems.shooter.stop();
+        Subsystems.shooter.run();
+        Subsystems.follower.setTrajectory("line");
+        Subsystems.follower.startFollowing();
         timer.stop();
     }
 
     @RunState(name = "taxi")
     public void runTaxi(){
-        follower.follow();
+        Subsystems.follower.follow();
     }
 }

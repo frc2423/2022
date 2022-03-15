@@ -29,8 +29,7 @@ public class Robot extends TimedRobot {
     constants.Kv, 
     Devices.gyro.getRotation()
   );
-  private Intake intake = new Intake ();
-  public static Shooter shooter = new Shooter ();
+
   private Auto auto = new Auto();
   private RateLimiter speedLimiter = new RateLimiter(0.7, 1.2);
   private RateLimiter turnLimiter = new RateLimiter(2, 3.5);
@@ -38,9 +37,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    intake.zero();
-    intake.stop();
     Devices.init();
+    Subsystems.init();
     CameraServer.startAutomaticCapture();
     Devices.camLed.set(Relay.Value.kOn);
   }
@@ -51,8 +49,8 @@ public class Robot extends TimedRobot {
   }
 
   public void autonomousInit() {
-    intake.zero();
-    intake.stop();
+    Subsystems.intake.zero();
+    Subsystems.intake.stop();
   }
 
   @Override
@@ -62,8 +60,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    intake.zero();
-    intake.stop();
+    Subsystems.intake.zero();
+    Subsystems.intake.stop();
     Devices.leftMotor.resetEncoder(0);
     Devices.rightMotor.resetEncoder(0);
     Devices.gyro.reset();
@@ -82,12 +80,12 @@ public class Robot extends TimedRobot {
     double rotationSpeed = 0;
     if (Devices.controller.getRightTriggerAxis() > 0.2){
       System.out.println("SHOOT!");
-      shooter.setAuto(NtHelper.getBoolean("/robot/shooter/isAuto", true));
-      shooter.shoot();
+      Subsystems.shooter.setAuto(NtHelper.getBoolean("/robot/shooter/isAuto", true));
+      Subsystems.shooter.shoot();
 
     }
     else {
-      shooter.stop();
+      Subsystems.shooter.stop();
       double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX()));
       double ySpeed = speedLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getLeftY()));
   
@@ -103,17 +101,15 @@ public class Robot extends TimedRobot {
     }
 
   
-    shooter.run();
-
-    //runs intake
-    intake.runIntake();
+    Subsystems.shooter.run();
+    Subsystems.intake.runIntake();
   }
 
 
   @Override
   public void disabledPeriodic() {
-    intake.zero();
-    intake.stop();
+    Subsystems.intake.zero();
+    Subsystems.intake.stop();
     Devices.leftMotor.resetEncoder(0);
     Devices.rightMotor.resetEncoder(0);
     Devices.gyro.reset();
@@ -130,7 +126,7 @@ public class Robot extends TimedRobot {
     NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
     NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
     NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());  
-    shooter.shooterInfo();
+    Subsystems.shooter.shooterInfo();
   }
 
   public void telementryAuto(){

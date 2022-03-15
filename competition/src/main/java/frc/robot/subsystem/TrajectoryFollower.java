@@ -1,9 +1,8 @@
-package frc.robot.util;
+package frc.robot.subsystem;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.Devices;
 import frc.robot.constants.constants;
-import frc.robot.subsystem.Drivetrain;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;

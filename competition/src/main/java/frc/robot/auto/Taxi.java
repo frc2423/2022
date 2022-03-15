@@ -4,16 +4,16 @@ import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
 import edu.wpi.first.math.trajectory.Trajectory;
+import frc.robot.Subsystems;
 import frc.robot.constants.constants;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.util.TrajectoryFollower;
+
 import com.pathplanner.lib.PathPlanner;
 
 
 public class Taxi extends StateMachine {
     // Values subject to change upon completed trajectory integration
     Trajectory trajectory = PathPlanner.loadPath("Taxi", constants.maxSpeedo, constants.maxAccel, true);
-    TrajectoryFollower follower = new TrajectoryFollower();
 
 
     private Timer timer = new Timer();
@@ -21,7 +21,7 @@ public class Taxi extends StateMachine {
 
     public Taxi(){
         super("Stop");
-        follower.addTrajectory("Taxi", trajectory);
+        Subsystems.follower.addTrajectory("Taxi", trajectory);
     }
 
     @RunState(name = "Stop")
@@ -33,7 +33,7 @@ public class Taxi extends StateMachine {
     @InitState(name = "Wait")
     public void waitInit(){
         timer.start();
-        follower.setTrajectory("Taxi");
+        Subsystems.follower.setTrajectory("Taxi");
     }
 
     @RunState(name = "Wait")
@@ -45,12 +45,12 @@ public class Taxi extends StateMachine {
 
     @InitState(name = "Taxi")
     public void taxiInit(){
-        follower.startFollowing();
+        Subsystems.follower.startFollowing();
         timer.stop();
     }
 
     @RunState(name = "Taxi")
     public void taxiRun(){
-        follower.follow();
+        Subsystems.follower.follow();
     }
 }
