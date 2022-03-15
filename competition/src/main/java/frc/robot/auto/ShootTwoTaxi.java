@@ -2,17 +2,9 @@ package frc.robot.auto;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
-import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.NtHelper;
 import frc.robot.Subsystems;
-import frc.robot.constants.constants;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.util.TrajectoryFollower;
-
-import com.pathplanner.lib.PathPlanner;
-
-import frc.robot.subsystem.Intake;
-import frc.robot.subsystem.Shooter;
 
 /* Move towards cargo in straight line
  * Intake cargo
@@ -21,12 +13,8 @@ import frc.robot.subsystem.Shooter;
  */ 
 
 public class ShootTwoTaxi extends StateMachine{
-
-    private Intake intake = new Intake();
     //TODO: Values subject to change upon completed trajcetory integration
     private Timer timer = new Timer();
-
-    // private Shooter shooter = new Shooter();
 
     public ShootTwoTaxi() {
         super("Stop");
@@ -55,7 +43,7 @@ public class ShootTwoTaxi extends StateMachine{
 
     @InitState(name = "Intake")
     public void IntakeInit (){
-        intake.intakeDown();
+        Subsystems.intake.intakeDown();
         timer.reset ();
         timer.start ();
     }
@@ -88,12 +76,10 @@ public class ShootTwoTaxi extends StateMachine{
     public void ShootTwoInit (){
         timer.reset();
         timer.start();
-    //Shooter initialization
     }
 
     @RunState(name = "ShootTwo")
     public void ShootTwo (){
-        //shooter.shootTwo;
         if (timer.get() > 4){
             setState ("TaxiBack");
         }

@@ -11,10 +11,7 @@ import frc.robot.subsystem.Intake;
 import edu.wpi.first.wpilibj.Timer;
 
 public class ShootOneAndShootTwo extends StateMachine{
-    //private Shooter shooter = new Shooter();
-
-    private Intake intake = new Intake();
-      private Timer timer = new Timer();
+    private Timer timer = new Timer();
 
     public ShootOneAndShootTwo() {
         super("FirstShot");
@@ -42,7 +39,7 @@ public class ShootOneAndShootTwo extends StateMachine{
     @InitState(name = "CargoAdvance")
     public void cargoAdvanceInit(){
         Subsystems.follower.resetPosition();
-        intake.intakeDown();
+        Subsystems.intake.intakeDown();
     }
 
     @RunState(name = "CargoAdvance")
@@ -57,7 +54,7 @@ public class ShootOneAndShootTwo extends StateMachine{
     public void shootTwoInit(){
         timer.reset();
         timer.start();
-        intake.intakeUp();
+        Subsystems.intake.intakeUp();
     }
 
     @RunState(name = "ShootTwo")

@@ -4,11 +4,9 @@ import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.Subsystems;
-import frc.robot.subsystem.Intake;
 import edu.wpi.first.wpilibj.Timer;
 
 public class ShootTwoAndShootOne extends StateMachine{
-    private Intake intake = new Intake();
     private Timer timer = new Timer();
     
     public ShootTwoAndShootOne(){
@@ -31,7 +29,7 @@ public class ShootTwoAndShootOne extends StateMachine{
 
     @InitState(name = "FirstIntake")
     public void FirstIntakeInit(){
-        intake.intakeDown();
+        Subsystems.intake.intakeDown();
         timer.reset ();
         timer.start ();
     }
@@ -85,7 +83,7 @@ public class ShootTwoAndShootOne extends StateMachine{
 
     @InitState(name = "SecondIntake")
     public void SecondIntakeInit(){
-        intake.intakeDown();
+        Subsystems.intake.intakeDown();
         timer.reset ();
         timer.start ();
     }

@@ -6,13 +6,10 @@ import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.NtHelper;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Robot;
 import frc.robot.Subsystems;
 
 public class ShootOneAndTaxi extends StateMachine {
 
-    private Trajectory line;
-    //private Shooter shooter = new Shooter();
     private Timer timer = new Timer();
 
     public ShootOneAndTaxi() {
@@ -28,14 +25,14 @@ public class ShootOneAndTaxi extends StateMachine {
 
     @InitState(name = "shooter")
     public void runShooterInit(){
-        Robot.shooter.setAuto(false);
+        Subsystems.shooter.setAuto(false);
         timer.start();
     }
 
     @RunState(name = "shooter")
     public void runShooter(){
-        Robot.shooter.shoot();
-        Robot.shooter.run();
+        Subsystems.shooter.shoot();
+        Subsystems.shooter.run();
         if (timer.get() > 4){
             setState("taxi");
         }
@@ -43,8 +40,8 @@ public class ShootOneAndTaxi extends StateMachine {
 
     @InitState(name = "taxi")
     public void initTaxi(){
-        Robot.shooter.stop();
-        Robot.shooter.run();
+        Subsystems.shooter.stop();
+        Subsystems.shooter.run();
         Subsystems.follower.setTrajectory("line");
         Subsystems.follower.startFollowing();
         timer.stop();

@@ -8,9 +8,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
 import frc.robot.constants.constants;
-import frc.robot.subsystem.Drivetrain;
-import frc.robot.subsystem.Intake;
-import frc.robot.subsystem.Shooter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.Targeting;
@@ -23,22 +20,12 @@ import frc.robot.util.RateLimiter;
 
 public class Robot extends TimedRobot {
 
-  private Drivetrain drivetrain = new Drivetrain(
-    constants.trackWidth, 
-    constants.Ks, 
-    constants.Kv, 
-    Devices.gyro.getRotation()
-  );
-  private Intake intake = new Intake ();
-  public static Shooter shooter = new Shooter ();
   private RateLimiter speedLimiter = new RateLimiter(0.7, 1.2);
   private RateLimiter turnLimiter = new RateLimiter(2, 3.5);
 
 
   @Override
   public void robotInit() {
-    intake.zero();
-    intake.stop();
     Devices.init();
     Subsystems.init();
     CameraServer.startAutomaticCapture();
@@ -51,8 +38,8 @@ public class Robot extends TimedRobot {
   }
 
   public void autonomousInit() {
-    intake.zero();
-    intake.stop();
+    Subsystems.intake.zero();
+    Subsystems.intake.stop();
   }
 
   @Override
@@ -62,12 +49,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    intake.zero();
-    intake.stop();
+    Subsystems.intake.zero();
+    Subsystems.intake.stop();
     Devices.leftMotor.resetEncoder(0);
     Devices.rightMotor.resetEncoder(0);
     Devices.gyro.reset();
-    drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
+    Subsystems.drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
     Targeting.init();
     NtHelper.setDouble("/robot/cargocount", 0);
 
@@ -75,19 +62,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
+    Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
 
 
     //Targeting Code
     double rotationSpeed = 0;
     if (Devices.controller.getRightTriggerAxis() > 0.2){
       System.out.println("SHOOT!");
-      shooter.setAuto(NtHelper.getBoolean("/robot/shooter/isAuto", true));
-      shooter.shoot();
+      Subsystems.shooter.setAuto(NtHelper.getBoolean("/robot/shooter/isAuto", true));
+      Subsystems.shooter.shoot();
 
     }
     else {
-      shooter.stop();
+      Subsystems.shooter.stop();
       double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX()));
       double ySpeed = speedLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getLeftY()));
   
@@ -96,28 +83,26 @@ public class Robot extends TimedRobot {
       double leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
       double rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
   
-      double[] motorValues = drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
+      double[] motorValues = Subsystems.drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
   
       Devices.leftMotor.setPercent(motorValues[0]);
       Devices.rightMotor.setPercent(motorValues[1]);
     }
 
   
-    shooter.run();
-
-    //runs intake
-    intake.runIntake();
+    Subsystems.shooter.run();
+    Subsystems.intake.runIntake();
   }
 
 
   @Override
   public void disabledPeriodic() {
-    intake.zero();
-    intake.stop();
+    Subsystems.intake.zero();
+    Subsystems.intake.stop();
     Devices.leftMotor.resetEncoder(0);
     Devices.rightMotor.resetEncoder(0);
     Devices.gyro.reset();
-    drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
+    Subsystems.drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
     Targeting.init();
   }
 
@@ -130,15 +115,15 @@ public class Robot extends TimedRobot {
     NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
     NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
     NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());  
-    shooter.shooterInfo();
+    Subsystems.shooter.shooterInfo();
   }
 
   public void telementryAuto(){
     // NtHelper.setDouble("/robot/Desired/x", desiredPose.poseMeters.getX());
     // NtHelper.setDouble("/robot/Desired/y", desiredPose.poseMeters.getY());
     // NtHelper.setDouble("/robot/Desired/angle", desiredPose.poseMeters.getRotation().getDegrees());
-    // NtHelper.setDouble("/robot/Current/x", drivetrain.getPose().getX());
-    // NtHelper.setDouble("/robot/Current/y", drivetrain.getPose().getY());
-    // NtHelper.setDouble("/robot/Current/angle", drivetrain.getPose().getRotation().getDegrees()); 
+    // NtHelper.setDouble("/robot/Current/x", Subsystems.drivetrain.getPose().getX());
+    // NtHelper.setDouble("/robot/Current/y", Subsystems.drivetrain.getPose().getY());
+    // NtHelper.setDouble("/robot/Current/angle", Subsystems.drivetrain.getPose().getRotation().getDegrees()); 
   }
 }

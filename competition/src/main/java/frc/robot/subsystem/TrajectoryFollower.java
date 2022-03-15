@@ -1,9 +1,9 @@
-package frc.robot.util;
+package frc.robot.subsystem;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.Devices;
+import frc.robot.Subsystems;
 import frc.robot.constants.constants;
-import frc.robot.subsystem.Drivetrain;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,12 +16,6 @@ public class TrajectoryFollower {
     private Timer timer = new Timer ();
     private Trajectory trajectory;
     private final RamseteController m_ramseteController = new RamseteController();
-    private Drivetrain drivetrain = new Drivetrain(
-      constants.trackWidth, 
-      constants.Ks, 
-      constants.Kv, 
-      Devices.gyro.getRotation()
-    );
 
     private HashMap<String, Trajectory> trajectoryMap;
 
@@ -41,9 +35,9 @@ public class TrajectoryFollower {
     public void setTrajectory (String name){
         trajectory = trajectoryMap.get(name);
         var initialPose = trajectory.getStates().get(0).poseMeters;
-        drivetrain.odometryReset(initialPose, initialPose.getRotation());
+        Subsystems.drivetrain.odometryReset(initialPose, initialPose.getRotation());
         Devices.gyro.setAngle(-initialPose.getRotation().getDegrees());
-        drivetrain.setTrajectory("traj", trajectory);
+        Subsystems.drivetrain.setTrajectory("traj", trajectory);
         
     }
 
@@ -51,9 +45,9 @@ public class TrajectoryFollower {
         var currTime = timer.get();
         var desiredPose = trajectory.sample(currTime);
 
-        drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
-        ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(drivetrain.getPose(), desiredPose);
-        double[] motorValues = drivetrain.getMotorValues(refChassisSpeeds);
+        Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
+        ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(Subsystems.drivetrain.getPose(), desiredPose);
+        double[] motorValues = Subsystems.drivetrain.getMotorValues(refChassisSpeeds);
         Devices.leftMotor.setPercent(motorValues[0]);
         Devices.rightMotor.setPercent(motorValues[1]);
         if (isDone()) timer.stop();
@@ -64,7 +58,7 @@ public class TrajectoryFollower {
         Devices.leftMotor.resetEncoder(0);
         Devices.rightMotor.resetEncoder(0);
         Devices.gyro.reset();
-        drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
+        Subsystems.drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
     }
 
     public boolean isDone(){
