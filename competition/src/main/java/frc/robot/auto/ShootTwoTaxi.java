@@ -89,12 +89,10 @@ public class ShootTwoTaxi extends StateMachine{
     public void ShootTwoInit (){
         timer.reset();
         timer.start();
-    //Shooter initialization
     }
 
     @RunState(name = "ShootTwo")
     public void ShootTwo (){
-        //shooter.shootTwo;
         if (timer.get() > 4){
             setState ("TaxiBack");
         }

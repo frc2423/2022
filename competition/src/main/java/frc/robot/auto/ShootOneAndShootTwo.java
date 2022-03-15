@@ -8,12 +8,10 @@ import frc.robot.util.NtHelper;
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.Subsystems;
 import frc.robot.constants.constants;
-import frc.robot.subsystem.Intake;
 import edu.wpi.first.wpilibj.Timer;
 
 import com.pathplanner.lib.PathPlanner;
 public class ShootOneAndShootTwo extends StateMachine{
-    private Intake intake = new Intake();
     Trajectory IntakeAimTrajectory = PathPlanner.loadPath("IntakeAim4", constants.maxSpeedo, constants.maxAccel);
     Trajectory TaxiTrajectory = PathPlanner.loadPath("Taxi4", constants.maxSpeedo, constants.maxAccel);
 
@@ -47,7 +45,7 @@ public class ShootOneAndShootTwo extends StateMachine{
     @InitState(name = "CargoAdvance")
     public void cargoAdvanceInit(){
         Subsystems.follower.resetPosition();
-        intake.intakeDown();
+        Subsystems.intake.intakeDown();
     }
 
     @RunState(name = "CargoAdvance")
@@ -62,7 +60,7 @@ public class ShootOneAndShootTwo extends StateMachine{
     public void shootTwoInit(){
         timer.reset();
         timer.start();
-        intake.intakeUp();
+        Subsystems.intake.intakeUp();
     }
 
     @RunState(name = "ShootTwo")
