@@ -3,6 +3,7 @@ import frc.robot.constants.constants;
 import frc.robot.subsystem.*;
 import frc.robot.auto.Auto;
 import frc.robot.auto.Trajectories;
+import frc.robot.util.Targeting;
 
 /**
  * Static accessor for all robot subsystems.
@@ -27,9 +28,8 @@ public class Subsystems {
         shooter = new Shooter();
         follower = new TrajectoryFollower(Trajectories.getTrajectories());
         auto = new Auto();
-
-
         intake.zero();
         intake.stop();
+        Targeting.init();
     }
 }

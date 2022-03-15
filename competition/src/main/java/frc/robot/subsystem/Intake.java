@@ -1,6 +1,5 @@
 package frc.robot.subsystem;
 
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Devices;
 import frc.robot.devices.NeoMotor;
@@ -15,7 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 //we are children dont judge us :P
 
-public class Intake extends StateMachine{
+public class Intake extends StateMachine {
 
     private NeoMotor armMotor;
     private NeoMotor armMotorLeft;
@@ -42,7 +41,7 @@ public class Intake extends StateMachine{
     private String colorState = "No ball";
     private Timer timer = new Timer();
 
-    public Intake(){
+    public Intake() {
         super("Stop");
         armMotor = Devices.intakeArmMotor;
         armMotorLeft = Devices.intakeArmFollowerMotor;
@@ -51,35 +50,35 @@ public class Intake extends StateMachine{
         rightLimit = Devices.rightLimit;
         beltMotor = Devices.beltMotor;
         colourSensor = Devices.colourSensor;
-        
+
         if (currentAlliance == Alliance.Blue) {
             desiredColor = "blue";
             otherColor = "red";
-        }
-        else {
+        } else {
             desiredColor = "red";
             otherColor = "blue";
         }
 
-      //  intakeUp();
+        // intakeUp();
         // zero(); //0.0000
         // stop();
     }
-    private void beltForward(){
+
+    private void beltForward() {
         Double currentCount = NtHelper.getDouble("/robot/cargocount", 0);
         NtHelper.setString("/robot/intake/currentcolorstate", colorState);
 
-        switch(colorState){
+        switch (colorState) {
             case "No ball":
                 NtHelper.setString("/robot/intake/currentcolor", "No color detected");
                 beltMotor.setPercent(beltSpeed);
-                
-                if (colourSensor.isColor(desiredColor)){
+
+                if (colourSensor.isColor(desiredColor)) {
                     colorState = "DesiredBall";
-                    currentCount = currentCount+1;
+                    currentCount = currentCount + 1;
                     NtHelper.setDouble("/robot/cargocount", currentCount);
                 }
-                if (colourSensor.isColor(otherColor)){
+                if (colourSensor.isColor(otherColor)) {
                     colorState = "OtherBall";
                     timer.reset();
                     timer.start();
@@ -89,18 +88,17 @@ public class Intake extends StateMachine{
             case "DesiredBall":
                 NtHelper.setString("/robot/intake/currentcolor", desiredColor);
 
-                if (currentCount == 0 || currentCount == 1){
+                if (currentCount == 0 || currentCount == 1) {
                     beltMotor.setPercent(beltSpeed);
-                }
-                else if (currentCount > 1){
+                } else if (currentCount > 1) {
                     beltMotor.setPercent(0);
                 }
 
-                if (!colourSensor.isColor(desiredColor)){
+                if (!colourSensor.isColor(desiredColor)) {
                     colorState = "No ball";
                 }
-                
-                if (colourSensor.isColor(otherColor)){
+
+                if (colourSensor.isColor(otherColor)) {
                     colorState = "OtherBall";
                     rollerSpeed = (-rollerSpeed);
                     timer.reset();
@@ -112,7 +110,7 @@ public class Intake extends StateMachine{
             case "OtherBall":
                 NtHelper.setString("/robot/intake/currentcolor", otherColor);
                 beltMotor.setPercent(-beltSpeed);
-                if ((currentCount == 1 && colourSensor.isColor(desiredColor)) || timer.get() > 2){
+                if ((currentCount == 1 && colourSensor.isColor(desiredColor)) || timer.get() > 2) {
                     colorState = "No ball";
                     rollerSpeed = (-rollerSpeed);
                     timer.stop();
@@ -121,39 +119,33 @@ public class Intake extends StateMachine{
         }
     }
 
-
-
     public void beltForward2() {
         NtHelper.setBoolean("/robot/intake/colorlog", colorLog);
-        if (colourSensor.isColor(desiredColor)){
+        if (colourSensor.isColor(desiredColor)) {
             NtHelper.setString("/robot/intake/currentcolor", desiredColor);
             Double currentCount = NtHelper.getDouble("/robot/cargocount", 0);
 
-            if (currentCount == 0 || currentCount == 1){
+            if (currentCount == 0 || currentCount == 1) {
                 beltMotor.setPercent(beltSpeed);
-            }
-            else if (currentCount > 1){
+            } else if (currentCount > 1) {
                 beltMotor.setPercent(0);
             }
-            if (!colorLog){
-                currentCount = currentCount+1;
-            NtHelper.setDouble("/robot/cargocount", currentCount);
+            if (!colorLog) {
+                currentCount = currentCount + 1;
+                NtHelper.setDouble("/robot/cargocount", currentCount);
             }
             colorLog = true;
-        }
-        else if(colourSensor.isColor(otherColor)){
+        } else if (colourSensor.isColor(otherColor)) {
             beltMotor.setPercent(-beltSpeed);
             rollerSpeed = (-rollerSpeed);
-        }
-        else{
+        } else {
             NtHelper.setString("/robot/intake/currentcolor", "No color detected");
             beltMotor.setPercent(beltSpeed);
             colorLog = false;
-            if (rollerSpeed < 0){
+            if (rollerSpeed < 0) {
                 rollerSpeed = -rollerSpeed;
             }
         }
-
 
     }
 
@@ -161,52 +153,42 @@ public class Intake extends StateMachine{
         beltMotor.setPercent(0);
     }
 
-    //sets position to current minus something
-    public void stepUp(){
+    // sets position to current minus something
+    public void stepUp() {
         rollerMotor.setPercent(0);
-        desiredPosition -= 2; 
-        armMotor.setDistance(desiredPosition);
-        armMotorLeft.setDistance(desiredPosition);
-        //Temporarily arbitrary
-        
-    }
-
-    //sets position to current plus something
-    public void stepDown(){
-        rollerMotor.setPercent(0);
-        desiredPosition += 2; 
+        desiredPosition -= 2;
         armMotor.setDistance(desiredPosition);
         armMotorLeft.setDistance(desiredPosition);
     }
-        //Temporarily arbitrary
 
-    //sets position to its up position
-    public void intakeUp(){
+    // sets position to current plus something
+    public void stepDown() {
+        rollerMotor.setPercent(0);
+        desiredPosition += 2;
+        armMotor.setDistance(desiredPosition);
+        armMotorLeft.setDistance(desiredPosition);
+    }
+
+    // sets position to its up position
+    public void intakeUp() {
         rollerMotor.setPercent(0);
         desiredPosition = topPosition;
         armMotor.setDistance(desiredPosition);
         armMotorLeft.setDistance(desiredPosition);
     }
 
-    //sets position to its down position
-      public void intakeDown(){
-
-       /* if (Devices.controller.getXButton()){
-            reverse();
-        }
-        else {
-            rollerMotor.setPercent(rollerSpeed);
-        }*/
+    // sets position to its down position
+    public void intakeDown() {
         rollerMotor.setPercent(rollerSpeed);
         beltForward();
 
-        desiredPosition = /*(Devices.controller.getLeftBumper()) ? belowPosition :*/ bottomPosition;
+        desiredPosition = /* (Devices.controller.getLeftBumper()) ? belowPosition : */ bottomPosition;
         armMotor.setDistance(desiredPosition);
         armMotorLeft.setDistance(desiredPosition);
     }
 
-    //sets setpoint to current postion
-    public void holdInPlace(){
+    // sets setpoint to current postion
+    public void holdInPlace() {
         rollerMotor.setPercent(0);
         desiredPosition = armMotor.getEncoderCount();
         armMotor.setDistance(desiredPosition);
@@ -219,156 +201,150 @@ public class Intake extends StateMachine{
         armMotorLeft.setPercent(0);
     }
 
-    public void reverse(){
+    public void reverse() {
         rollerMotor.setPercent(-rollerSpeed);
     }
 
-    public void zero(){
+    public void zero() {
         armMotor.resetEncoder(0.00000);
         armMotorLeft.resetEncoder(0.0000);
-        //0000000000000000000000000000000.0
     }
 
-    public boolean calibrate(){
+    public boolean calibrate() {
 
-        if (!isRightPressed()){
+        if (!isRightPressed()) {
             armMotor.setPercent(calibrateSpeed);
-        }
-        else {
-           armMotor.setPercent(0);
-           armMotor.resetEncoder(0);
+        } else {
+            armMotor.setPercent(0);
+            armMotor.resetEncoder(0);
         }
 
-        if (!isLeftPressed()){
+        if (!isLeftPressed()) {
             armMotorLeft.setPercent(calibrateSpeed);
-        }
-        else {
+        } else {
             armMotorLeft.setPercent(0);
             armMotorLeft.resetEncoder(0);
         }
         return (isRightPressed() && isLeftPressed());
-     
+
     }
 
-    @InitState(name="Stop")
-    public void stopInit(){
+    @InitState(name = "Stop")
+    public void stopInit() {
         beltStop();
 
     }
 
-    @RunState(name="Stop")
-    public void stopRun(){
-        //System.out.println("color " + colourSensor.getRawColor().red + "  " + colourSensor.getRawColor().green + "  " + colourSensor.getRawColor().blue);
+    @RunState(name = "Stop")
+    public void stopRun() {
+        // System.out.println("color " + colourSensor.getRawColor().red + " " +
+        // colourSensor.getRawColor().green + " " + colourSensor.getRawColor().blue);
 
         stop();
-        if (Devices.controller.getAButton()){
+        if (Devices.controller.getAButton()) {
             setState("Calibrate");
         }
     }
 
-    @InitState(name="Calibrate")
-    public void calibrateInit(){
+    @InitState(name = "Calibrate")
+    public void calibrateInit() {
 
     }
 
-    @RunState(name="Calibrate")
-    public void calibrateRun(){
-        if (calibrate()){
+    @RunState(name = "Calibrate")
+    public void calibrateRun() {
+        if (calibrate()) {
             setState("Down");
         }
     }
 
-    @InitState(name="Down")
-    public void downInit(){
+    @InitState(name = "Down")
+    public void downInit() {
 
     }
 
-    @RunState(name="Down")
-    public void runDown(){
+    @RunState(name = "Down")
+    public void runDown() {
         intakeDown();
-            if (Devices.controller.getYButton()){
-                setState("Up");
-            }
+        if (Devices.controller.getYButton()) {
+            setState("Up");
+        }
     }
 
-    @InitState(name="Up")
-    public void upInit(){
+    @InitState(name = "Up")
+    public void upInit() {
 
     }
 
-    public boolean isLeftPressed(){
+    public boolean isLeftPressed() {
         return !leftLimit.get();
     }
 
-    public boolean isRightPressed(){
+    public boolean isRightPressed() {
         return !rightLimit.get();
     }
 
-    @RunState(name="Up")
-    public void upRun(){
+    @RunState(name = "Up")
+    public void upRun() {
 
         intakeUp();
-            if (isLeftPressed()){
-                armMotorLeft.setPercent(0);
-            }
-            if (isRightPressed()){
-                armMotor.setPercent(0);
-            }
-            if (!leftLimit.get() && !rightLimit.get()){ 
-                setState("Stop");
-            }
-            if (Devices.controller.getAButton()){
-                setState("Down");
-            }
+        if (isLeftPressed()) {
+            armMotorLeft.setPercent(0);
+        }
+        if (isRightPressed()) {
+            armMotor.setPercent(0);
+        }
+        if (!leftLimit.get() && !rightLimit.get()) {
+            setState("Stop");
+        }
+        if (Devices.controller.getAButton()) {
+            setState("Down");
+        }
     }
 
-
-
-
-    public void runIntake(){
+    public void runIntake() {
         NtHelper.setString("/robot/intake/state", state);
         NtHelper.setBoolean("/robot/intake/leftLimit", leftLimit.get());
         NtHelper.setBoolean("/robot/intake/rightLimit", rightLimit.get());
 
-        switch (state){
+        switch (state) {
             case "Calibrate":
-                if (calibrate()){
+                if (calibrate()) {
                     System.out.println("calibrated");
                     state = "Stop";
                 }
                 break;
             case "Stop":
-            //System.out.println("color " + colourSensor.getRawColor().red + "  " + colourSensor.getRawColor().green + "  " + colourSensor.getRawColor().blue);
+                // System.out.println("color " + colourSensor.getRawColor().red + " " +
+                // colourSensor.getRawColor().green + " " + colourSensor.getRawColor().blue);
 
                 stop();
-                if (Devices.controller.getAButton()){
+                if (Devices.controller.getAButton()) {
                     state = "Down";
                 }
                 break;
             case "Down":
                 intakeDown();
-                if (Devices.controller.getYButton()){
+                if (Devices.controller.getYButton()) {
                     state = "Up";
                 }
                 break;
             case "Up":
                 intakeUp();
-                if (isLeftPressed()){
+                if (isLeftPressed()) {
                     armMotorLeft.setPercent(0);
                 }
-                if (isRightPressed()){
+                if (isRightPressed()) {
                     armMotor.setPercent(0);
                 }
-                if (isLeftPressed() && isRightPressed()){ //"||"just for testing because there is the bar in the way
+                if (isLeftPressed() && isRightPressed()) { // "||"just for testing because there is the bar in the way
                     state = "Stop";
                 }
-                if (Devices.controller.getAButton()){
+                if (Devices.controller.getAButton()) {
                     state = "Down";
                 }
                 break;
         }
     }
 
-
-    
 }

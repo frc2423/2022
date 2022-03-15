@@ -32,7 +32,6 @@ public class ShootOneAndTaxi extends StateMachine {
     @RunState(name = "shooter")
     public void runShooter(){
         Subsystems.shooter.shoot();
-        Subsystems.shooter.run();
         if (timer.get() > 4){
             setState("taxi");
         }
@@ -41,7 +40,6 @@ public class ShootOneAndTaxi extends StateMachine {
     @InitState(name = "taxi")
     public void initTaxi(){
         Subsystems.shooter.stop();
-        Subsystems.shooter.run();
         Subsystems.follower.setTrajectory("line");
         Subsystems.follower.startFollowing();
         timer.stop();

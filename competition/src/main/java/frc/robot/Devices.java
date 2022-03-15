@@ -53,7 +53,8 @@ public class Devices {
         
         colourSensor.addColor("red", .475, .382, .142);
         colourSensor.addColor("blue", .17, .42, .39);
-        
+    
+        Devices.camLed.set(Relay.Value.kForward);
         // climberLeftMotor.setPid(.02, 0.0001, 0);
         // climberRightMotor.setPid(.02, 0.0001, 0);
     }
