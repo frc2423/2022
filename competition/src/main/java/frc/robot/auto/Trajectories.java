@@ -3,7 +3,6 @@ package frc.robot.auto;
 import java.util.HashMap;
 
 import com.pathplanner.lib.PathPlanner;
-
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.constants.constants;
 
@@ -18,7 +17,7 @@ public class Trajectories {
         trajectoryUploader("MiddleCargoToHub");
         trajectoryUploader("TopCargoToHub");
         trajectoryUploader("BottomCargoToMiddleCargo");
-        trajectoryUploader("AngledMiddleCargoToHub");
+      //  trajectoryUploader("AngledMiddleCargoToHub");
         return trajectoryKeeper;  
     }
 

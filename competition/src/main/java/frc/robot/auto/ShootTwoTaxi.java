@@ -4,7 +4,9 @@ import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.NtHelper;
+import frc.robot.Devices;
 import frc.robot.Subsystems;
+import frc.robot.util.DriveHelper;
 
 /* Move towards cargo in straight line
  * Intake cargo
@@ -15,6 +17,7 @@ import frc.robot.Subsystems;
 public class ShootTwoTaxi extends StateMachine{
     //TODO: Values subject to change upon completed trajcetory integration
     private Timer timer = new Timer();
+    private double angle;
 
     public ShootTwoTaxi() {
         super("Stop");
@@ -28,7 +31,14 @@ public class ShootTwoTaxi extends StateMachine{
 
     @InitState(name = "CargoAdvance")
     public void CargoAdvanceInit (){
-        Subsystems.follower.setTrajectory("CargoAdvance");
+        String position = NtHelper.getString("/robot/auto/postion", "middle");
+        if (position.equals("high")){
+            Subsystems.follower.setTrajectory("TopTarmacToTopCargo");
+        } else if (position.equals("midde")) {
+            Subsystems.follower.setTrajectory("MiddleTarmacToMiddleCargo");
+        } else {
+            Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
+        }
         Subsystems.follower.resetPosition();
     }
 
@@ -51,15 +61,39 @@ public class ShootTwoTaxi extends StateMachine{
     @RunState(name = "Intake")
     public void Intake (){
         if (timer.get() > 2){
-            setState("ShooterAdvance");
+            setState("Rotate");
         }
         //Seconds; subject to change
 
     }
 
+    @InitState(name = "Rotate")
+    public void rotateInit(){
+        angle = Devices.gyro.getAngle() + 180;
+    }
+
+    @RunState(name = "Rotate")
+    public void rotate(){
+        double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, .3, false);
+        double leftSpeed = arcadeSpeeds[0];
+        double rightSpeed = arcadeSpeeds[1];
+        Devices.leftMotor.setPercent(leftSpeed);
+        Devices.rightMotor.setPercent(rightSpeed); 
+        if(Devices.gyro.getAngle() > angle-10){
+            setState("ShooterAdvance");
+        }
+    }
+
     @InitState(name = "ShooterAdvance")
     public void ShooterAdvanceInit (){
-        Subsystems.follower.setTrajectory("ShooterAdvance");
+        String position = NtHelper.getString("/robot/auto/postion", "middle");
+        if (position.equals("high")){
+            Subsystems.follower.setTrajectory("TopCargoToHub");
+        } else if (position.equals("midde")) {
+            Subsystems.follower.setTrajectory("MiddleCargoToHub");
+        } else {
+            Subsystems.follower.setTrajectory("BottomCargoToHub");
+        }
         Subsystems.follower.resetPosition();
     }
 
