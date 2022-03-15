@@ -25,8 +25,8 @@ public class TrajectoryFollower {
 
     private HashMap<String, Trajectory> trajectoryMap;
 
-    public TrajectoryFollower() {
-        trajectoryMap = new HashMap<String, Trajectory>();
+    public TrajectoryFollower(HashMap<String, Trajectory> trajectoryMap) {
+        this.trajectoryMap = trajectoryMap;
     }
 
     public void startFollowing() {

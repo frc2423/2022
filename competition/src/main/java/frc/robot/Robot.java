@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
     intake.zero();
     intake.stop();
     Devices.init();
+    Subsystems.init();
     CameraServer.startAutomaticCapture();
     Devices.camLed.set(Relay.Value.kOn);
   }
