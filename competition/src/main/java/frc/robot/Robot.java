@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
     Subsystems.shooter.run();
-    // Subsystems.climber.run();
+    Subsystems.climber.run();
     Subsystems.intake.runIntake();
     telemetry();
   }
@@ -80,6 +80,7 @@ public class Robot extends TimedRobot {
     Devices.gyro.reset();
     Subsystems.drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
     Targeting.init();
+    Subsystems.climber.resetClimber();
   }
 
   public void telemetry() {
@@ -89,6 +90,7 @@ public class Robot extends TimedRobot {
     NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
     NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());  
     Subsystems.shooter.shooterInfo();
+    Subsystems.climber.climberInfo();
   }
 
   public void telementryAuto(){

@@ -28,8 +28,8 @@ public class Devices {
     public static NeoMotor kickerMotor = new NeoMotor(10);
     public static NeoMotor shooterMotor = new NeoMotor(9);
     // Climber motors
-    //public static NeoMotor climberLeftMotor = new NeoMotor(???);
-    //public static NeoMotor climberRightMotor = new NeoMotor(???);
+    public static NeoMotor climberLeftMotor = new NeoMotor(12);
+    public static NeoMotor climberRightMotor = new NeoMotor(11);
     //relay stuff for LEDs on stinky (the camera) - please don't lose it again
     public static final Relay camLed = new Relay(0);
     //color sensor thing
@@ -55,7 +55,7 @@ public class Devices {
         colourSensor.addColor("blue", .17, .42, .39);
     
         Devices.camLed.set(Relay.Value.kForward);
-        // climberLeftMotor.setPid(.02, 0.0001, 0);
-        // climberRightMotor.setPid(.02, 0.0001, 0);
+        climberLeftMotor.setPid(.02, 0.0000, 0);
+        climberRightMotor.setPid(.02, 0.0000, 0);
     }
 }

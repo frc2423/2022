@@ -1,5 +1,8 @@
 package frc.robot.subsystem;
 
+import javax.swing.text.Position;
+
+import edu.wpi.first.math.trajectory.Trajectory.State;
 import frc.robot.Devices;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.NtHelper;
@@ -11,16 +14,19 @@ public class Climber extends StateMachine {
 
     private NeoMotor leftMotor;
     private NeoMotor rightMotor;
-    private double desiredPosition;
+    private double barPosition;
     private final double LOW_POSITION = 10;
-    private final double MEDIUM_POSITION = 20;
+    private final double MEDIUM_POSITION = 100;
     private final double CLIMB_POSITION = 5;
-    private final double BOTTOM_DISTANCE = 1;
+    private final double BOTTOM_POSITION = 1;
+    private double desiredPosition = 0;
 
     public Climber() {
         super("stop");
-        // leftMotor = Devices.climberLeftMotor;
-        // rightMotor = Devices.climberRightMotor;
+        leftMotor = Devices.climberLeftMotor;
+        rightMotor = Devices.climberRightMotor;
+        System.out.println("climber init");
+        NtHelper.setString("/robot/climber/desiredState", "stop");
     }
 
     public void resetClimber() {
@@ -29,12 +35,19 @@ public class Climber extends StateMachine {
     }
 
     public String getNtState() {
-        return NtHelper.getString("/robot/climber/state", "stop");
+        return NtHelper.getString("/robot/climber/desiredState", "stop");
     }
 
     public Boolean isMediumBar() {
         return NtHelper.getBoolean("/robot/climber/isMediumBar", true);
     }
+
+    public void setDesiredPosition(double position){
+        leftMotor.setDistance(position);
+        rightMotor.setDistance(position);
+        desiredPosition = position;
+    }
+        
 
     @RunState(name = "stop")
     public void stop() {
@@ -47,17 +60,16 @@ public class Climber extends StateMachine {
 
     @InitState(name = "up")
     public void initUp() {
-        if (isMediumBar()) {
-            desiredPosition = LOW_POSITION; // !!!PLACEHOLDER VALUE!!!
+        if (!isMediumBar()) {
+            barPosition = LOW_POSITION; // !!!PLACEHOLDER VALUE!!!
         } else {
-            desiredPosition = MEDIUM_POSITION; // !!!PLACEHOLDER VALUE!!!
+            barPosition = MEDIUM_POSITION; // !!!PLACEHOLDER VALUE!!!
         }
     }
 
     @RunState(name = "up")
     public void goUp() {
-        leftMotor.setDistance(desiredPosition);
-        rightMotor.setDistance(desiredPosition);
+        setDesiredPosition(barPosition);
         if (getNtState().equals("stop")) {
             setState("Stop");
         } else if (getNtState().equals("climb")) {
@@ -69,7 +81,7 @@ public class Climber extends StateMachine {
 
     @InitState(name = "climb")
     public void initClimb() {
-        desiredPosition = CLIMB_POSITION;
+        barPosition = CLIMB_POSITION;
     }
 
     @RunState(name = "climb")
@@ -84,8 +96,8 @@ public class Climber extends StateMachine {
          * need to slow down the motor speed somehow
          * and I don't know exactly how to do that :)
          */
-        leftMotor.setDistance(desiredPosition);
-        rightMotor.setDistance(desiredPosition);
+        setDesiredPosition(CLIMB_POSITION);
+
 
         if (getNtState().equals("up")) {
             setState("up");
@@ -94,13 +106,27 @@ public class Climber extends StateMachine {
 
     @RunState(name = "down")
     public void down() {
-        leftMotor.setDistance(0);
-        rightMotor.setDistance(0);
-        boolean isDown = leftMotor.getDistance() < BOTTOM_DISTANCE && rightMotor.getDistance() < BOTTOM_DISTANCE;
+        setDesiredPosition(0);
+        boolean isDown = leftMotor.getDistance() < BOTTOM_POSITION && rightMotor.getDistance() < BOTTOM_POSITION;
         if (isDown || getNtState().equals("stop")) {
             setState("stop");
         } else if (getNtState().equals("up")) {
             setState("up");
         }
+    }
+
+    public void climberReset(){
+        leftMotor.resetEncoder(0);
+        rightMotor.resetEncoder(0);
+    }
+
+
+    public void climberInfo(){
+        NtHelper.setDouble("/robot/climber/barPosition", barPosition);
+        NtHelper.setString("/robot/climber/currentState", getState());
+        NtHelper.setDouble("/robot/climber/desiredPosition", desiredPosition);
+        NtHelper.setDouble("/robot/climber/leftPosition", leftMotor.getDistance());
+        NtHelper.setDouble("/robot/climber/rightPosition", rightMotor.getDistance());
+
     }
 }
