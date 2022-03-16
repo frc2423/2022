@@ -50,7 +50,7 @@ public class ShootTwoShootOne extends StateMachine{
 
     @InitState(name = "Intake")
     public void IntakeInit (){
-        Subsystems.intake.intakeDown();
+        Subsystems.intake.setDownState();
         timer.reset ();
         timer.start ();
     }
@@ -58,7 +58,7 @@ public class ShootTwoShootOne extends StateMachine{
     @RunState(name = "Intake")
     public void Intake (){
         if (timer.get() > 2){
-            Subsystems.intake.intakeUp();
+            Subsystems.intake.setUpState();
             setState("Rotate");
         }
         //Seconds; subject to change

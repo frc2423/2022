@@ -39,7 +39,7 @@ public class ShootOneAndShootTwo extends StateMachine{
     @InitState(name = "CargoAdvance")
     public void cargoAdvanceInit(){
         Subsystems.follower.resetPosition();
-        Subsystems.intake.intakeDown();
+        Subsystems.intake.setDownState();
     }
 
     @RunState(name = "CargoAdvance")
@@ -54,7 +54,7 @@ public class ShootOneAndShootTwo extends StateMachine{
     public void shootTwoInit(){
         timer.reset();
         timer.start();
-        Subsystems.intake.intakeUp();
+        Subsystems.intake.setUpState();
     }
 
     @RunState(name = "ShootTwo")

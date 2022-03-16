@@ -80,6 +80,7 @@ public class Robot extends TimedRobot {
     Devices.gyro.reset();
     Subsystems.drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
     Targeting.init();
+    Subsystems.auto.setState("init");
   }
 
   public void telemetry() {

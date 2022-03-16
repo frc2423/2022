@@ -38,7 +38,8 @@ public class Rotation {
     return (maxTurn - minTurn) / (maxX - minX) * (x + minX) - minTurn;
   }
 
-  public boolean isDone(double angle){
-    return (angle < maxX && angle > minX);
+  public boolean isDone(double x){
+    return x >= -minX && x <= minX;
+    //return (angle < maxX && angle > minX);
   }
 }

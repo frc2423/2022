@@ -9,7 +9,7 @@ import frc.robot.constants.constants;
 public class Trajectories {
     private static HashMap<String, Trajectory> trajectoryKeeper= new HashMap<String, Trajectory>();
     public static HashMap<String, Trajectory> getTrajectories() {
-        trajectoryUploader("Taxi");
+        trajectoryUploader("Taxi", true);
         trajectoryUploader("BottomTarmacToBottomCargo");
         trajectoryUploader("MiddleTarmacToMiddleCargo");
         trajectoryUploader("TopTarmacToTopCargo");
@@ -25,8 +25,13 @@ public class Trajectories {
         return trajectoryKeeper;  
     }
 
-private static void trajectoryUploader(String name){
-     Trajectory addedTrajectory = PathPlanner.loadPath(name, constants.maxSpeedo, constants.maxAccel, true);
+    private static void trajectoryUploader(String name){
+        trajectoryUploader(name, false);
+    }
+
+
+    private static void trajectoryUploader(String name, boolean isReversed){
+     Trajectory addedTrajectory = PathPlanner.loadPath(name, constants.maxSpeedo, constants.maxAccel, isReversed);
         trajectoryKeeper.put(name, addedTrajectory);
     }
 }
