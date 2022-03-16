@@ -17,6 +17,10 @@ public class Trajectories {
         trajectoryUploader("MiddleCargoToHub");
         trajectoryUploader("TopCargoToHub");
         trajectoryUploader("BottomCargoToMiddleCargo");
+
+        trajectoryUploader("BottomHubBackUp");
+        trajectoryUploader("BottomTarmacToMiddleCargo");
+        trajectoryUploader("MiddleCargoToBottomHub");
       //  trajectoryUploader("AngledMiddleCargoToHub");
         return trajectoryKeeper;  
     }
