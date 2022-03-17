@@ -13,8 +13,8 @@ public class Climber extends StateMachine {
     private NeoMotor rightMotor;
     private double barPosition;
     private final double LOW_POSITION = 80;
-    private final double MEDIUM_POSITION = 150;
-    private final double CLIMB_POSITION = 50;
+    private final double MEDIUM_POSITION = 160;
+    private final double CLIMB_POSITION = 25;
     private final double BOTTOM_POSITION = 10;
     private double desiredPosition = 0;
 
@@ -23,6 +23,10 @@ public class Climber extends StateMachine {
         leftMotor = Devices.climberLeftMotor;
         rightMotor = Devices.climberRightMotor;
         NtHelper.setString("/robot/climber/desiredState", "stop");
+
+        NtHelper.setDouble("/robot/climber/ntPosition", 50);
+        
+
 
     }
 
@@ -33,6 +37,10 @@ public class Climber extends StateMachine {
 
     public String getNtState() {
         return NtHelper.getString("/robot/climber/desiredState", "stop");
+    }
+
+    public double getNtPosition() {
+        return NtHelper.getDouble("/robot/climber/ntPosition", 50);
     }
 
     public Boolean isMediumBar() {
@@ -67,6 +75,7 @@ public class Climber extends StateMachine {
     @RunState(name = "up")
     public void goUp() {
         setDesiredPosition(barPosition);
+        // setDesiredPosition(getNtPosition());
         if (getNtState().equals("stop")) {
             setState("Stop");
         } else if (getNtState().equals("climb")) {
