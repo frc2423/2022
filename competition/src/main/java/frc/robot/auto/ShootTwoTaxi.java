@@ -30,12 +30,31 @@ public class ShootTwoTaxi extends StateMachine{
 
     }
 
+    public void haltMovement(){
+        Devices.leftMotor.setPercent(0);
+        Devices.rightMotor.setPercent(0); 
+    }
+
     @RunState(name = "Stop")
     public void stopState(){
         NtHelper.setString("/robot/auto/state", "stop");
         NtHelper.setString("/robot/auto/postiion", "bottom");
+        setState("IntakeDown");
+    }
 
-        setState("CargoAdvance");
+
+    @InitState(name="IntakeDown")
+    public void initIntakeDown() {
+        timer.reset ();
+        timer.start ();
+        Subsystems.intake.setDownState();
+    }
+
+    @RunState(name = "IntakeDown")
+    public void runIntakeDown(){
+        if (timer.get() > .5) {
+            setState("CargoAdvance");
+        }
     }
 
     @InitState(name = "CargoAdvance")
@@ -48,7 +67,6 @@ public class ShootTwoTaxi extends StateMachine{
         } else {
             Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
         }
-        //Subsystems.follower.resetPosition();
         Subsystems.follower.startFollowing();
     }
 
@@ -57,15 +75,14 @@ public class ShootTwoTaxi extends StateMachine{
         NtHelper.setString("/robot/auto/state", "cargoAdvance");
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
-            setState("Rotate");
+            setState("Intake");
         }
     
     }
-    @RunState(name="end") public void stoppppp(){}
 
     @InitState(name = "Intake")
     public void IntakeInit (){
-        Subsystems.intake.setDownState();
+        haltMovement();
         timer.reset ();
         timer.start ();
     }
@@ -74,8 +91,7 @@ public class ShootTwoTaxi extends StateMachine{
     public void Intake (){
         NtHelper.setString("/robot/auto/state", "intake");
 
-        if (timer.get() > 2){
-            Subsystems.intake.setUpState();
+        if (timer.get() > 1.5){
             setState("Rotate");
         }
         //Seconds; subject to change
@@ -85,6 +101,7 @@ public class ShootTwoTaxi extends StateMachine{
 
     @InitState(name = "Rotate")
     public void rotateInit(){
+        Subsystems.intake.setUpState();
         angle = Devices.gyro.getAngle() + 180;
         rotate = new Rotation(.2, .4, 5, 150);
     }
@@ -104,7 +121,7 @@ public class ShootTwoTaxi extends StateMachine{
         double rightSpeed = arcadeSpeeds[1];
         Devices.leftMotor.setPercent(leftSpeed);
         Devices.rightMotor.setPercent(rightSpeed); 
-        if(rotate.isDone(Devices.gyro.getAngle())){
+        if(rotate.isDone(angleError)){
             setState("ShooterAdvance");
         }
     }
