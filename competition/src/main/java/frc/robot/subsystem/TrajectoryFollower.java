@@ -34,11 +34,17 @@ public class TrajectoryFollower {
     }
 
     public void setTrajectory (String name){
+        setTrajectory(name, true);
+    }
+
+    public void setTrajectory (String name, boolean moveToStart){
         NtHelper.setString("/robot/auto/currTrajectory", name);
         trajectory = trajectoryMap.get(name);
-        var initialPose = trajectory.getStates().get(0).poseMeters;
-        Subsystems.drivetrain.odometryReset(initialPose, initialPose.getRotation());
-        Devices.gyro.setAngle(-initialPose.getRotation().getDegrees());
+        if (moveToStart) {
+            var initialPose = trajectory.getStates().get(0).poseMeters;
+            Subsystems.drivetrain.odometryReset(initialPose, initialPose.getRotation());
+            Devices.gyro.setAngle(-initialPose.getRotation().getDegrees());
+        }
         Subsystems.drivetrain.setTrajectory("traj", trajectory);
         
     }

@@ -130,11 +130,11 @@ public class ShootTwoTaxi extends StateMachine{
     public void ShooterAdvanceInit (){
         String position = NtHelper.getString("/robot/auto/postion", "bottom");
         if (position.equals("high")){
-            Subsystems.follower.setTrajectory("TopCargoToHub");
+            Subsystems.follower.setTrajectory("TopCargoToHub", false);
         } else if (position.equals("midde")) {
-            Subsystems.follower.setTrajectory("MiddleCargoToHub");
+            Subsystems.follower.setTrajectory("MiddleCargoToHub", false);
         } else {
-            Subsystems.follower.setTrajectory("BottomCargoToHub");
+            Subsystems.follower.setTrajectory("BottomCargoToHub", false);
         }
         Subsystems.follower.startFollowing();
         //Subsystems.follower.resetPosition();
