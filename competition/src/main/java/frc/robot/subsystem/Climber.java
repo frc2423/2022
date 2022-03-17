@@ -1,8 +1,5 @@
 package frc.robot.subsystem;
 
-import javax.swing.text.Position;
-
-import edu.wpi.first.math.trajectory.Trajectory.State;
 import frc.robot.Devices;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.NtHelper;
@@ -15,18 +12,18 @@ public class Climber extends StateMachine {
     private NeoMotor leftMotor;
     private NeoMotor rightMotor;
     private double barPosition;
-    private final double LOW_POSITION = 10;
-    private final double MEDIUM_POSITION = 100;
-    private final double CLIMB_POSITION = 5;
-    private final double BOTTOM_POSITION = 1;
+    private final double LOW_POSITION = 80;
+    private final double MEDIUM_POSITION = 150;
+    private final double CLIMB_POSITION = 50;
+    private final double BOTTOM_POSITION = 10;
     private double desiredPosition = 0;
 
     public Climber() {
         super("stop");
         leftMotor = Devices.climberLeftMotor;
         rightMotor = Devices.climberRightMotor;
-        System.out.println("climber init");
         NtHelper.setString("/robot/climber/desiredState", "stop");
+
     }
 
     public void resetClimber() {
