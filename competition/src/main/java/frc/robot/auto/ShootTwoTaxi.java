@@ -102,7 +102,7 @@ public class ShootTwoTaxi extends StateMachine{
     public void rotateInit(){
         Subsystems.intake.setUpState();
         angle = Devices.gyro.getAngle() + 180;
-        rotate = new Rotation(.2, .4, 5, 150);
+        rotate = new Rotation(.15, .3, 5, 150);
     }
 
     private double getAngleErrorRadians(double errorDegrees) {
@@ -127,7 +127,7 @@ public class ShootTwoTaxi extends StateMachine{
 
     @InitState(name = "ShooterAdvance")
     public void ShooterAdvanceInit (){
-        String position = NtHelper.getString("/robot/auto/postion", "bottom");
+        String position = NtHelper.getString("/robot/auto/position", "bottom");
         if (position.equals("top")){
             Subsystems.follower.setTrajectory("TopCargoToHub", false);
         } else if (position.equals("middle")) {

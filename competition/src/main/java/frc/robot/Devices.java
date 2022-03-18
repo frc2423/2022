@@ -45,8 +45,8 @@ public class Devices {
         rightMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
         leftMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
 
-        intakeArmMotor.setPid(.03, 0.0002, 0);
-        intakeArmFollowerMotor.setPid(.03, 0.0002, 0);
+        intakeArmMotor.setPid(.035, 0.00025, 0);
+        intakeArmFollowerMotor.setPid(.035, 0.00025, 0);
         intakeArmMotor.setIZone(2);
         intakeArmFollowerMotor.setIZone(2);
         intakeArmFollowerMotor.setInverted(true);

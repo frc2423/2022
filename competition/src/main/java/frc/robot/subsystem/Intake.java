@@ -25,7 +25,7 @@ public class Intake extends StateMachine {
     private DigitalInput rightLimit;
 
     private double topPosition = 1;
-    private double bottomPosition = -13.5;
+    private double bottomPosition = -14.5;
     private double belowPosition = -13.5;
     private double rollerSpeed = 0.50;
     private double calibrateSpeed = 0.1;
