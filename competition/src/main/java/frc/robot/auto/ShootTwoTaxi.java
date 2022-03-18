@@ -27,7 +27,7 @@ public class ShootTwoTaxi extends StateMachine{
         super("Stop");
         NtHelper.setString("/robot/auto/name", "shootTwoTaxi3");
         Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
-
+        NtHelper.setString("/robot/auto/position", "bottom");
     }
 
     public void haltMovement(){
@@ -38,7 +38,6 @@ public class ShootTwoTaxi extends StateMachine{
     @RunState(name = "Stop")
     public void stopState(){
         NtHelper.setString("/robot/auto/state", "stop");
-        NtHelper.setString("/robot/auto/postiion", "bottom");
         setState("IntakeDown");
     }
 
@@ -60,7 +59,7 @@ public class ShootTwoTaxi extends StateMachine{
     @InitState(name = "CargoAdvance")
     public void CargoAdvanceInit (){
         String position = NtHelper.getString("/robot/auto/position", "bottom");
-        if (position.equals("high")){
+        if (position.equals("top")){
             Subsystems.follower.setTrajectory("TopTarmacToTopCargo");
         } else if (position.equals("middle")) {
             Subsystems.follower.setTrajectory("MiddleTarmacToMiddleCargo");
@@ -129,9 +128,9 @@ public class ShootTwoTaxi extends StateMachine{
     @InitState(name = "ShooterAdvance")
     public void ShooterAdvanceInit (){
         String position = NtHelper.getString("/robot/auto/postion", "bottom");
-        if (position.equals("high")){
+        if (position.equals("top")){
             Subsystems.follower.setTrajectory("TopCargoToHub", false);
-        } else if (position.equals("midde")) {
+        } else if (position.equals("middle")) {
             Subsystems.follower.setTrajectory("MiddleCargoToHub", false);
         } else {
             Subsystems.follower.setTrajectory("BottomCargoToHub", false);

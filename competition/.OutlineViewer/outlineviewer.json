@@ -12,9 +12,15 @@
     "aiming": {
       "open": true
     },
-    "climber": {
+    "auto": {
       "open": true
     },
-    "open": true
+    "open": true,
+    "shooter": {
+      "open": true
+    },
+    "shootr": {
+      "open": true
+    }
   }
 }

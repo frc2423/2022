@@ -11,7 +11,7 @@ public class Trajectories {
     public static HashMap<String, Trajectory> getTrajectories() {
         trajectoryUploader("Taxi", true);
         trajectoryUploader("BottomTarmacToBottomCargo");
-        trajectoryUploader("MiddleTarmacToMiddleCargo");
+        trajectoryUploader("MiddleTarmacToMiddleCargo", false, 3, 3);
         trajectoryUploader("TopTarmacToTopCargo");
         trajectoryUploader("BottomCargoToHub");
         trajectoryUploader("MiddleCargoToHub");
@@ -26,12 +26,15 @@ public class Trajectories {
     }
 
     private static void trajectoryUploader(String name){
-        trajectoryUploader(name, false);
+        trajectoryUploader(name, false, constants.maxSpeedo, constants.maxAccel);
     }
 
-
     private static void trajectoryUploader(String name, boolean isReversed){
-     Trajectory addedTrajectory = PathPlanner.loadPath(name, constants.maxSpeedo, constants.maxAccel, isReversed);
+        trajectoryUploader(name, isReversed, constants.maxSpeedo, constants.maxAccel);
+    }
+
+    private static void trajectoryUploader(String name, boolean isReversed, double maxVel, double maxAccel){
+     Trajectory addedTrajectory = PathPlanner.loadPath(name, maxVel, maxAccel, isReversed);
         trajectoryKeeper.put(name, addedTrajectory);
     }
 }
