@@ -3,11 +3,76 @@
     source-provider="NetworkTables"
     slot="tab"
 >
-    <frc-toggle-button
+    <vaadin-number-field
+        has-controls=""
+        label="Ball Count"
+        max="2"
+        value="2"
+        tabindex="0"
+        has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(254.34px, 126.166px);"
+        style="transform: translate(0.00260598px, 41.3527px); width: 142.643px; height: 85px;"
+        has-value=""
+        hascontrols=""
+        min="NaN"
+    ></vaadin-number-field>
+    <frc-toggle-group
+        source-provider="NetworkTables"
+        style="transform: translate(216.865px, 37.7466px);"
+        options="[&quot;Outtake&quot;,&quot;Idle&quot;,&quot;Intake&quot;]"
+        value="Outtake"
+    ></frc-toggle-group>
+    <style>
+        .header {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+    <frc-toggle-switch
+        source-provider="NetworkTables"
+        style="transform: translate(-0.000543494px, 342.662px); width: 150.667px; height: 39.9896px;"
         toggled=""
-    ></frc-toggle-button>
+    ></frc-toggle-switch>
+    <frc-toggle-group
+        source-provider="NetworkTables"
+        style="transform: translate(438.344px, 33.676px); width: 161.976px; height: 336.198px;"
+        source-key="/robot/climber/state"
+        options="[&quot;Climb&quot;,&quot;Up&quot;,&quot;Stop&quot;,&quot;Down&quot;]"
+        value="Stop"
+    ></frc-toggle-group>
+
+
+
+    <frc-label
+        text="Low"
+        source-provider="NetworkTables"
+        style="width: 35.1354px; height: 21.3229px; transform: translate(2.87002px, 385.961px);"
+    ></frc-label>
+    <frc-label
+        text="High"
+        source-provider="NetworkTables"
+        style="transform: translate(111.338px, 385.998px);"
+    ></frc-label>
+    <frc-toggle-switch
+        source-provider="NetworkTables"
+        style="transform: translate(0.00613699px, 467.329px); width: 152.656px; height: 41.9792px;"
+    ></frc-toggle-switch>
+    <frc-label
+        text="SHOOTER"
+        source-provider="NetworkTables"
+        style="transform: translate(28px, 416.004px); width: 103.792px; height: 29.3333px;"
+        class="header"
+    ></frc-label>
+    <frc-label
+        text="Auto"
+        source-provider="NetworkTables"
+        style="transform: translate(113.994px, 446.66px);"
+    ></frc-label>
+    <frc-label
+        text="Manual"
+        source-provider="NetworkTables"
+        style="transform: translate(1.33328px, 446.003px);"
+    ></frc-label>
 </dashboard-tab>
 <dashboard-tab
     tab-name="Autonomous"
@@ -38,52 +103,25 @@
     ></frc-toggle-group>
     <frc-field
         source-provider="NetworkTables"
-        style="width: 1117px; height: 934px; transform: translate(604.306px, -14px);"
-        game="Custom"
+        style="width: 758.458px; height: 379.062px; transform: translate(532.854px, -4.35059e-05px);"
         image="C:\Users\amory\Documents\repos\kwarqs\2022\competition\dashboard\interfaces\2022-field-cropped.png"
         top-left-field-corner-x="43"
         top-left-field-corner-y="29"
         bottom-right-field-corner-x="640"
         bottom-right-field-corner-y="515"
-        show-grid=""
         width="33"
+        grid-size="3"
     >
         <frc-field-robot
             source-key="/SmartDashboard/Field/Robot"
             source-provider="NetworkTables"
-            style="width: 61.4818px; height: 92.2226px; transform: translate(43.4957px, 847.239px) rotate(90deg);"
+            style="width: 24.7535px; height: 37.1302px; transform: translate(17.1814px, 340.925px) rotate(90deg);"
             pose="[]"
         ></frc-field-robot>
         <frc-field-trajectory
             source-key="/SmartDashboard/Field/traj"
             source-provider="NetworkTables"
-            style="width: 102.47px; height: 102.47px; transform: translate(23.0018px, 842.116px) rotate(90deg);"
-        ></frc-field-trajectory>
-    </frc-field>
-</dashboard-tab>
-<dashboard-tab
-    tab-name="Tab 3"
-    source-provider="NetworkTables"
-    slot="tab"
->
-    <frc-field
-        source-provider="NetworkTables"
-        style="width: 1286px; height: 937px; transform: translate(0px, 0px);"
-        top-left-field-corner-x="74"
-        top-left-field-corner-y="50"
-        bottom-right-field-corner-x="1774"
-        bottom-right-field-corner-y="900"
-    >
-        <frc-field-robot
-            source-key="/SmartDashboard/Field/Robot"
-            source-provider="NetworkTables"
-            style="width: 0px; height: 0px; transform: translate(0px, 0px) rotate(90deg);"
-            pose="[0,0,0]"
-        ></frc-field-robot>
-        <frc-field-trajectory
-            source-key="/SmartDashboard/Field/traj"
-            source-provider="NetworkTables"
-            style="width: 0px; height: 0px; transform: translate(0px, 0px) rotate(90deg);"
+            style="width: 41.2558px; height: 41.2558px; transform: translate(8.9302px, 338.862px) rotate(90deg);"
         ></frc-field-trajectory>
     </frc-field>
 </dashboard-tab>
