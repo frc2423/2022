@@ -71,14 +71,14 @@ public class Intake extends StateMachine {
         switch (colorState) {
             case "No ball":
                 NtHelper.setString("/robot/intake/currentcolor", "No color detected");
-                beltMotor.setPercent(beltSpeed);
+                beltMotor.setPercent(beltSpeed); /** GO */
 
                 if (colourSensor.isColor(desiredColor)) {
                     colorState = "DesiredBall";
                     currentCount = currentCount + 1;
                     NtHelper.setDouble("/robot/cargocount", currentCount);
                 }
-                if (colourSensor.isColor(otherColor)) {
+                else if (colourSensor.isColor(otherColor)) {
                     colorState = "OtherBall";
                     timer.reset();
                     timer.start();
@@ -88,24 +88,22 @@ public class Intake extends StateMachine {
             case "DesiredBall":
                 NtHelper.setString("/robot/intake/currentcolor", desiredColor);
 
-                if (currentCount == 0 || currentCount == 1) {
-                    beltMotor.setPercent(beltSpeed);
-                } else if (currentCount > 1) {
-                    beltMotor.setPercent(0);
+                if (colourSensor.isColor(desiredColor)) {
+                    if (currentCount < 2) {
+                        beltMotor.setPercent(beltSpeed); /* GO */
+                    } else {
+                        beltMotor.setPercent(0); /* STOP */
+                    }
                 }
-
-                if (!colourSensor.isColor(desiredColor)) {
-                    colorState = "No ball";
-                }
-
-                if (colourSensor.isColor(otherColor)) {
+               else if (colourSensor.isColor(otherColor)) {
                     colorState = "OtherBall";
                     rollerSpeed = (-rollerSpeed);
                     timer.reset();
                     timer.start();
-
                 }
-
+                else {
+                    colorState = "No ball";
+                }
                 break;
             case "OtherBall":
                 NtHelper.setString("/robot/intake/currentcolor", otherColor);
@@ -119,39 +117,7 @@ public class Intake extends StateMachine {
         }
     }
 
-    public void beltForward2() {
-        NtHelper.setBoolean("/robot/intake/colorlog", colorLog);
-        if (colourSensor.isColor(desiredColor)) {
-            NtHelper.setString("/robot/intake/currentcolor", desiredColor);
-            Double currentCount = NtHelper.getDouble("/robot/cargocount", 0);
-
-            if (currentCount == 0 || currentCount == 1) {
-                beltMotor.setPercent(beltSpeed);
-            } else if (currentCount > 1) {
-                beltMotor.setPercent(0);
-            }
-            if (!colorLog) {
-                currentCount = currentCount + 1;
-                NtHelper.setDouble("/robot/cargocount", currentCount);
-            }
-            colorLog = true;
-        } else if (colourSensor.isColor(otherColor)) {
-            beltMotor.setPercent(-beltSpeed);
-            rollerSpeed = (-rollerSpeed);
-        } else {
-            NtHelper.setString("/robot/intake/currentcolor", "No color detected");
-            beltMotor.setPercent(beltSpeed);
-            colorLog = false;
-            if (rollerSpeed < 0) {
-                rollerSpeed = -rollerSpeed;
-            }
-        }
-
-    }
-
-    public void beltStop() {
-        beltMotor.setPercent(0);
-    }
+   
 
     // sets position to current minus something
     public void stepUp() {
@@ -231,7 +197,7 @@ public class Intake extends StateMachine {
 
     @InitState(name = "Stop")
     public void stopInit() {
-        beltStop();
+        beltMotor.setPercent(0);
 
     }
 
