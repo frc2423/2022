@@ -25,7 +25,7 @@ public class Intake extends StateMachine {
     private DigitalInput rightLimit;
 
     private double topPosition = 1;
-    private double bottomPosition = -13.5;
+    private double bottomPosition = -14.5;
     private double belowPosition = -13.5;
     private double rollerSpeed = 0.50;
     private double calibrateSpeed = 0.1;
@@ -170,7 +170,7 @@ public class Intake extends StateMachine {
     }
 
     // sets position to its up position
-    public void intakeUp() {
+    private void intakeUp() {
         rollerMotor.setPercent(0);
         desiredPosition = topPosition;
         armMotor.setDistance(desiredPosition);
@@ -178,7 +178,7 @@ public class Intake extends StateMachine {
     }
 
     // sets position to its down position
-    public void intakeDown() {
+    private void intakeDown() {
         rollerMotor.setPercent(rollerSpeed);
         beltForward();
 
@@ -300,6 +300,12 @@ public class Intake extends StateMachine {
         if (Devices.controller.getAButton()) {
             setState("Down");
         }
+    }
+    public void setDownState(){
+        state="Down";
+    }
+    public void setUpState(){
+        state="Up";
     }
 
     public void runIntake() {

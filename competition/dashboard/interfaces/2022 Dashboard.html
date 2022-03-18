@@ -6,6 +6,7 @@
     <frc-toggle-button
         source-provider="NetworkTables"
         style="transform: translate(254.34px, 126.166px);"
+        toggled=""
     ></frc-toggle-button>
 </dashboard-tab>
 <dashboard-tab
@@ -14,18 +15,32 @@
     slot="tab"
     selected=""
 >
+    <frc-label
+        text="For Shoot Two Taxi"
+        source-provider="NetworkTables"
+        style="transform: translate(290.671px, 150.001px);"
+    ></frc-label>
     <frc-toggle-group
         source-provider="NetworkTables"
-        style="width: 228px; height: 637px; transform: translate(0px, 0px);"
+        style="transform: translate(283.993px, 173.996px);"
+        source-key="/robot/auto/position"
+        id="auto-start-position"
+        options="[&quot;Top&quot;,&quot;Middle&quot;,&quot;Bottom&quot;]"
+        value="Top"
+    ></frc-toggle-group>
+    <frc-toggle-group
+        source-provider="NetworkTables"
+        style="width: 227.333px; height: 637px; transform: translate(2.39883e-05px, 44.6668px);"
         source-key="/robot/auto/name"
-        options="[&quot;taxi1&quot;,&quot;simpleAuto2&quot;,&quot;shootTwoTaxi3&quot;,&quot;threeMuskets4&quot;,&quot;threeMuskets5ive&quot;]"
-        value="taxi1"
+        options="[&quot;taxi&quot;,&quot;shootOneAndTaxi&quot;,&quot;shootTwoTaxi&quot;,&quot;shootOneAndShootTwo&quot;,&quot;shootTwoAndShootOne&quot;]"
+        value="taxi"
+        id="auto-selector"
     ></frc-toggle-group>
     <frc-field
         source-provider="NetworkTables"
         style="width: 1117px; height: 934px; transform: translate(604.306px, -14px);"
         game="Custom"
-        image="https://i.ibb.co/552bJVz/2022-field-cropped.png"
+        image="C:\Users\amory\Documents\repos\kwarqs\2022\competition\dashboard\interfaces\2022-field-cropped.png"
         top-left-field-corner-x="43"
         top-left-field-corner-y="29"
         bottom-right-field-corner-x="640"
