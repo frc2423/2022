@@ -47,19 +47,26 @@ public class Climber extends StateMachine {
         return NtHelper.getBoolean("/robot/climber/isMediumBar", true);
     }
 
+    @Override
+    public void setState(String name) {
+        super.setState(name);
+        NtHelper.setString("robot/climber/state", name);
+    }
+
     public void setDesiredPosition(double position){
         leftMotor.setDistance(position);
         rightMotor.setDistance(position);
         desiredPosition = position;
     }
         
-
     @RunState(name = "stop")
     public void stop() {
         leftMotor.setPercent(0);
         rightMotor.setPercent(0);
         if (getNtState().equals("up")) {
             setState("up");
+        } else {
+            NtHelper.setString("robot/climber/state", "stop");
         }
     }
 
@@ -77,11 +84,13 @@ public class Climber extends StateMachine {
         setDesiredPosition(barPosition);
         // setDesiredPosition(getNtPosition());
         if (getNtState().equals("stop")) {
-            setState("Stop");
+            setState("stop");
         } else if (getNtState().equals("climb")) {
             setState("climb");
         } else if (getNtState().equals("down")) {
             setState("down");
+        } else {
+            NtHelper.setString("robot/climber/state", "up");
         }
     }
 
@@ -107,6 +116,8 @@ public class Climber extends StateMachine {
 
         if (getNtState().equals("up")) {
             setState("up");
+        } else {
+            NtHelper.setString("robot/climber/state", "climb");
         }
     }
 
@@ -118,6 +129,8 @@ public class Climber extends StateMachine {
             setState("stop");
         } else if (getNtState().equals("up")) {
             setState("up");
+        } else {
+            NtHelper.setString("robot/climber/state", "down");
         }
     }
 
