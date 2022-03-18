@@ -20,7 +20,7 @@ public class ShootOneAndShootTwo extends StateMachine{
 
     @InitState(name = "FirstShot")
     public void firstShotInit(){
-        Subsystems.follower.setTrajectory("IntakeAim4");
+        Subsystems.follower.setTrajectory("BottomTarmacToCargosToHub");
         timer.reset();
         timer.start();
         //TODO: Implement shooter code following general shooter implementation
@@ -38,8 +38,8 @@ public class ShootOneAndShootTwo extends StateMachine{
 
     @InitState(name = "CargoAdvance")
     public void cargoAdvanceInit(){
-        Subsystems.follower.resetPosition();
-        Subsystems.intake.intakeDown();
+        Subsystems.follower.startFollowing();
+        Subsystems.intake.setDownState();
     }
 
     @RunState(name = "CargoAdvance")
@@ -54,7 +54,7 @@ public class ShootOneAndShootTwo extends StateMachine{
     public void shootTwoInit(){
         timer.reset();
         timer.start();
-        Subsystems.intake.intakeUp();
+        Subsystems.intake.setUpState();
     }
 
     @RunState(name = "ShootTwo")
@@ -70,7 +70,7 @@ public class ShootOneAndShootTwo extends StateMachine{
     @InitState (name = "TaxiBack")
     public void taxiBackInit(){
         Subsystems.follower.setTrajectory("Taxi4");
-        Subsystems.follower.resetPosition();
+        Subsystems.follower.startFollowing();
         timer.stop();
     }
 

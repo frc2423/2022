@@ -7,6 +7,9 @@
       "open": true
     },
     "robot": {
+      "auto": {
+        "open": true
+      },
       "intake": {
         "open": true
       },

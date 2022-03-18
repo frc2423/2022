@@ -4,6 +4,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
 import frc.robot.constants.constants;
+import frc.robot.util.NtHelper;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -33,10 +34,17 @@ public class TrajectoryFollower {
     }
 
     public void setTrajectory (String name){
+        setTrajectory(name, true);
+    }
+
+    public void setTrajectory (String name, boolean moveToStart){
+        NtHelper.setString("/robot/auto/currTrajectory", name);
         trajectory = trajectoryMap.get(name);
-        var initialPose = trajectory.getStates().get(0).poseMeters;
-        Subsystems.drivetrain.odometryReset(initialPose, initialPose.getRotation());
-        Devices.gyro.setAngle(-initialPose.getRotation().getDegrees());
+        if (moveToStart) {
+            var initialPose = trajectory.getStates().get(0).poseMeters;
+            Subsystems.drivetrain.odometryReset(initialPose, initialPose.getRotation());
+            Devices.gyro.setAngle(-initialPose.getRotation().getDegrees());
+        }
         Subsystems.drivetrain.setTrajectory("traj", trajectory);
         
     }
@@ -50,6 +58,9 @@ public class TrajectoryFollower {
         double[] motorValues = Subsystems.drivetrain.getMotorValues(refChassisSpeeds);
         Devices.leftMotor.setPercent(motorValues[0]);
         Devices.rightMotor.setPercent(motorValues[1]);
+        NtHelper.setDouble("/robot/auto/leftmotor", motorValues[0]);
+        NtHelper.setDouble("/robot/auto/rightmotor", motorValues[1]);
+
         if (isDone()) timer.stop();
     }
 
