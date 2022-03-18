@@ -22,7 +22,7 @@ public class Auto extends StateMachine {
         shootOneAndShootTwo = new ShootOneAndShootTwo();
         shootTwoAndShootOne = new ShootTwoAndShootOne();
 
-        NtHelper.setString("/robot/auto/name", "shootOneAndTaxi");
+        NtHelper.setString("/robot/auto/name", "shootTwoTaxi");
     }
 
     public void getAuto(){
@@ -64,5 +64,6 @@ public class Auto extends StateMachine {
     @RunState(name = "run")
     public void runRun(){
         selectedAutonomous.run();
+        System.out.println("selected auto: " + selectedAutonomous.getClass().getName());
     }
 }
