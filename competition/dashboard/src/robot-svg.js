@@ -39,14 +39,14 @@ function addElement(name, config, draw) {
   return element.attr(attr)
 }
 
-function createSvg(config) {
+function createSvg(parent, config) {
   const {
     size: { width, height },
     scale = 1,
     children,
   } = config;
   const draw = SVG()
-    .addTo("body")
+    .addTo(parent)
     // .size(width, height)
     .viewbox(0, 0, width, height)
     .scale(scale);
@@ -57,8 +57,8 @@ function createSvg(config) {
 }
 
 export default class RobotSvg {
-  constructor(config) {
-    this._svg = createSvg(config);
+  constructor(parent, config) {
+    this._svg = createSvg(parent, config);
   }
 
   rotatePart(name, degrees) {
