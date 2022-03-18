@@ -12,6 +12,7 @@ import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.Targeting;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.math.controller.PIDController;
 
 
 public class Shooter extends StateMachine{
@@ -28,7 +29,14 @@ public class Shooter extends StateMachine{
     private double revDuration = 1;
     private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
     private boolean autoMode = false;
+
+    private double targetSpeed = 3500; 
     //Motor values subject to change following implementation and testing
+
+    private final double kP = 1;
+    private final double kI = 0;
+    private final double kD = 0;
+    private PIDController pidController;
 
     public Shooter() {
         super("stop");
@@ -40,6 +48,11 @@ public class Shooter extends StateMachine{
         NtHelper.setDouble("/robot/shooter/shootermotori", 0.0); 
         NtHelper.setDouble("/robot/shooter/shootermotord", 0.0);
         NtHelper.setDouble("/robot/shooter/shootermotorf", 0.0);
+
+        pidController = new PIDController(kP, kI, kD);
+        // pidController.atSetpoint()
+        // pidController.setTolerance(positionTolerance, velocityTolerance);
+        // pidController.calculate(measurement, setpoint)
     }
 
     public void setAuto(boolean bool){
@@ -132,8 +145,12 @@ public class Shooter extends StateMachine{
        // shooterMotor.setSpeed(shooterSpeed);
         setShooterVolt(shooterSpeed);
 
-        if (timer.get() > this.revDuration && isAimed) this.setState("shoot");
+        if ((timer.get() > this.revDuration || isAtSpeed()) && isAimed ) this.setState("shoot");
 
+    }
+
+    public boolean isAtSpeed(){
+        return (Devices.shooterMotor.getSpeed() > targetSpeed);
     }
 
     @InitState(name="shoot")
@@ -150,6 +167,7 @@ public class Shooter extends StateMachine{
         // run shooting
         //shooterMotor.setPercent(-Devices.controller.getRightTriggerAxis() * 0.65);
         setShooterVolt(shooterSpeed);
+        if(!isAtSpeed()) setState("rev");
     }
 
 

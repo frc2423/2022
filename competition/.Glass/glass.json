@@ -52,8 +52,7 @@
   },
   "NetworkTables Settings": {
     "mode": "Client",
-    "serverTeam": "10.24.23.2",
-    "visible": false
+    "serverTeam": "10.24.23.2"
   },
   "Plots": {
     "Plot <0>": {
