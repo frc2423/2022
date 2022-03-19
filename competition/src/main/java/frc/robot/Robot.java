@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
     Devices.init();
     Subsystems.init();
     CameraServer.startAutomaticCapture();
+    NtHelper.setBoolean("/robot/shooter/isAuto", true);
   }
 
   @Override
@@ -44,7 +45,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    NtHelper.setDouble("/robot/cargocount", 0);
+    NtHelper.setDouble("/robot/cargoCount", 0);
   }
 
   @Override

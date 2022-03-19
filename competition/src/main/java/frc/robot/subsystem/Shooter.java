@@ -138,7 +138,7 @@ public class Shooter extends StateMachine{
 
     @InitState(name="shoot")
     public void runShootInit() {
-        NtHelper.setDouble("/robot/cargocount", 0);
+        NtHelper.setDouble("/robot/cargoCount", 0);
     }
     
     @RunState(name="shoot")
@@ -169,7 +169,6 @@ public class Shooter extends StateMachine{
         NtHelper.getDouble("/robot/shooter/shootermotori", 0.0), 
         NtHelper.getDouble("/robot/shooter/shootermotord", 0.0),
         NtHelper.getDouble("/robot/shooter/shootermotorf", 0.0));
-        NtHelper.setBoolean("/robot/shooter/isAuto", autoMode);
         NtHelper.setDouble("/robot/shooter/foundMotorP", NtHelper.getDouble("/robot/shooter/shootermotorp", 0.0));
     }
 

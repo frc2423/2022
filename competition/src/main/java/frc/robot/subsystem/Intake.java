@@ -40,7 +40,6 @@ public class Intake extends StateMachine {
     private boolean colorLog = false;
     private String colorState = "No ball";
     private Timer timer = new Timer();
-    private double currentCount = 0;
 
     public Intake() {
         super("Stop");
@@ -54,6 +53,7 @@ public class Intake extends StateMachine {
         rightLimit = Devices.rightLimit;
         beltMotor = Devices.beltMotor;
         colourSensor = Devices.colourSensor;
+        setBallCount(0);
 
         if (currentAlliance == Alliance.Blue) {
             desiredColor = "blue";
@@ -69,12 +69,11 @@ public class Intake extends StateMachine {
     }
 
     public double getBallCount(){
-        return currentCount;
+        return NtHelper.getDouble("/robot/cargoCount", 0);
     }
 
     public void setBallCount(double count) {
-        currentCount = count;
-        NtHelper.setDouble("/robot/cargocount", count);
+        NtHelper.setDouble("/robot/cargoCount", count);
     }
 
     private void beltForward() {
@@ -99,9 +98,9 @@ public class Intake extends StateMachine {
             case "DesiredBall":
                 NtHelper.setString("/robot/intake/currentcolor", desiredColor);
 
-                if (currentCount == 0 || currentCount == 1) {
+                if (getBallCount() == 0 || getBallCount() == 1) {
                     beltMotor.setPercent(beltSpeed);
-                } else if (currentCount > 1) {
+                } else if (getBallCount() > 1) {
                     beltMotor.setPercent(0);
                 }
 
@@ -121,42 +120,13 @@ public class Intake extends StateMachine {
             case "OtherBall":
                 NtHelper.setString("/robot/intake/currentcolor", otherColor);
                 beltMotor.setPercent(-beltSpeed);
-                if ((currentCount == 1 && colourSensor.isColor(desiredColor)) || timer.get() > 2) {
+                if ((getBallCount() == 1 && colourSensor.isColor(desiredColor)) || timer.get() > 2) {
                     colorState = "No ball";
                     rollerSpeed = (-rollerSpeed);
                     timer.stop();
                 }
                 break;
         }
-    }
-
-    public void beltForward2() {
-        NtHelper.setBoolean("/robot/intake/colorlog", colorLog);
-        if (colourSensor.isColor(desiredColor)) {
-            NtHelper.setString("/robot/intake/currentcolor", desiredColor);
-
-            if (currentCount == 0 || currentCount == 1) {
-                beltMotor.setPercent(beltSpeed);
-            } else if (currentCount > 1) {
-                beltMotor.setPercent(0);
-            }
-            if (!colorLog) {
-                currentCount = currentCount + 1;
-                NtHelper.setDouble("/robot/cargocount", currentCount);
-            }
-            colorLog = true;
-        } else if (colourSensor.isColor(otherColor)) {
-            beltMotor.setPercent(-beltSpeed);
-            rollerSpeed = (-rollerSpeed);
-        } else {
-            NtHelper.setString("/robot/intake/currentcolor", "No color detected");
-            beltMotor.setPercent(beltSpeed);
-            colorLog = false;
-            if (rollerSpeed < 0) {
-                rollerSpeed = -rollerSpeed;
-            }
-        }
-
     }
 
     public void beltStop() {
