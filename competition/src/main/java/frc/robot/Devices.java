@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Relay;
 
 public class Devices {
     public static XboxController controller = new XboxController(0);
+    public static XboxController climbController = new XboxController(1);
     public static Gyro gyro = new Gyro();
     // Drivetrain motors
     public static NeoMotor leftMotor = new NeoMotor(1); // front left

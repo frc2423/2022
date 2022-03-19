@@ -71,6 +71,14 @@ public class Robot extends TimedRobot {
       Devices.leftMotor.setPercent(motorValues[0]);
       Devices.rightMotor.setPercent(motorValues[1]);
     }
+
+    if (Devices.climbController.getYButtonPressed()) {
+      NtHelper.setString("/robot/climber/desiredState", "up");
+    } else if (Devices.climbController.getAButtonPressed()) {
+      NtHelper.setString("/robot/climber/desiredState", "down");
+    } else if (Devices.climbController.getRightBumperPressed()){
+      NtHelper.setString("/robot/climber/desiredState", "climb");
+    }
   }
 
   @Override
