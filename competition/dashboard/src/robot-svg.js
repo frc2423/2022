@@ -66,10 +66,26 @@ export default class RobotSvg {
     if (!part) {
       return;
     }
+    part.attr('data-degrees', degrees);
     const x = part.attr('data-x');
     const y = part.attr('data-y');
+    const vis = part.attr('data-visiblity') ?? 'visible';
     part.attr({
-      style: `transform: translate(${x}px, ${y}px) rotate(${degrees}deg)`
+      style: `transform: translate(${x}px, ${y}px) rotate(${degrees}deg); visibility: ${vis};`
+    });
+  }
+
+  setPartVisibility(name, isVisible) {
+    const part = this._svg.findOne(`[data-name=${name}]`);
+    if (!part) {
+      return;
+    }
+    part.attr('data-visiblity', isVisible ? 'visible' : 'hidden');
+    const x = part.attr('data-x');
+    const y = part.attr('data-y');
+    const deg = part.attr('data-degrees') ?? 0;
+    part.attr({
+      style: `transform: translate(${x}px, ${y}px) rotate(${deg}deg); visibility: ${isVisible ? 'visible' : 'hidden'};`
     });
   }
 }
