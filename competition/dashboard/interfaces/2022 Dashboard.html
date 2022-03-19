@@ -2,33 +2,45 @@
     tab-name="TeleOperated"
     source-provider="NetworkTables"
     slot="tab"
-    selected=""
+    source-key="/robot/cargoCount"
 >
+    <frc-label
+        text="INTAKE"
+        source-provider="NetworkTables"
+        style="transform: translate(74px, 240.004px); width: 103.792px; height: 29.3333px;"
+        class="header"
+    ></frc-label>
+    <frc-label
+        text="CLIMBER"
+        source-provider="NetworkTables"
+        style="transform: translate(1651px, 111.004px); width: 103.792px; height: 29.3333px;"
+        class="header"
+    ></frc-label>
     <kwarqs-robot-drawing
         source-provider="NetworkTables"
-        style="transform: translate(193.994px, 392.672px); width: 496px; height: 388px;"
+        style="transform: translate(437.994px, 64.672px); width: 1062px; height: 780px;"
         robot-arm-setpoint-max="-14.5"
         allience-color="RED"
-        source-key="/robot/svg"
     ></kwarqs-robot-drawing>
     <vaadin-number-field
-        has-controls=""
         label="Ball Count"
         max="2"
-        value="2"
+        value="0"
         tabindex="0"
         has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(0.00260598px, 41.3527px); width: 142.643px; height: 85px;"
-        has-value=""
-        hascontrols=""
+        style="transform: translate(50.0491px, 746.011px); width: 168.609px; height: 82px;"
         min="NaN"
+        source-key="/robot/cargoCount"
+        has-value=""
+        has-controls=""
+        hascontrols=""
     ></vaadin-number-field>
     <frc-toggle-group
         source-provider="NetworkTables"
-        style="transform: translate(216.865px, 37.7466px);"
+        style="transform: translate(49.7781px, 276.853px); width: 166.571px; height: 452.105px;"
         options="[&quot;Outtake&quot;,&quot;Idle&quot;,&quot;Intake&quot;]"
-        value="Outtake"
+        value="Intake"
     ></frc-toggle-group>
     <style>
         .header {
@@ -38,15 +50,15 @@
     </style>
     <frc-toggle-switch
         source-provider="NetworkTables"
-        style="transform: translate(-0.000543494px, 342.662px); width: 150.667px; height: 39.9896px;"
+        style="transform: translate(1599px, 577.662px); width: 240.656px; height: 55.9844px;"
         toggled=""
     ></frc-toggle-switch>
     <frc-toggle-group
         source-provider="NetworkTables"
-        style="transform: translate(438.344px, 33.676px); width: 161.976px; height: 336.198px;"
+        style="transform: translate(1584.28px, 172.439px); width: 252.344px; height: 384.094px;"
         source-key="/robot/climber/desiredState"
         options="[&quot;climb&quot;,&quot;up&quot;,&quot;stop&quot;,&quot;down&quot;]"
-        value="Up"
+        value="up"
     ></frc-toggle-group>
 
 
@@ -54,39 +66,65 @@
     <frc-label
         text="Low"
         source-provider="NetworkTables"
-        style="width: 35.1354px; height: 21.3229px; transform: translate(2.87002px, 385.961px);"
+        style="width: 35.1354px; height: 21.3229px; transform: translate(1620.87px, 640.961px);"
     ></frc-label>
     <frc-label
-        text="High"
+        text="Middle"
         source-provider="NetworkTables"
-        style="transform: translate(111.338px, 385.998px);"
+        style="transform: translate(1796.34px, 643.998px); width: 46.9062px; height: 18px;"
     ></frc-label>
     <frc-toggle-switch
         source-provider="NetworkTables"
-        style="transform: translate(0.00613699px, 467.329px); width: 152.656px; height: 41.9792px;"
+        style="transform: translate(30.01px, 101.329px); width: 215.641px; height: 41.9688px;"
+        source-key="/robot/shooter/isAuto"
     ></frc-toggle-switch>
     <frc-label
         text="SHOOTER"
         source-provider="NetworkTables"
-        style="transform: translate(28px, 416.004px); width: 103.792px; height: 29.3333px;"
+        style="transform: translate(74px, 45.004px); width: 103.792px; height: 29.3333px;"
         class="header"
     ></frc-label>
     <frc-label
         text="Auto"
         source-provider="NetworkTables"
-        style="transform: translate(113.994px, 446.66px);"
+        style="transform: translate(185.99px, 155.66px); width: 48.9219px; height: 20px;"
     ></frc-label>
     <frc-label
         text="Manual"
         source-provider="NetworkTables"
-        style="transform: translate(1.33328px, 446.003px);"
+        style="transform: translate(37.33px, 154.003px);"
     ></frc-label>
 </dashboard-tab>
 <dashboard-tab
     tab-name="Autonomous"
     source-provider="NetworkTables"
     slot="tab"
+    selected=""
 >
+    <vaadin-combo-box
+        tabindex="0"
+        source-provider="NetworkTables"
+        style="transform: translate(277px, 727px);"
+        label="For Shoot Two Taxi"
+        items="[&quot;Top&quot;,&quot;Middle&quot;,&quot;Bottom&quot;]"
+        source-key="/robot/auto/position/value"
+        has-value=""
+    ></vaadin-combo-box>
+    <vaadin-combo-box
+        tabindex="0"
+        source-provider="NetworkTables"
+        style="transform: translate(24px, 728px);"
+        label="Auto Selector"
+        items="[&quot;taxi&quot;,&quot;shootOneAndTaxi&quot;,&quot;shootTwoTaxi&quot;,&quot;shootOneAndShootTwo&quot;,&quot;shootTwoAndShootOne&quot;]"
+        source-key="/robot/auto/name/value"
+        has-value=""
+    ></vaadin-combo-box>
+    <frc-label
+        text="AUTO SELECTOR"
+        source-provider="NetworkTables"
+        style="transform: translate(20px, 4.004px); width: 209.781px; height: 29.3125px;"
+        class="header"
+    ></frc-label>
     <frc-label
         text="For Shoot Two Taxi"
         source-provider="NetworkTables"
@@ -95,22 +133,20 @@
     <frc-toggle-group
         source-provider="NetworkTables"
         style="transform: translate(283.993px, 173.996px);"
-        source-key="/robot/auto/position"
         id="auto-start-position"
         options="[&quot;Top&quot;,&quot;Middle&quot;,&quot;Bottom&quot;]"
-        value="Middle"
+        value="Bottom"
     ></frc-toggle-group>
     <frc-toggle-group
         source-provider="NetworkTables"
         style="width: 227.333px; height: 637px; transform: translate(2.39883e-05px, 44.6668px);"
-        source-key="/robot/auto/name"
         options="[&quot;taxi&quot;,&quot;shootOneAndTaxi&quot;,&quot;shootTwoTaxi&quot;,&quot;shootOneAndShootTwo&quot;,&quot;shootTwoAndShootOne&quot;]"
         value="shootOneAndTaxi"
         id="auto-selector"
     ></frc-toggle-group>
     <frc-field
         source-provider="NetworkTables"
-        style="width: 758.458px; height: 379.062px; transform: translate(532.854px, -4.35059e-05px);"
+        style="width: 1370.16px; height: 889.047px; transform: translate(532.854px, -4.35059e-05px);"
         top-left-field-corner-x="74"
         top-left-field-corner-y="50"
         bottom-right-field-corner-x="1774"
@@ -120,13 +156,13 @@
         <frc-field-robot
             source-key="/SmartDashboard/Field/Robot"
             source-provider="NetworkTables"
-            style="width: 0px; height: 0px; transform: translate(0px, 0px) rotate(90deg);"
+            style="width: 45.6754px; height: 68.5131px; transform: translate(31.7032px, 629.079px) rotate(90deg);"
             pose="[]"
         ></frc-field-robot>
         <frc-field-trajectory
             source-key="/SmartDashboard/Field/traj"
             source-provider="NetworkTables"
-            style="width: 0px; height: 0px; transform: translate(0px, 0px) rotate(90deg);"
+            style="width: 76.1256px; height: 76.1256px; transform: translate(16.4781px, 625.273px) rotate(90deg);"
         ></frc-field-trajectory>
     </frc-field>
 </dashboard-tab>
