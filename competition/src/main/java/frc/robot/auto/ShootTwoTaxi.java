@@ -62,7 +62,7 @@ public class ShootTwoTaxi extends StateMachine{
             Subsystems.follower.setTrajectory("TopTarmacToTopCargo");
         } else if (position.equals("middle")) {
             Subsystems.follower.setTrajectory("MiddleTarmacToMiddleCargo");
-        } else {
+        } else { //bottom
             Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
         }
         Subsystems.follower.startFollowing();
@@ -131,7 +131,7 @@ public class ShootTwoTaxi extends StateMachine{
             Subsystems.follower.setTrajectory("TopCargoToHub", false);
         } else if (position.equals("middle")) {
             Subsystems.follower.setTrajectory("MiddleCargoToHub", false);
-        } else {
+        } else { //bottom
             Subsystems.follower.setTrajectory("BottomCargoToHub", false);
         }
         Subsystems.follower.startFollowing();
@@ -167,7 +167,7 @@ public class ShootTwoTaxi extends StateMachine{
 
     @InitState(name = "TaxiBack")
     public void TaxiBackInit (){
-        Subsystems.follower.setTrajectory ("CargoAdvance");
+        Subsystems.follower.setTrajectory ("Taxi");
         Subsystems.follower.startFollowing();
        // Subsystems.follower.resetPosition();
         timer.stop();
