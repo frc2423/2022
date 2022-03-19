@@ -20,11 +20,11 @@ class RobotSvgElement extends LitElement {
   `;
 
   static properties = {
-    robotArmSetpoint: { type: Number, attribute: 'robot-arm-setpoint', reflect: true },
-    robotArmSetpointMax: { type: Number, attribute: 'robot-arm-setpoint-max', reflect: true },
-    rotationsPerSecond: { type: Number, attribute: 'rotations-per-second', reflect: true },
-    allianceColor: { type: String, attribute: 'allience-color', reflect: true },
-    ballCount: { type: Number, attribute: 'ball-count', reflect: true }
+    robotArmSetpoint: { type: Number, attribute: 'robot-arm-setpoint' },
+    robotArmSetpointMax: { type: Number, attribute: 'robot-arm-setpoint-max' },
+    rotationsPerSecond: { type: Number, attribute: 'rotations-per-second' },
+    allianceColor: { type: String, attribute: 'allience-color' },
+    ballCount: { type: Number, attribute: 'ball-count' }
   };
 
   constructor() {
@@ -33,7 +33,7 @@ class RobotSvgElement extends LitElement {
     this.robotArmSetpointMax = -10;
     this.robotSvg = null;
     this.rotationsPerSecond = 0;
-    this.allianceColor = "RED";
+    this.allianceColor = "Red";
     this.ballCount = 0;
   }
 
@@ -122,7 +122,7 @@ class RobotSvgElement extends LitElement {
       this.robotSvg.rotatePart('intakeTopArm', (-60) * (this.robotArmSetpoint / this.robotArmSetpointMax));
     }
     if (changedprops.has("ballCount") || changedprops.has("allianceColor")) {
-      if (this.allianceColor == "RED") {
+      if (this.allianceColor.toUpperCase() == "RED") {
         if (this.ballCount == 1) {
           this.robotSvg.setPartVisibility("redCargo1", true);
           this.robotSvg.setPartVisibility("redCargo2", false);

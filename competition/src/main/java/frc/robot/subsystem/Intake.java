@@ -40,9 +40,13 @@ public class Intake extends StateMachine {
     private boolean colorLog = false;
     private String colorState = "No ball";
     private Timer timer = new Timer();
+    private double currentCount = 0;
 
     public Intake() {
         super("Stop");
+
+        NtHelper.setDouble("/robot/svg/robotArmSetpointMax", bottomPosition);
+
         armMotor = Devices.intakeArmMotor;
         armMotorLeft = Devices.intakeArmFollowerMotor;
         rollerMotor = Devices.intakeRollerMotor;
@@ -64,8 +68,16 @@ public class Intake extends StateMachine {
         // stop();
     }
 
+    public double getBallCount(){
+        return currentCount;
+    }
+
+    public void setBallCount(double count) {
+        currentCount = count;
+        NtHelper.setDouble("/robot/cargocount", count);
+    }
+
     private void beltForward() {
-        Double currentCount = NtHelper.getDouble("/robot/cargocount", 0);
         NtHelper.setString("/robot/intake/currentcolorstate", colorState);
 
         switch (colorState) {
@@ -75,8 +87,7 @@ public class Intake extends StateMachine {
 
                 if (colourSensor.isColor(desiredColor)) {
                     colorState = "DesiredBall";
-                    currentCount = currentCount + 1;
-                    NtHelper.setDouble("/robot/cargocount", currentCount);
+                    setBallCount(getBallCount() + 1);
                 }
                 if (colourSensor.isColor(otherColor)) {
                     colorState = "OtherBall";
@@ -123,7 +134,6 @@ public class Intake extends StateMachine {
         NtHelper.setBoolean("/robot/intake/colorlog", colorLog);
         if (colourSensor.isColor(desiredColor)) {
             NtHelper.setString("/robot/intake/currentcolor", desiredColor);
-            Double currentCount = NtHelper.getDouble("/robot/cargocount", 0);
 
             if (currentCount == 0 || currentCount == 1) {
                 beltMotor.setPercent(beltSpeed);

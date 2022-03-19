@@ -6,7 +6,10 @@
 >
     <kwarqs-robot-drawing
         source-provider="NetworkTables"
-        style="transform: translate(166.662px, 328.005px); width: 496px; height: 388px;"
+        style="transform: translate(193.994px, 392.672px); width: 496px; height: 388px;"
+        robot-arm-setpoint-max="-14.5"
+        allience-color="RED"
+        source-key="/robot/svg"
     ></kwarqs-robot-drawing>
     <vaadin-number-field
         has-controls=""
@@ -41,9 +44,9 @@
     <frc-toggle-group
         source-provider="NetworkTables"
         style="transform: translate(438.344px, 33.676px); width: 161.976px; height: 336.198px;"
-        source-key="/robot/climber/state"
-        options="[&quot;Climb&quot;,&quot;Up&quot;,&quot;Stop&quot;,&quot;Down&quot;]"
-        value="Stop"
+        source-key="/robot/climber/desiredState"
+        options="[&quot;climb&quot;,&quot;up&quot;,&quot;stop&quot;,&quot;down&quot;]"
+        value="Up"
     ></frc-toggle-group>
 
 
@@ -95,14 +98,14 @@
         source-key="/robot/auto/position"
         id="auto-start-position"
         options="[&quot;Top&quot;,&quot;Middle&quot;,&quot;Bottom&quot;]"
-        value="Top"
+        value="Middle"
     ></frc-toggle-group>
     <frc-toggle-group
         source-provider="NetworkTables"
         style="width: 227.333px; height: 637px; transform: translate(2.39883e-05px, 44.6668px);"
         source-key="/robot/auto/name"
         options="[&quot;taxi&quot;,&quot;shootOneAndTaxi&quot;,&quot;shootTwoTaxi&quot;,&quot;shootOneAndShootTwo&quot;,&quot;shootTwoAndShootOne&quot;]"
-        value="taxi"
+        value="shootOneAndTaxi"
         id="auto-selector"
     ></frc-toggle-group>
     <frc-field

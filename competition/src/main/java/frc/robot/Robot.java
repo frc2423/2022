@@ -14,6 +14,7 @@ import frc.robot.util.Targeting;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.util.RateLimiter;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class Robot extends TimedRobot {
 
@@ -90,6 +91,13 @@ public class Robot extends TimedRobot {
     NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
     NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
     NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());  
+
+    NtHelper.setString("/robot/svg/allianceColor", DriverStation.getAlliance().toString());
+    NtHelper.setDouble("/robot/svg/ballCount", Subsystems.intake.getBallCount());
+    NtHelper.setDouble("/robot/svg/rotationsPerSecond", Devices.leftMotor.getSpeed()/(2 * Math.PI * Units.inchesToMeters(3)));
+    NtHelper.setDouble ("/robot/svg/robotArmSetpoint", Devices.intakeArmMotor.getDistance());
+
+
     Subsystems.shooter.shooterInfo();
     Subsystems.climber.climberInfo();
   }
