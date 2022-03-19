@@ -22,11 +22,11 @@ public class Auto extends StateMachine {
         shootOneAndShootTwo = new ShootOneAndShootTwo();
         shootTwoAndShootOne = new ShootTwoAndShootOne();
 
-        NtHelper.setString("/robot/auto/name", "shootTwoTaxi");
+        NtHelper.setString("/robot/auto/name/value", "shootTwoTaxi");
     }
 
     public void getAuto(){
-        String name = NtHelper.getString("/robot/auto/name", "taxi");
+        String name = NtHelper.getString("/robot/auto/name/value", "taxi");
         System.out.println(name);
         switch (name) {
             case "taxi":

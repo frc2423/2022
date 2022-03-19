@@ -15,7 +15,7 @@ public class ShootOneAndShootTwo extends StateMachine{
 
     public ShootOneAndShootTwo() {
         super("FirstShot");
-        NtHelper.setString("/robot/auto/name", "threeMuskets4");
+        // NtHelper.setString("/robot/auto/name/value", "threeMuskets4");
       }
 
     @InitState(name = "FirstShot")

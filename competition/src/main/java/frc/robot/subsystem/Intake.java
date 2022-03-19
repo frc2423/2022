@@ -41,6 +41,9 @@ public class Intake extends StateMachine {
     private String colorState = "No ball";
     private Timer timer = new Timer();
 
+    private boolean ballRejection;
+    private boolean filterColor;
+
     public Intake() {
         super("Stop");
 
@@ -63,9 +66,21 @@ public class Intake extends StateMachine {
             otherColor = "blue";
         }
 
+        //TEMPORARY ~~~~~ UNTIL WORKING
+        doBallRejection(false);
+        doColorFiltering(false);
+
         // intakeUp();
         // zero(); //0.0000
         // stop();
+    }
+
+    public void doBallRejection(boolean reject){
+        ballRejection = reject;
+    }
+
+    public void doColorFiltering(boolean filter){
+        filterColor = filter;
     }
 
     public double getBallCount(){
@@ -88,7 +103,7 @@ public class Intake extends StateMachine {
                     colorState = "DesiredBall";
                     setBallCount(getBallCount() + 1);
                 }
-                if (colourSensor.isColor(otherColor)) {
+                if (colourSensor.isColor(otherColor) && filterColor) {
                     colorState = "OtherBall";
                     timer.reset();
                     timer.start();
@@ -100,7 +115,7 @@ public class Intake extends StateMachine {
 
                 if (getBallCount() == 0 || getBallCount() == 1) {
                     beltMotor.setPercent(beltSpeed);
-                } else if (getBallCount() > 1) {
+                } else if (getBallCount() > 1 && ballRejection) {
                     beltMotor.setPercent(0);
                 }
 
@@ -108,7 +123,7 @@ public class Intake extends StateMachine {
                     colorState = "No ball";
                 }
 
-                if (colourSensor.isColor(otherColor)) {
+                if (colourSensor.isColor(otherColor) && filterColor) {
                     colorState = "OtherBall";
                     rollerSpeed = (-rollerSpeed);
                     timer.reset();

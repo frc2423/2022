@@ -15,7 +15,6 @@ public class ShootOneAndTaxi extends StateMachine {
     public ShootOneAndTaxi() {
         super("Stop");
         // TODO: Implement shooter follow-through and trajectory values
-         NtHelper.setString("/robot/auto/name", "simpleAuto2");
     }
 
     @RunState(name = "Stop")

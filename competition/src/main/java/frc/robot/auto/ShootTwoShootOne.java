@@ -24,7 +24,6 @@ public class ShootTwoShootOne extends StateMachine{
 
     public ShootTwoShootOne() {
         super("Stop");
-        NtHelper.setString("/robot/auto/name", "shootTwoTaxi3");
     }
 
     @RunState(name = "Stop")
