@@ -304,6 +304,8 @@ public class Intake extends StateMachine {
     }
 
     public void runIntake() {
+        // String rawColor = colourSensor
+        // NtHelper.setString("/robot/intake/rawColorValue", colourSensor.getColor().green
         NtHelper.setString("/robot/intake/state", state);
         NtHelper.setBoolean("/robot/intake/leftLimit", leftLimit.get());
         NtHelper.setBoolean("/robot/intake/rightLimit", rightLimit.get());

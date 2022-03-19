@@ -90,7 +90,7 @@ public class Robot extends TimedRobot {
     Devices.gyro.reset();
     Subsystems.drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
     Targeting.init();
-    Subsystems.climber.resetClimber();
+    Subsystems.climber.calibrate();
     Subsystems.auto.setState("init");
   }
 

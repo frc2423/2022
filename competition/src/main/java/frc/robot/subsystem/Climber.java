@@ -30,7 +30,8 @@ public class Climber extends StateMachine {
 
     }
 
-    public void resetClimber() {
+    public void calibrate() {
+        setState("stop");
         leftMotor.resetEncoder(0);
         rightMotor.resetEncoder(0);
     }
