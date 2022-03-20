@@ -25,15 +25,21 @@ public class Climber extends StateMachine {
         NtHelper.setString("/robot/climber/desiredState", "stop");
 
         NtHelper.setDouble("/robot/climber/ntPosition", 50);
-        
+    }
 
+    public void preventClimberFromBreaking() {
+        double leftPosition = leftMotor.getDistance();
+        double rightPosition = rightMotor.getDistance();
+        double bottomPosition = -5;
 
+        if (leftPosition < bottomPosition || rightPosition < bottomPosition){
+            setState("stop");
+        }
     }
 
     public void calibrate() {
-        setState("stop");
-        leftMotor.resetEncoder(0);
-        rightMotor.resetEncoder(0);
+        // setState("stop");
+        NtHelper.setString("robot/climber/desiredState", "stop");
     }
 
     public String getNtState() {

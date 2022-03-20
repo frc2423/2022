@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
     Devices.init();
     Subsystems.init();
     CameraServer.startAutomaticCapture();
-    NtHelper.setBoolean("/robot/shooter/isAuto", true);
+    NtHelper.setBoolean("/robot/shooter/isAuto", false);
   }
 
   @Override
@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
     Subsystems.shooter.run();
     Subsystems.climber.run();
     Subsystems.intake.runIntake();
+    Subsystems.climber.preventClimberFromBreaking();
     telemetry();
   }
 
@@ -53,7 +54,7 @@ public class Robot extends TimedRobot {
 
     //Targeting Code
     if (Devices.controller.getRightTriggerAxis() > 0.2){
-      Subsystems.shooter.setAuto(NtHelper.getBoolean("/robot/shooter/isAuto", true));
+      Subsystems.shooter.setAuto(NtHelper.getBoolean("/robot/shooter/isAuto", false));
       Subsystems.shooter.shoot();
     }
     else {

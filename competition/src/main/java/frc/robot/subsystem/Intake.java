@@ -170,6 +170,19 @@ public class Intake extends StateMachine {
         desiredPosition = topPosition;
         armMotor.setDistance(desiredPosition);
         armMotorLeft.setDistance(desiredPosition);
+        runOuttake();
+
+    }
+
+    private void runOuttake() {
+        boolean isOuttaking = Devices.controller.getBButton();
+        if (isOuttaking) {
+            Devices.beltMotor.setPercent(-beltSpeed);
+        } else {
+            Devices.beltMotor.setPercent(0);
+
+        }
+
     }
 
     // sets position to its down position
