@@ -1,12 +1,9 @@
 package frc.robot.auto;
 
 import frc.robot.util.stateMachine.StateMachine;
-
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
-import frc.robot.util.NtHelper;
 import frc.robot.Subsystems;
-import frc.robot.subsystem.Intake;
 
 import edu.wpi.first.wpilibj.Timer;
 
@@ -15,7 +12,6 @@ public class ShootOneAndShootTwo extends StateMachine{
 
     public ShootOneAndShootTwo() {
         super("FirstShot");
-        // NtHelper.setString("/robot/auto/name/value", "threeMuskets4");
       }
 
     @InitState(name = "FirstShot")

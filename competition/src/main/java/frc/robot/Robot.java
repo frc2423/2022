@@ -89,16 +89,14 @@ public class Robot extends TimedRobot {
   }
 
   public void telemetry() {
-    NtHelper.setDouble ("/robot/intake/leftdistance", Devices.intakeArmMotor.getDistance());
-    NtHelper.setDouble ("/robot/intake/rightdistance", Devices.intakeArmFollowerMotor.getDistance());
-    NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
-    NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
-    NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());  
+    NtHelper.setDouble (NtKeys.LEFT_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
+    NtHelper.setDouble (NtKeys.RIGHT_INTAKE_POSITION, Devices.intakeArmFollowerMotor.getDistance());
+    NtHelper.setDouble(NtKeys.GYRO_ANGLE, Devices.gyro.getAngle());  
 
-    NtHelper.setString("/robot/svg/allianceColor", DriverStation.getAlliance().toString());
-    NtHelper.setDouble("/robot/svg/ballCount", Subsystems.intake.getCargoCount());
-    NtHelper.setDouble("/robot/svg/rotationsPerSecond", Devices.leftMotor.getSpeed()/(2 * Math.PI * Units.inchesToMeters(3)));
-    NtHelper.setDouble ("/robot/svg/robotArmSetpoint", Devices.intakeArmMotor.getDistance());
+    NtHelper.setString(NtKeys.SVG_ALLIANCE_COLOR, DriverStation.getAlliance().toString());
+    NtHelper.setDouble(NtKeys.SVG_CARGO_COUNT, Subsystems.intake.getCargoCount());
+    NtHelper.setDouble(NtKeys.SVG_ROTATIONS_PER_SECOND, Devices.leftMotor.getSpeed()/(2 * Math.PI * Units.inchesToMeters(3)));
+    NtHelper.setDouble (NtKeys.SVG_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
 
 
     Subsystems.shooter.shooterInfo();

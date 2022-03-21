@@ -1,5 +1,6 @@
 package frc.robot.auto;
 
+import frc.robot.constants.NtKeys;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
@@ -21,13 +22,11 @@ public class Auto extends StateMachine {
         shootTwoTaxi = new ShootTwoTaxi();
         shootOneAndShootTwo = new ShootOneAndShootTwo();
         shootTwoAndShootOne = new ShootTwoAndShootOne();
-
-        NtHelper.setString("/robot/auto/name/value", "shootTwoTaxi");
+        NtHelper.setString(NtKeys.AUTO_MODE_NAME, "shootTwoTaxi");
     }
 
     public void getAuto(){
-        String name = NtHelper.getString("/robot/auto/name/value", "taxi");
-        System.out.println(name);
+        String name = NtHelper.getString(NtKeys.AUTO_MODE_NAME, "taxi");
         switch (name) {
             case "taxi":
                 selectedAutonomous = taxi;
@@ -45,8 +44,8 @@ public class Auto extends StateMachine {
                 selectedAutonomous = shootTwoAndShootOne;
                 break;
             default:
-                selectedAutonomous = taxi; // I'm sure this will cause no problems in the future :)
-                break; // Adrien, you evil evil man
+                selectedAutonomous = taxi;
+                break;
         }
     }
 
@@ -64,6 +63,5 @@ public class Auto extends StateMachine {
     @RunState(name = "run")
     public void runRun(){
         selectedAutonomous.run();
-        System.out.println("selected auto: " + selectedAutonomous.getClass().getName());
     }
 }

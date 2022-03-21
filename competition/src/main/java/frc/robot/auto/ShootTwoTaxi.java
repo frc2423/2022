@@ -1,4 +1,5 @@
 package frc.robot.auto;
+
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
@@ -6,6 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.NtHelper;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
+import frc.robot.constants.NtKeys;
 import frc.robot.util.DriveHelper;
 import frc.robot.util.Rotation;
 import edu.wpi.first.math.MathUtil;
@@ -15,10 +17,10 @@ import edu.wpi.first.math.util.Units;
  * Intake cargo
  * Aim and shoot both cargos at upper hub (testing necessary)
  * Move backwards to taxi
- */ 
+ */
 
-public class ShootTwoTaxi extends StateMachine{
-    //TODO: Values subject to change upon completed trajcetory integration
+public class ShootTwoTaxi extends StateMachine {
+    // TODO: Values subject to change upon completed trajcetory integration
     private Timer timer = new Timer();
     private double angle;
     private Rotation rotate;
@@ -26,79 +28,77 @@ public class ShootTwoTaxi extends StateMachine{
     public ShootTwoTaxi() {
         super("Stop");
         Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
-        NtHelper.setString("/robot/auto/position/value", "bottom");
+        NtHelper.setString(NtKeys.AUTO_MODE_ROBOT_POSITION, "bottom");
     }
 
-    public void haltMovement(){
+    public void haltMovement() {
         Devices.leftMotor.setPercent(0);
-        Devices.rightMotor.setPercent(0); 
+        Devices.rightMotor.setPercent(0);
     }
 
     @RunState(name = "Stop")
-    public void stopState(){
+    public void stopState() {
         NtHelper.setString("/robot/auto/state", "stop");
         setState("IntakeDown");
     }
 
-
-    @InitState(name="IntakeDown")
+    @InitState(name = "IntakeDown")
     public void initIntakeDown() {
-        timer.reset ();
-        timer.start ();
+        timer.reset();
+        timer.start();
         Subsystems.intake.setDownState();
     }
 
     @RunState(name = "IntakeDown")
-    public void runIntakeDown(){
+    public void runIntakeDown() {
         if (timer.get() > .5) {
             setState("CargoAdvance");
         }
     }
 
     @InitState(name = "CargoAdvance")
-    public void CargoAdvanceInit (){
-        String position = NtHelper.getString("/robot/auto/position/value", "bottom");
-        if (position.equals("top")){
+    public void CargoAdvanceInit() {
+        String position = NtHelper.getString("/robot/auto/position", "bottom");
+        if (position.equals("top")) {
             Subsystems.follower.setTrajectory("TopTarmacToTopCargo");
         } else if (position.equals("middle")) {
             Subsystems.follower.setTrajectory("MiddleTarmacToMiddleCargo");
-        } else { //bottom
+        } else { // bottom
             Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
         }
         Subsystems.follower.startFollowing();
     }
 
     @RunState(name = "CargoAdvance")
-    public void CargoAdvanceRun(){
+    public void CargoAdvanceRun() {
         NtHelper.setString("/robot/auto/state", "cargoAdvance");
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
             setState("Intake");
         }
-    
+
     }
 
     @InitState(name = "Intake")
-    public void IntakeInit (){
+    public void IntakeInit() {
         haltMovement();
-        timer.reset ();
-        timer.start ();
+        timer.reset();
+        timer.start();
     }
 
     @RunState(name = "Intake")
-    public void Intake (){
+    public void Intake() {
         NtHelper.setString("/robot/auto/state", "intake");
 
-        if (timer.get() > 1.5){
+        if (timer.get() > 1.5) {
             setState("Rotate");
         }
-        //Seconds; subject to change
+        // Seconds; subject to change
 
     }
 
-
     @InitState(name = "Rotate")
-    public void rotateInit(){
+    public void rotateInit() {
         Subsystems.intake.setUpState();
         angle = Devices.gyro.getAngle() + 180;
         rotate = new Rotation(.15, .3, 5, 150);
@@ -109,74 +109,71 @@ public class ShootTwoTaxi extends StateMachine{
     }
 
     @RunState(name = "Rotate")
-    public void rotate(){
+    public void rotate() {
         NtHelper.setString("/robot/auto/state", "rotate");
 
-        double angleError = getAngleErrorRadians(angle  - Devices.gyro.getAngle());
+        double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
         double rotationSpeed = rotate.calculate(angleError);
         double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
         Devices.leftMotor.setPercent(leftSpeed);
-        Devices.rightMotor.setPercent(rightSpeed); 
-        if(rotate.isDone(angleError)){
+        Devices.rightMotor.setPercent(rightSpeed);
+        if (rotate.isDone(angleError)) {
             setState("ShooterAdvance");
         }
     }
 
     @InitState(name = "ShooterAdvance")
-    public void ShooterAdvanceInit (){
-        String position = NtHelper.getString("/robot/auto/position/value", "bottom");
-        if (position.equals("top")){
+    public void ShooterAdvanceInit() {
+        String position = NtHelper.getString("/robot/auto/position", "bottom");
+        if (position.equals("top")) {
             Subsystems.follower.setTrajectory("TopCargoToHub", false);
         } else if (position.equals("middle")) {
             Subsystems.follower.setTrajectory("MiddleCargoToHub", false);
-        } else { //bottom
+        } else { // bottom
             Subsystems.follower.setTrajectory("BottomCargoToHub", false);
         }
         Subsystems.follower.startFollowing();
-        //Subsystems.follower.resetPosition();
     }
 
     @RunState(name = "ShooterAdvance")
-    public void ShooterAdvance (){
+    public void ShooterAdvance() {
         NtHelper.setString("/robot/auto/state", "shooteradvacnce");
-        Subsystems.follower.follow ();
-        if (Subsystems.follower.isDone()){
-            setState ("ShootTwo");
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
+            setState("ShootTwo");
         }
 
     }
 
     @InitState(name = "ShootTwo")
-    public void ShootTwoInit (){
+    public void ShootTwoInit() {
         timer.reset();
         timer.start();
     }
 
     @RunState(name = "ShootTwo")
-    public void ShootTwo (){
+    public void ShootTwo() {
         NtHelper.setString("/robot/auto/state", "shoottwo");
         Subsystems.shooter.shoot();
-        if (timer.get() > 4){
-            setState ("TaxiBack");
+        if (timer.get() > 4) {
+            setState("TaxiBack");
         }
-        //Seconds subject to change upon testing
-    
+        // Seconds subject to change upon testing
+
     }
 
     @InitState(name = "TaxiBack")
-    public void TaxiBackInit (){
-        Subsystems.follower.setTrajectory ("Taxi");
+    public void TaxiBackInit() {
+        Subsystems.follower.setTrajectory("Taxi");
         Subsystems.follower.startFollowing();
-       // Subsystems.follower.resetPosition();
         timer.stop();
     }
 
     @RunState(name = "TaxiBack")
-    public void TaxiBack (){
-        Subsystems.follower.follow ();
+    public void TaxiBack() {
+        Subsystems.follower.follow();
     }
-
 
 }

@@ -100,7 +100,7 @@
     tab-name="Autonomous"
     source-provider="NetworkTables"
     slot="tab"
-    source-key="/robot/auto/position/value"
+    source-key="/robot/auto/position"
 >
 
 
@@ -121,7 +121,7 @@
         id="auto-start-position"
         options="[&quot;top&quot;,&quot;middle&quot;,&quot;bottom&quot;]"
         value="bottom"
-        source-key="/robot/auto/position/value"
+        source-key="/robot/auto/position"
     ></frc-toggle-group>
     <frc-toggle-group
         source-provider="NetworkTables"
@@ -129,7 +129,7 @@
         options="[&quot;taxi&quot;,&quot;shootOneAndTaxi&quot;,&quot;shootTwoTaxi&quot;,&quot;shootOneAndShootTwo&quot;,&quot;shootTwoAndShootOne&quot;]"
         value="shootTwoTaxi"
         id="auto-selector"
-        source-key="/robot/auto/name/value"
+        source-key="/robot/auto/name"
     ></frc-toggle-group>
     <frc-field
         source-provider="NetworkTables"

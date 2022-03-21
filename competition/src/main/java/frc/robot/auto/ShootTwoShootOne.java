@@ -33,7 +33,6 @@ public class ShootTwoShootOne extends StateMachine{
 
     @InitState(name = "CargoAdvance")
     public void CargoAdvanceInit (){
-        String position = NtHelper.getString("/robot/auto/postion", "middle");
         Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
         Subsystems.follower.resetPosition();
     }
