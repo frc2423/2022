@@ -27,7 +27,6 @@ public class Intake extends StateMachine {
 
     private double topPosition = 1;
     private double bottomPosition = -14.5;
-    private double belowPosition = -13.5;
     private double rollerSpeed = 0.50;
     private double calibrateSpeed = 0.1;
 
@@ -38,7 +37,6 @@ public class Intake extends StateMachine {
     private Alliance currentAlliance = DriverStation.getAlliance();
     private String desiredColor;
     private String otherColor;
-    private boolean colorLog = false;
     private String colorState = "No ball";
     private Timer timer = new Timer();
 
@@ -48,8 +46,7 @@ public class Intake extends StateMachine {
     public Intake() {
         super("Stop");
 
-        NtHelper.setDouble("/robot/svg/robotArmSetpointMax", bottomPosition);
-
+        NtHelper.setDouble(NtKeys.SVG_INTAKE_MAX_POSITION, bottomPosition);
         armMotor = Devices.intakeArmMotor;
         armMotorLeft = Devices.intakeArmFollowerMotor;
         rollerMotor = Devices.intakeRollerMotor;
@@ -93,11 +90,11 @@ public class Intake extends StateMachine {
     }
 
     private void beltForward() {
-        NtHelper.setString("/robot/intake/currentcolorstate", colorState);
+        NtHelper.setString(NtKeys.CURRENT_COLOR_STATE, colorState);
 
         switch (colorState) {
             case "No ball":
-                NtHelper.setString("/robot/intake/currentcolor", "No color detected");
+                NtHelper.setString(NtKeys.DETECTED_CARGO_COLOR, "No color detected");
                 beltMotor.setPercent(beltSpeed);
 
                 if (colourSensor.isColor(desiredColor)) {
@@ -112,7 +109,7 @@ public class Intake extends StateMachine {
                 }
                 break;
             case "DesiredBall":
-                NtHelper.setString("/robot/intake/currentcolor", desiredColor);
+                NtHelper.setString(NtKeys.DETECTED_CARGO_COLOR, desiredColor);
 
                 if (getCargoCount() == 0 || getCargoCount() == 1) {
                     beltMotor.setPercent(beltSpeed);
@@ -134,7 +131,7 @@ public class Intake extends StateMachine {
 
                 break;
             case "OtherBall":
-                NtHelper.setString("/robot/intake/currentcolor", otherColor);
+                NtHelper.setString(NtKeys.DETECTED_CARGO_COLOR, otherColor);
                 beltMotor.setPercent(-beltSpeed);
                 if ((getCargoCount() == 1 && colourSensor.isColor(desiredColor)) || timer.get() > 2) {
                     colorState = "No ball";
@@ -246,9 +243,6 @@ public class Intake extends StateMachine {
 
     @RunState(name = "Stop")
     public void stopRun() {
-        // System.out.println("color " + colourSensor.getRawColor().red + " " +
-        // colourSensor.getRawColor().green + " " + colourSensor.getRawColor().blue);
-
         stop();
         if (Devices.controller.getAButton()) {
             setState("Calibrate");
@@ -318,11 +312,9 @@ public class Intake extends StateMachine {
     }
 
     public void runIntake() {
-        // String rawColor = colourSensor
-        // NtHelper.setString("/robot/intake/rawColorValue", colourSensor.getColor().green
-        NtHelper.setString("/robot/intake/state", state);
-        NtHelper.setBoolean("/robot/intake/leftLimit", leftLimit.get());
-        NtHelper.setBoolean("/robot/intake/rightLimit", rightLimit.get());
+        NtHelper.setString(NtKeys.INTAKE_STATE, state);
+        NtHelper.setBoolean(NtKeys.INTAKE_LEFT_LIMIT_PRESSED, isLeftPressed());
+        NtHelper.setBoolean(NtKeys.INTAKE_RIGHT_LIMIT_PRESSED, isRightPressed());
 
         switch (state) {
             case "Calibrate":
