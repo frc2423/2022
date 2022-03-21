@@ -3,7 +3,7 @@ package frc.robot.subsystem;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
-
+import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
@@ -138,7 +138,7 @@ public class Shooter extends StateMachine{
 
     @InitState(name="shoot")
     public void runShootInit() {
-        NtHelper.setDouble("/robot/cargoCount", 0);
+        NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
     }
     
     @RunState(name="shoot")

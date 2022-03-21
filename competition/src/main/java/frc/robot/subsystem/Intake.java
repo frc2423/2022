@@ -2,6 +2,7 @@ package frc.robot.subsystem;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Devices;
+import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.ColourSensor;
 import frc.robot.util.NtHelper;
@@ -56,7 +57,7 @@ public class Intake extends StateMachine {
         rightLimit = Devices.rightLimit;
         beltMotor = Devices.beltMotor;
         colourSensor = Devices.colourSensor;
-        setBallCount(0);
+        setCargoCount(0);
 
         if (currentAlliance == Alliance.Blue) {
             desiredColor = "blue";
@@ -83,12 +84,12 @@ public class Intake extends StateMachine {
         filterColor = filter;
     }
 
-    public double getBallCount(){
-        return NtHelper.getDouble("/robot/cargoCount", 0);
+    public double getCargoCount(){
+        return NtHelper.getDouble(NtKeys.CARGO_COUNT, 0);
     }
 
-    public void setBallCount(double count) {
-        NtHelper.setDouble("/robot/cargoCount", count);
+    public void setCargoCount(double count) {
+        NtHelper.setDouble(NtKeys.CARGO_COUNT, count);
     }
 
     private void beltForward() {
@@ -101,7 +102,7 @@ public class Intake extends StateMachine {
 
                 if (colourSensor.isColor(desiredColor)) {
                     colorState = "DesiredBall";
-                    setBallCount(getBallCount() + 1);
+                    setCargoCount(getCargoCount() + 1);
                 }
                 if (colourSensor.isColor(otherColor) && filterColor) {
                     colorState = "OtherBall";
@@ -113,9 +114,9 @@ public class Intake extends StateMachine {
             case "DesiredBall":
                 NtHelper.setString("/robot/intake/currentcolor", desiredColor);
 
-                if (getBallCount() == 0 || getBallCount() == 1) {
+                if (getCargoCount() == 0 || getCargoCount() == 1) {
                     beltMotor.setPercent(beltSpeed);
-                } else if (getBallCount() > 1 && ballRejection) {
+                } else if (getCargoCount() > 1 && ballRejection) {
                     beltMotor.setPercent(0);
                 }
 
@@ -135,7 +136,7 @@ public class Intake extends StateMachine {
             case "OtherBall":
                 NtHelper.setString("/robot/intake/currentcolor", otherColor);
                 beltMotor.setPercent(-beltSpeed);
-                if ((getBallCount() == 1 && colourSensor.isColor(desiredColor)) || timer.get() > 2) {
+                if ((getCargoCount() == 1 && colourSensor.isColor(desiredColor)) || timer.get() > 2) {
                     colorState = "No ball";
                     rollerSpeed = (-rollerSpeed);
                     timer.stop();
