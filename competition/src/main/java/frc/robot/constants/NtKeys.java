@@ -3,6 +3,11 @@ package frc.robot.constants;
 public class NtKeys {
     // Shooter
     public static final String IS_AUTO_AIM = "/robot/shooter/isAuto";
+    public static final String SHOOTER_STATE = "/robot/shooter/state";
+    public static final String SHOOTER_SPEED = "/robot/shooter/shooterspeed";
+    public static final String DESIRED_SHOOTER_SPEED = "/robot/shooter/desiredshooterspeed";
+    public static final String DESIRED_KICKER_SPEED = "/robot/shooter/desiredkickerspeed";
+    
     // Drivetrain
     public static final String GYRO_ANGLE = "/robot/gyro";
     // SVG robot for dashboard
@@ -28,6 +33,7 @@ public class NtKeys {
     public static final String INTAKE_STATE = "/robot/intake/state";
     public static final String INTAKE_LEFT_LIMIT_PRESSED = "/robot/intake/leftLimitPressed";
     public static final String INTAKE_RIGHT_LIMIT_PRESSED = "/robot/intake/rightLimitPressed";
-
     public static final String DETECTED_CARGO_COLOR = "/robot/intake/currentcolor";
+    public static final String CURRENT_COLOR_STATE = "/robot/intake/currentcolorstate";
+    
 }
