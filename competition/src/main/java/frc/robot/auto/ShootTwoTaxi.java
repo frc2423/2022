@@ -38,7 +38,6 @@ public class ShootTwoTaxi extends StateMachine {
 
     @RunState(name = "Stop")
     public void stopState() {
-        NtHelper.setString("/robot/auto/state", "stop");
         setState("IntakeDown");
     }
 
@@ -58,7 +57,7 @@ public class ShootTwoTaxi extends StateMachine {
 
     @InitState(name = "CargoAdvance")
     public void CargoAdvanceInit() {
-        String position = NtHelper.getString("/robot/auto/position", "bottom");
+        String position = NtHelper.getString(NtKeys.AUTO_MODE_ROBOT_POSITION, "bottom");
         if (position.equals("top")) {
             Subsystems.follower.setTrajectory("TopTarmacToTopCargo");
         } else if (position.equals("middle")) {
@@ -71,7 +70,6 @@ public class ShootTwoTaxi extends StateMachine {
 
     @RunState(name = "CargoAdvance")
     public void CargoAdvanceRun() {
-        NtHelper.setString("/robot/auto/state", "cargoAdvance");
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
             setState("Intake");
@@ -88,8 +86,6 @@ public class ShootTwoTaxi extends StateMachine {
 
     @RunState(name = "Intake")
     public void Intake() {
-        NtHelper.setString("/robot/auto/state", "intake");
-
         if (timer.get() > 1.5) {
             setState("Rotate");
         }
@@ -110,8 +106,6 @@ public class ShootTwoTaxi extends StateMachine {
 
     @RunState(name = "Rotate")
     public void rotate() {
-        NtHelper.setString("/robot/auto/state", "rotate");
-
         double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
         double rotationSpeed = rotate.calculate(angleError);
         double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
@@ -126,7 +120,7 @@ public class ShootTwoTaxi extends StateMachine {
 
     @InitState(name = "ShooterAdvance")
     public void ShooterAdvanceInit() {
-        String position = NtHelper.getString("/robot/auto/position", "bottom");
+        String position = NtHelper.getString(NtKeys.AUTO_MODE_ROBOT_POSITION, "bottom");
         if (position.equals("top")) {
             Subsystems.follower.setTrajectory("TopCargoToHub", false);
         } else if (position.equals("middle")) {
@@ -139,7 +133,6 @@ public class ShootTwoTaxi extends StateMachine {
 
     @RunState(name = "ShooterAdvance")
     public void ShooterAdvance() {
-        NtHelper.setString("/robot/auto/state", "shooteradvacnce");
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
             setState("ShootTwo");
@@ -155,7 +148,6 @@ public class ShootTwoTaxi extends StateMachine {
 
     @RunState(name = "ShootTwo")
     public void ShootTwo() {
-        NtHelper.setString("/robot/auto/state", "shoottwo");
         Subsystems.shooter.shoot();
         if (timer.get() > 4) {
             setState("TaxiBack");

@@ -12,4 +12,10 @@ public class NtKeys {
     public static final String SVG_INTAKE_POSITION = "/robot/svg/robotArmSetpoint";
     public static final String AUTO_MODE_NAME = "/robot/auto/name";
     public static final String AUTO_MODE_ROBOT_POSITION = "/robot/auto/position";
+    public static final String CLIMBER_DESIRED_STATE = "/robot/climber/desiredState";
+    public static final String CLIMBER_CURRENT_STATE = "/robot/climber/state";
+    public static final String CLIMB_MEDIUM_BAR = "/robot/climber/isMediumBar";
+    public static final String CLIMBER_DESIRED_POSITION = "/robot/climber/desiredPosition";
+    public static final String CLIMBER_LEFT_POSITION = "/robot/climber/leftPosition";
+    public static final String CLIMBER_RIGHT_POSITION = "/robot/climber/rightPosition";
 }

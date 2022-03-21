@@ -1,9 +1,9 @@
 package frc.robot.subsystem;
 
 import frc.robot.Devices;
+import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.NtHelper;
-import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
 
@@ -11,7 +11,6 @@ public class Climber extends StateMachine {
 
     private NeoMotor leftMotor;
     private NeoMotor rightMotor;
-    private double barPosition;
     private final double LOW_POSITION = 80;
     private final double MEDIUM_POSITION = 160;
     private final double CLIMB_POSITION = 25;
@@ -22,9 +21,7 @@ public class Climber extends StateMachine {
         super("stop");
         leftMotor = Devices.climberLeftMotor;
         rightMotor = Devices.climberRightMotor;
-        NtHelper.setString("/robot/climber/desiredState", "stop");
-
-        NtHelper.setDouble("/robot/climber/ntPosition", 50);
+        setState("stop");
     }
 
     public void preventClimberFromBreaking() {
@@ -38,93 +35,72 @@ public class Climber extends StateMachine {
     }
 
     public void calibrate() {
-        // setState("stop");
-        NtHelper.setString("robot/climber/desiredState", "stop");
+        setState("stop");
     }
 
-    public String getNtState() {
-        return NtHelper.getString("/robot/climber/desiredState", "stop");
-    }
-
-    public double getNtPosition() {
-        return NtHelper.getDouble("/robot/climber/ntPosition", 50);
+    public String getDesiredState() {
+        return NtHelper.getString(NtKeys.CLIMBER_DESIRED_STATE, "stop");
     }
 
     public Boolean isMediumBar() {
-        return NtHelper.getBoolean("/robot/climber/isMediumBar", true);
+        return NtHelper.getBoolean(NtKeys.CLIMB_MEDIUM_BAR, true);
+    }
+
+    public void setDesiredState(String name) {
+        NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, name);
     }
 
     @Override
     public void setState(String name) {
         super.setState(name);
-        NtHelper.setString("robot/climber/state", name);
+        NtHelper.setString(NtKeys.CLIMBER_CURRENT_STATE, name);
+        setDesiredState(name);
     }
 
     public void setDesiredPosition(double position){
         leftMotor.setDistance(position);
         rightMotor.setDistance(position);
         desiredPosition = position;
+        NtHelper.setDouble(NtKeys.CLIMBER_DESIRED_POSITION, desiredPosition);
     }
         
     @RunState(name = "stop")
     public void stop() {
         leftMotor.setPercent(0);
         rightMotor.setPercent(0);
-        if (getNtState().equals("up")) {
+        if (getDesiredState().equals("up")) {
             setState("up");
         } else {
-            NtHelper.setString("robot/climber/state", "stop");
+            setDesiredState("stop");
         }
     }
 
-    @InitState(name = "up")
-    public void initUp() {
-        if (!isMediumBar()) {
-            barPosition = LOW_POSITION; // !!!PLACEHOLDER VALUE!!!
-        } else {
-            barPosition = MEDIUM_POSITION; // !!!PLACEHOLDER VALUE!!!
-        }
+    public double getBarPosition() {
+        return isMediumBar() ? MEDIUM_POSITION : LOW_POSITION;
     }
 
     @RunState(name = "up")
     public void goUp() {
-        setDesiredPosition(barPosition);
-        // setDesiredPosition(getNtPosition());
-        if (getNtState().equals("stop")) {
+        setDesiredPosition(getBarPosition());
+        if (getDesiredState().equals("stop")) {
             setState("stop");
-        } else if (getNtState().equals("climb")) {
+        } else if (getDesiredState().equals("climb")) {
             setState("climb");
-        } else if (getNtState().equals("down")) {
+        } else if (getDesiredState().equals("down")) {
             setState("down");
         } else {
-            NtHelper.setString("robot/climber/state", "up");
+            setDesiredState("stop");
         }
-    }
-
-    @InitState(name = "climb")
-    public void initClimb() {
-        barPosition = CLIMB_POSITION;
     }
 
     @RunState(name = "climb")
     public void climb() {
-        /*
-         * I don't exactly know what to do here
-         * it for sure needs to move down slowly,
-         * how it does that I'm not entirely sure;
-         * Maybe a setpoint that is some difference
-         * from desired position or it's own
-         * position for a setDistance, but you would
-         * need to slow down the motor speed somehow
-         * and I don't know exactly how to do that :)
-         */
         setDesiredPosition(CLIMB_POSITION);
 
-
-        if (getNtState().equals("up")) {
+        if (getDesiredState().equals("up")) {
             setState("up");
         } else {
-            NtHelper.setString("robot/climber/state", "climb");
+            setDesiredState("climb");
         }
     }
 
@@ -132,12 +108,12 @@ public class Climber extends StateMachine {
     public void down() {
         setDesiredPosition(0);
         boolean isDown = leftMotor.getDistance() < BOTTOM_POSITION && rightMotor.getDistance() < BOTTOM_POSITION;
-        if (isDown || getNtState().equals("stop")) {
+        if (isDown || getDesiredState().equals("stop")) {
             setState("stop");
-        } else if (getNtState().equals("up")) {
+        } else if (getDesiredState().equals("up")) {
             setState("up");
         } else {
-            NtHelper.setString("robot/climber/state", "down");
+            setDesiredState("down");
         }
     }
 
@@ -146,13 +122,8 @@ public class Climber extends StateMachine {
         rightMotor.resetEncoder(0);
     }
 
-
     public void climberInfo(){
-        NtHelper.setDouble("/robot/climber/barPosition", barPosition);
-        NtHelper.setString("/robot/climber/currentState", getState());
-        NtHelper.setDouble("/robot/climber/desiredPosition", desiredPosition);
-        NtHelper.setDouble("/robot/climber/leftPosition", leftMotor.getDistance());
-        NtHelper.setDouble("/robot/climber/rightPosition", rightMotor.getDistance());
-
+        NtHelper.setDouble(NtKeys.CLIMBER_LEFT_POSITION, leftMotor.getDistance());
+        NtHelper.setDouble(NtKeys.CLIMBER_RIGHT_POSITION, rightMotor.getDistance());
     }
 }
