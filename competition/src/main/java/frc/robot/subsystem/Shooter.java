@@ -3,7 +3,7 @@ package frc.robot.subsystem;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
-
+import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
@@ -23,23 +23,17 @@ public class Shooter extends StateMachine{
 
     private double beltSpeed = -0.2;
     private double kickerSpeed = -0.3;
-    private double shooterSpeed = -60;//-3500; //-10; //-.2; //-0.8; //-3500?
+    private double shooterSpeed = -60;
 
     private double revDuration = 1;
     private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
     private boolean autoMode = false;
-    //Motor values subject to change following implementation and testing
 
     public Shooter() {
         super("stop");
         beltMotor = Devices.beltMotor;
         kickerMotor = Devices.kickerMotor;
         shooterMotor = Devices.shooterMotor;
-
-        NtHelper.setDouble("/robot/shooter/shootermotorp", 0.0);
-        NtHelper.setDouble("/robot/shooter/shootermotori", 0.0); 
-        NtHelper.setDouble("/robot/shooter/shootermotord", 0.0);
-        NtHelper.setDouble("/robot/shooter/shootermotorf", 0.0);
     }
 
     public void setAuto(boolean bool){
@@ -122,14 +116,12 @@ public class Shooter extends StateMachine{
             double rightSpeed = arcadeSpeeds[1];
             Devices.leftMotor.setPercent(leftSpeed);
             Devices.rightMotor.setPercent(rightSpeed); 
-            System.out.println("doing the thing "+ rotationSpeed);
             isAimed = rotationSpeed == 0 && Targeting.hasTargets();
         } else {
             Devices.leftMotor.setPercent(0);
             Devices.rightMotor.setPercent(0);
         }
         
-       // shooterMotor.setSpeed(shooterSpeed);
         setShooterVolt(shooterSpeed);
 
         if (timer.get() > this.revDuration && isAimed) this.setState("shoot");
@@ -138,7 +130,7 @@ public class Shooter extends StateMachine{
 
     @InitState(name="shoot")
     public void runShootInit() {
-        NtHelper.setDouble("/robot/cargoCount", 0);
+        NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
     }
     
     @RunState(name="shoot")
@@ -147,31 +139,14 @@ public class Shooter extends StateMachine{
         kicker();
         Devices.leftMotor.setPercent(0);
         Devices.rightMotor.setPercent(0); 
-        // run shooting
-        //shooterMotor.setPercent(-Devices.controller.getRightTriggerAxis() * 0.65);
         setShooterVolt(shooterSpeed);
     }
 
 
     public void shooterInfo(){
-        shooterSpeed = NtHelper.getDouble("/robot/shooter/desiredshooterspeed", shooterSpeed);
-        kickerSpeed = NtHelper.getDouble("/robot/shooter/desiredkickerspeed", kickerSpeed);
-
-
-        NtHelper.setString("/robot/shooter/state", getState());
-        // NtHelper.setDouble("/robot/shooter/beltspeed", beltMotor.getSpeed());
-        // NtHelper.setDouble("/robot/shooter/kickerspeed", kickerMotor.getSpeed());
-        NtHelper.setDouble("/robot/shooter/shooterspeed", shooterMotor.getSpeed());
-        NtHelper.setDouble("/robot/shooter/desiredshooterspeed", shooterSpeed);
-        NtHelper.setDouble("/robot/shootr/desiredkickerspeed", kickerSpeed);
-
-        shooterMotor.setPidf(NtHelper.getDouble("/robot/shooter/shootermotorp", 0.0),
-        NtHelper.getDouble("/robot/shooter/shootermotori", 0.0), 
-        NtHelper.getDouble("/robot/shooter/shootermotord", 0.0),
-        NtHelper.getDouble("/robot/shooter/shootermotorf", 0.0));
-        NtHelper.setDouble("/robot/shooter/foundMotorP", NtHelper.getDouble("/robot/shooter/shootermotorp", 0.0));
+        NtHelper.setString(NtKeys.SHOOTER_STATE, getState());
+        NtHelper.setDouble(NtKeys.SHOOTER_SPEED, shooterMotor.getSpeed());
+        NtHelper.setDouble(NtKeys.DESIRED_SHOOTER_SPEED, shooterSpeed);
+        NtHelper.setDouble(NtKeys.DESIRED_KICKER_SPEED, kickerSpeed);
     }
-
-
-
 }

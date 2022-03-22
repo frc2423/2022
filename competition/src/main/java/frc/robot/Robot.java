@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.util.RateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.constants.NtKeys;
 
 public class Robot extends TimedRobot {
 
@@ -26,7 +27,7 @@ public class Robot extends TimedRobot {
     Devices.init();
     Subsystems.init();
     CameraServer.startAutomaticCapture();
-    NtHelper.setBoolean("/robot/shooter/isAuto", false);
+    NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, false);
   }
 
   @Override
@@ -46,7 +47,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    NtHelper.setDouble("/robot/cargoCount", 0);
+    NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
   }
 
   @Override
@@ -54,7 +55,7 @@ public class Robot extends TimedRobot {
 
     //Targeting Code
     if (Devices.controller.getRightTriggerAxis() > 0.2){
-      Subsystems.shooter.setAuto(NtHelper.getBoolean("/robot/shooter/isAuto", false));
+      Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
       Subsystems.shooter.shoot();
     }
     else {
@@ -72,14 +73,6 @@ public class Robot extends TimedRobot {
       Devices.leftMotor.setPercent(motorValues[0]);
       Devices.rightMotor.setPercent(motorValues[1]);
     }
-
-    if (Devices.climbController.getYButtonPressed()) {
-      NtHelper.setString("/robot/climber/desiredState", "up");
-    } else if (Devices.climbController.getAButtonPressed()) {
-      NtHelper.setString("/robot/climber/desiredState", "down");
-    } else if (Devices.climbController.getRightBumperPressed()){
-      NtHelper.setString("/robot/climber/desiredState", "climb");
-    }
   }
 
   @Override
@@ -96,28 +89,17 @@ public class Robot extends TimedRobot {
   }
 
   public void telemetry() {
-    NtHelper.setDouble ("/robot/intake/leftdistance", Devices.intakeArmMotor.getDistance());
-    NtHelper.setDouble ("/robot/intake/rightdistance", Devices.intakeArmFollowerMotor.getDistance());
-    NtHelper.setDouble ("/robot/intake/leftspeed", Devices.intakeArmFollowerMotor.getSpeed());
-    NtHelper.setDouble ("/robot/intake/rightspeed", Devices.intakeArmMotor.getSpeed());
-    NtHelper.setDouble("/robot/gyro", Devices.gyro.getAngle());  
+    NtHelper.setDouble (NtKeys.LEFT_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
+    NtHelper.setDouble (NtKeys.RIGHT_INTAKE_POSITION, Devices.intakeArmFollowerMotor.getDistance());
+    NtHelper.setDouble(NtKeys.GYRO_ANGLE, Devices.gyro.getAngle());  
 
-    NtHelper.setString("/robot/svg/allianceColor", DriverStation.getAlliance().toString());
-    NtHelper.setDouble("/robot/svg/ballCount", Subsystems.intake.getBallCount());
-    NtHelper.setDouble("/robot/svg/rotationsPerSecond", Devices.leftMotor.getSpeed()/(2 * Math.PI * Units.inchesToMeters(3)));
-    NtHelper.setDouble ("/robot/svg/robotArmSetpoint", Devices.intakeArmMotor.getDistance());
+    NtHelper.setString(NtKeys.SVG_ALLIANCE_COLOR, DriverStation.getAlliance().toString());
+    NtHelper.setDouble(NtKeys.SVG_CARGO_COUNT, Subsystems.intake.getCargoCount());
+    NtHelper.setDouble(NtKeys.SVG_ROTATIONS_PER_SECOND, Devices.leftMotor.getSpeed()/(2 * Math.PI * Units.inchesToMeters(3)));
+    NtHelper.setDouble (NtKeys.SVG_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
 
 
     Subsystems.shooter.shooterInfo();
     Subsystems.climber.climberInfo();
-  }
-
-  public void telementryAuto(){
-    // NtHelper.setDouble("/robot/Desired/x", desiredPose.poseMeters.getX());
-    // NtHelper.setDouble("/robot/Desired/y", desiredPose.poseMeters.getY());
-    // NtHelper.setDouble("/robot/Desired/angle", desiredPose.poseMeters.getRotation().getDegrees());
-    // NtHelper.setDouble("/robot/Current/x", Subsystems.drivetrain.getPose().getX());
-    // NtHelper.setDouble("/robot/Current/y", Subsystems.drivetrain.getPose().getY());
-    // NtHelper.setDouble("/robot/Current/angle", Subsystems.drivetrain.getPose().getRotation().getDegrees()); 
   }
 }
