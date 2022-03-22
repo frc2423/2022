@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
     Subsystems.shooter.run();
     Subsystems.climber.run();
-    Subsystems.intake.runIntake();
+    Subsystems.belt.run_storage();
     Subsystems.climber.preventClimberFromBreaking();
     telemetry();
   }
@@ -73,12 +73,16 @@ public class Robot extends TimedRobot {
       Devices.leftMotor.setPercent(motorValues[0]);
       Devices.rightMotor.setPercent(motorValues[1]);
     }
+
+    if (Devices.controller.getAButton()){
+      Subsystems.intake.intakeDown();
+    } else if (Devices.controller.getYButton()) {
+      Subsystems.intake.intakeUp();
+    }
   }
 
   @Override
   public void disabledPeriodic() {
-    Subsystems.intake.zero();
-    Subsystems.intake.stop();
     Devices.leftMotor.resetEncoder(0);
     Devices.rightMotor.resetEncoder(0);
     Devices.gyro.reset();
@@ -94,7 +98,6 @@ public class Robot extends TimedRobot {
     NtHelper.setDouble(NtKeys.GYRO_ANGLE, Devices.gyro.getAngle());  
 
     NtHelper.setString(NtKeys.SVG_ALLIANCE_COLOR, DriverStation.getAlliance().toString());
-    NtHelper.setDouble(NtKeys.SVG_CARGO_COUNT, Subsystems.intake.getCargoCount());
     NtHelper.setDouble(NtKeys.SVG_ROTATIONS_PER_SECOND, Devices.leftMotor.getSpeed()/(2 * Math.PI * Units.inchesToMeters(3)));
     NtHelper.setDouble (NtKeys.SVG_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
 

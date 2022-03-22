@@ -15,6 +15,7 @@ public class Subsystems {
     public static Shooter shooter;
     public static TrajectoryFollower follower;
     public static Auto auto;
+    public static Belt belt;
     
     static void init() {
         climber = new Climber();
@@ -28,8 +29,7 @@ public class Subsystems {
         shooter = new Shooter();
         follower = new TrajectoryFollower(Trajectories.getTrajectories());
         auto = new Auto();
-        intake.zero();
-        intake.stop();
+        belt = new Belt();
         Targeting.init();
     }
 }
