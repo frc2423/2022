@@ -5,12 +5,10 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
 import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
-import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
-import frc.robot.util.Targeting;
 import edu.wpi.first.wpilibj.RobotController;
 
 
@@ -108,23 +106,23 @@ public class Shooter extends StateMachine{
 
     @RunState(name="rev") 
     public void runRev() {
-        boolean isAimed = true;
-        if (autoMode == true){
-            double rotationSpeed = Targeting.calculate();
-            double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
-            double leftSpeed = arcadeSpeeds[0];
-            double rightSpeed = arcadeSpeeds[1];
-            Devices.leftMotor.setPercent(leftSpeed);
-            Devices.rightMotor.setPercent(rightSpeed); 
-            isAimed = rotationSpeed == 0 && Targeting.hasTargets();
-        } else {
-            Devices.leftMotor.setPercent(0);
-            Devices.rightMotor.setPercent(0);
-        }
+        //boolean isAimed = true;
+        // if (autoMode == true){
+        //     double rotationSpeed = Targeting.calculate();
+        //     double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
+        //     double leftSpeed = arcadeSpeeds[0];
+        //     double rightSpeed = arcadeSpeeds[1];
+        //     Devices.leftMotor.setPercent(leftSpeed);
+        //     Devices.rightMotor.setPercent(rightSpeed); 
+        //     isAimed = rotationSpeed == 0 && Targeting.hasTargets();
+        // } else {
+        //     Devices.leftMotor.setPercent(0);
+        //     Devices.rightMotor.setPercent(0);
+        // }
         
         setShooterVolt(shooterSpeed);
 
-        if (timer.get() > this.revDuration && isAimed) this.setState("shoot");
+        if (timer.get() > this.revDuration) this.setState("shoot");
 
     }
 
@@ -137,8 +135,6 @@ public class Shooter extends StateMachine{
     public void runShoot() {
         beltForward();
         kicker();
-        Devices.leftMotor.setPercent(0);
-        Devices.rightMotor.setPercent(0); 
         setShooterVolt(shooterSpeed);
     }
 

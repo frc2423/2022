@@ -54,9 +54,16 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     //Targeting Code
-    if (Devices.controller.getRightTriggerAxis() > 0.2){
-      Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
-      Subsystems.shooter.shoot();
+    if (Devices.controller.getRightTriggerAxis() > 0.2){      
+        double rotationSpeed = Targeting.calculate();
+        double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
+        double leftSpeed = arcadeSpeeds[0];
+        double rightSpeed = arcadeSpeeds[1];
+        Devices.leftMotor.setPercent(leftSpeed);
+        Devices.rightMotor.setPercent(rightSpeed); 
+        if(rotationSpeed == 0 && Targeting.hasTargets()) {
+          Subsystems.shooter.shoot();
+        }
     }
     else {
       Subsystems.shooter.stop();

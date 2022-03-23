@@ -24,7 +24,6 @@ public class ShootOneAndTaxi extends StateMachine {
 
     @InitState(name = "shooter")
     public void runShooterInit(){
-        Subsystems.shooter.setAuto(false);
         timer.start();
     }
 
