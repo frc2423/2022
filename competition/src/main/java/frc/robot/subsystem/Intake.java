@@ -45,7 +45,7 @@ public class Intake {
         return !leftLimit.get();
     }
 
-    public void calibrate(){
+    private void calibrate(){
         if(isLeftPressed()) {
             armMotorLeft.setPercent(0);
             armMotorLeft.resetEncoder(0);
@@ -63,22 +63,21 @@ public class Intake {
         }
     }
 
-
-    public void intakeUp(){
+    private void intakeUp(){
         rollerMotor.setPercent(0);
-        if(!leftLimit.get()) {
+        if(isLeftPressed()) {
             armMotorLeft.setPercent(0);
         } else {
             armMotorLeft.setDistance(topPosition);
         }
-        if(!rightLimit.get()) {
+        if(isRightPressed()) {
             armMotor.setPercent(0);
         } else {
             armMotor.setDistance(topPosition); 
         }
     }
 
-    public void intakeDown(){
+    private void intakeDown(){
         rollerMotor.setPercent(rollerSpeed);
         armMotor.setDistance(bottomPosition);
         armMotorLeft.setDistance(bottomPosition);

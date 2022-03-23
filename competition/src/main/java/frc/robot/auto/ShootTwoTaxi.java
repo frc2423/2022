@@ -45,7 +45,7 @@ public class ShootTwoTaxi extends StateMachine {
     public void initIntakeDown() {
         timer.reset();
         timer.start();
-        Subsystems.intake.intakeDown();
+        Subsystems.intake.goDown();
     }
 
     @RunState(name = "IntakeDown")
@@ -95,7 +95,7 @@ public class ShootTwoTaxi extends StateMachine {
 
     @InitState(name = "Rotate")
     public void rotateInit() {
-        Subsystems.intake.intakeUp();
+        Subsystems.intake.goUp();
         angle = Devices.gyro.getAngle() + 180;
         rotate = new Rotation(.15, .3, 5, 150);
     }
