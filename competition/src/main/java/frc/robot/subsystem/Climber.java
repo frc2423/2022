@@ -1,5 +1,6 @@
 package frc.robot.subsystem;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Devices;
 import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
@@ -17,10 +18,16 @@ public class Climber extends StateMachine {
     private final double BOTTOM_POSITION = 10;
     private double desiredPosition = 0;
 
+    private DigitalInput leftLimitSwitch; 
+    private DigitalInput rightLimitSwitch;
+
     public Climber() {
         super("down");
         leftMotor = Devices.climberLeftMotor;
         rightMotor = Devices.climberRightMotor;
+
+        leftLimitSwitch = Devices.leftLimitSwitchClimber;
+        rightLimitSwitch = Devices.rightLimitSwitchClimber;
         setState("down");
     }
 
@@ -75,10 +82,15 @@ public class Climber extends StateMachine {
 
     @RunState(name = "down")
     public void down() {
-        boolean isDown = leftMotor.getDistance() < BOTTOM_POSITION && rightMotor.getDistance() < BOTTOM_POSITION;
-        if (isDown) {
-            leftMotor.setPercent(0);
-            rightMotor.setPercent(0);
+        boolean isDown = (leftLimitSwitch.get() && rightLimitSwitch.get());
+        if (leftLimitSwitch.get() || rightLimitSwitch.get()) {
+            if (leftLimitSwitch.get()) {
+                leftMotor.setPercent(0);
+
+            }
+            if (rightLimitSwitch.get()) {
+                rightMotor.setPercent(0);
+            }
         } else {
             setDesiredPosition(0);
         }
