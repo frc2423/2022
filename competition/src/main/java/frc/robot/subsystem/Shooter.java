@@ -28,12 +28,17 @@ public class Shooter extends StateMachine{
     private double revDuration = 1;
     private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
     private boolean autoMode = false;
+    private boolean isShoot = false;
 
     public Shooter() {
         super("stop");
         beltMotor = Devices.beltMotor;
         kickerMotor = Devices.kickerMotor;
         shooterMotor = Devices.shooterMotor;
+    }
+
+    public boolean isShoot(){
+        return isShoot;
     }
 
     public void setAuto(boolean bool){
@@ -92,6 +97,7 @@ public class Shooter extends StateMachine{
         kickerStop();
         shooterStop();
         timer.stop();
+        isShoot = false;
     }
 
     @RunState(name="stop") 
@@ -130,6 +136,7 @@ public class Shooter extends StateMachine{
 
     @InitState(name="shoot")
     public void runShootInit() {
+        isShoot = true;
         NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
     }
     
