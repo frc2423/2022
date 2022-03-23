@@ -38,6 +38,8 @@ public class Robot extends TimedRobot {
     Subsystems.belt.run_storage();
     Subsystems.climber.preventClimberFromBreaking();
     telemetry();
+
+    Subsystems.intake.runIntake();
   }
 
   @Override
@@ -75,9 +77,11 @@ public class Robot extends TimedRobot {
     }
 
     if (Devices.controller.getAButton()){
-      Subsystems.intake.intakeDown();
+      Subsystems.intake.goDown();
+    } else if (Devices.controller.getYButtonPressed() && Devices.controller.getStartButton()) {
+      Subsystems.intake.unCalibrate();
     } else if (Devices.controller.getYButton()) {
-      Subsystems.intake.intakeUp();
+      Subsystems.intake.goUp();
     }
   }
 
@@ -90,6 +94,7 @@ public class Robot extends TimedRobot {
     Targeting.init();
     Subsystems.climber.calibrate();
     Subsystems.auto.setState("init");
+    Subsystems.intake.unCalibrate();
   }
 
   public void telemetry() {
