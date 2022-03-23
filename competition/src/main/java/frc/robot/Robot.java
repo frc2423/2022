@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
     Subsystems.shooter.run();
     Subsystems.climber.run();
+    Subsystems.intake.run();
     Subsystems.belt.run_storage();
     Subsystems.climber.preventClimberFromBreaking();
     telemetry();
@@ -55,7 +56,6 @@ public class Robot extends TimedRobot {
 
     //Targeting Code
     if (Devices.controller.getRightTriggerAxis() > 0.2){
-      Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
       Subsystems.shooter.shoot();
     }
     else {

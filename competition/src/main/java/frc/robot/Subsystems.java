@@ -16,6 +16,7 @@ public class Subsystems {
     public static TrajectoryFollower follower;
     public static Auto auto;
     public static Belt belt;
+    public static CargoCounter cargoCounter;
     
     static void init() {
         climber = new Climber();
@@ -30,6 +31,7 @@ public class Subsystems {
         follower = new TrajectoryFollower(Trajectories.getTrajectories());
         auto = new Auto();
         belt = new Belt();
+        cargoCounter = new CargoCounter();
         Targeting.init();
     }
 }
