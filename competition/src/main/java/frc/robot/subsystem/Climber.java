@@ -16,6 +16,7 @@ public class Climber extends StateMachine {
     private final double CLIMB_POSITION = 25;
     private final double BOTTOM_POSITION = 10;
     private double desiredPosition = 0;
+    private boolean safe = false;
 
     public Climber() {
         super("down");
@@ -30,6 +31,7 @@ public class Climber extends StateMachine {
         double bottomPosition = -5;
 
         if (leftPosition < bottomPosition || rightPosition < bottomPosition){
+            safe = true;
             setState("down");
         }
     }
@@ -75,7 +77,7 @@ public class Climber extends StateMachine {
 
     @RunState(name = "down")
     public void down() {
-        boolean isDown = leftMotor.getDistance() < BOTTOM_POSITION && rightMotor.getDistance() < BOTTOM_POSITION;
+        boolean isDown = (leftMotor.getDistance() < BOTTOM_POSITION && rightMotor.getDistance() < BOTTOM_POSITION) || safe;
         if (isDown) {
             leftMotor.setPercent(0);
             rightMotor.setPercent(0);
@@ -83,6 +85,7 @@ public class Climber extends StateMachine {
             setDesiredPosition(0);
         }
         if (getDesiredState().equals("up")) {
+            safe = false;
             setState("up");
         }
     }
