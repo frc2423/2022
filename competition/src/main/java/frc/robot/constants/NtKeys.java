@@ -7,6 +7,7 @@ public class NtKeys {
     public static final String SHOOTER_SPEED = "/robot/shooter/shooterspeed";
     public static final String DESIRED_SHOOTER_SPEED = "/robot/shooter/desiredshooterspeed";
     public static final String DESIRED_KICKER_SPEED = "/robot/shooter/desiredkickerspeed";
+    public static final String SHOOTER_GOAL_SPEED = "/robot/shooter/goalSpeed";
     
     // Drivetrain
     public static final String GYRO_ANGLE = "/robot/gyro";

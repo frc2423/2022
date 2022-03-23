@@ -107,6 +107,34 @@
           }
         }
       }
+    },
+    {
+      "title": "Tuning",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              7,
+              1
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_title": "Shooter Speed",
+              "Slider Settings/Min": -70.0,
+              "Slider Settings/Max": 0.0,
+              "Slider Settings/Block increment": 1.0,
+              "Visuals/Display value": true
+            }
+          }
+        }
+      }
     }
   ],
   "windowGeometry": {

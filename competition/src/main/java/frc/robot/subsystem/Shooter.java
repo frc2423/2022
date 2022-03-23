@@ -34,6 +34,7 @@ public class Shooter extends StateMachine{
         beltMotor = Devices.beltMotor;
         kickerMotor = Devices.kickerMotor;
         shooterMotor = Devices.shooterMotor;
+        NtHelper.setDouble(NtKeys.SHOOTER_GOAL_SPEED, this.shooterSpeed);
     }
 
     public void setAuto(boolean bool){
@@ -56,6 +57,10 @@ public class Shooter extends StateMachine{
 
     public void setShooterSpeed(double speed){
         shooterSpeed = speed;
+    }
+    
+    public double getGoalSpeed() {
+        return NtHelper.getDouble(NtKeys.SHOOTER_GOAL_SPEED, this.shooterSpeed);
     }
 
     public void beltForward() {
@@ -122,7 +127,7 @@ public class Shooter extends StateMachine{
             Devices.rightMotor.setPercent(0);
         }
         
-        setShooterVolt(shooterSpeed);
+        setShooterVolt(getGoalSpeed());
 
         if (timer.get() > this.revDuration && isAimed) this.setState("shoot");
 
@@ -139,7 +144,7 @@ public class Shooter extends StateMachine{
         kicker();
         Devices.leftMotor.setPercent(0);
         Devices.rightMotor.setPercent(0); 
-        setShooterVolt(shooterSpeed);
+        setShooterVolt(getGoalSpeed());
     }
 
 
