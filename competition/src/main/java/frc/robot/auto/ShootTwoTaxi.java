@@ -151,6 +151,7 @@ public class ShootTwoTaxi extends StateMachine {
         Subsystems.shooter.shoot();
         if (timer.get() > 4) {
             setState("TaxiBack");
+            Subsystems.shooter.stop();
         }
         // Seconds subject to change upon testing
 

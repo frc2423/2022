@@ -9,19 +9,24 @@ import frc.robot.constants.constants;
 public class Trajectories {
     private static HashMap<String, Trajectory> trajectoryKeeper= new HashMap<String, Trajectory>();
     public static HashMap<String, Trajectory> getTrajectories() {
-        trajectoryUploader("Taxi", true);
-        trajectoryUploader("BottomTarmacToBottomCargo");
-        trajectoryUploader("MiddleTarmacToMiddleCargo", false, 2, 2);
-        trajectoryUploader("TopTarmacToTopCargo");
-        trajectoryUploader("BottomCargoToHub");
-        trajectoryUploader("MiddleCargoToHub", false, 2, 2);
-        trajectoryUploader("TopCargoToHub");
-        trajectoryUploader("BottomCargoToMiddleCargo");
-        trajectoryUploader("BottomTarmacToCargosToHub");
-        trajectoryUploader("BottomHubBackUp");
-        trajectoryUploader("BottomTarmacToMiddleCargo");
-        trajectoryUploader("MiddleCargoToBottomHub");
+        trajectoryUploader("Taxi", true, 2, 1);
+        trajectoryUploader("BottomTarmacToBottomCargo", false, 2, 1);
+        trajectoryUploader("MiddleTarmacToMiddleCargo", false, 2, 1);
+        trajectoryUploader("TopTarmacToTopCargo", false, 2, 1);
+        trajectoryUploader("BottomCargoToHub", false, 2, 1);
+        trajectoryUploader("MiddleCargoToHub", false, 2, 1);
+        trajectoryUploader("TopCargoToHub", false, 2, 1);
+        trajectoryUploader("BottomCargoToMiddleCargo", false, 2, 1);
+        trajectoryUploader("BottomTarmacToCargosToHub", false, 2, 1);
+        trajectoryUploader("BottomHubBackUp", false, 2, 1);
+        trajectoryUploader("BottomTarmacToMiddleCargo", false, 2, 1);
+        trajectoryUploader("MiddleCargoToBottomHub", false, 2, 1);
       //  trajectoryUploader("AngledMiddleCargoToHub");
+
+        trajectoryUploader("TestStraightPath", false, 2, 1);
+        trajectoryUploader("TestCurvyPath", false, 2, 1);
+
+
         return trajectoryKeeper;  
     }
 
