@@ -16,12 +16,13 @@ public class Climber extends StateMachine {
     private final double CLIMB_POSITION = 25;
     private final double BOTTOM_POSITION = 10;
     private double desiredPosition = 0;
+    private boolean safe = false;
 
     public Climber() {
-        super("stop");
+        super("down");
         leftMotor = Devices.climberLeftMotor;
         rightMotor = Devices.climberRightMotor;
-        setState("stop");
+        setState("down");
     }
 
     public void preventClimberFromBreaking() {
@@ -30,22 +31,24 @@ public class Climber extends StateMachine {
         double bottomPosition = -5;
 
         if (leftPosition < bottomPosition || rightPosition < bottomPosition){
-            setState("stop");
+            safe = true;
+            setState("down");
         }
     }
 
     public void calibrate() {
-        setState("stop");
+        setState("down");
     }
 
     public String getDesiredState() {
-        return NtHelper.getString(NtKeys.CLIMBER_DESIRED_STATE, "stop");
+        return NtHelper.getString(NtKeys.CLIMBER_DESIRED_STATE, "down");
     }
 
     public Boolean isMediumBar() {
         return NtHelper.getBoolean(NtKeys.CLIMB_MEDIUM_BAR, true);
     }
-
+    
+    // ok it's fine - alexandra
     public void setDesiredState(String name) {
         NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, name);
     }
@@ -63,57 +66,27 @@ public class Climber extends StateMachine {
         desiredPosition = position;
         NtHelper.setDouble(NtKeys.CLIMBER_DESIRED_POSITION, desiredPosition);
     }
-        
-    @RunState(name = "stop")
-    public void stop() {
-        leftMotor.setPercent(0);
-        rightMotor.setPercent(0);
-        if (getDesiredState().equals("up")) {
-            setState("up");
-        } else {
-            setDesiredState("stop");
-        }
-    }
-
-    public double getBarPosition() {
-        return isMediumBar() ? MEDIUM_POSITION : LOW_POSITION;
-    }
-
+    
     @RunState(name = "up")
     public void goUp() {
-        setDesiredPosition(getBarPosition());
-        if (getDesiredState().equals("stop")) {
-            setState("stop");
-        } else if (getDesiredState().equals("climb")) {
-            setState("climb");
-        } else if (getDesiredState().equals("down")) {
+        setDesiredPosition(MEDIUM_POSITION);
+        if (getDesiredState().equals("down")) {
             setState("down");
-        } else {
-            setDesiredState("stop");
-        }
-    }
-
-    @RunState(name = "climb")
-    public void climb() {
-        setDesiredPosition(CLIMB_POSITION);
-
-        if (getDesiredState().equals("up")) {
-            setState("up");
-        } else {
-            setDesiredState("climb");
         }
     }
 
     @RunState(name = "down")
     public void down() {
-        setDesiredPosition(0);
-        boolean isDown = leftMotor.getDistance() < BOTTOM_POSITION && rightMotor.getDistance() < BOTTOM_POSITION;
-        if (isDown || getDesiredState().equals("stop")) {
-            setState("stop");
-        } else if (getDesiredState().equals("up")) {
-            setState("up");
+        boolean isDown = (leftMotor.getDistance() < BOTTOM_POSITION && rightMotor.getDistance() < BOTTOM_POSITION) || safe;
+        if (isDown) {
+            leftMotor.setPercent(0);
+            rightMotor.setPercent(0);
         } else {
-            setDesiredState("down");
+            setDesiredPosition(0);
+        }
+        if (getDesiredState().equals("up")) {
+            safe = false;
+            setState("up");
         }
     }
 
