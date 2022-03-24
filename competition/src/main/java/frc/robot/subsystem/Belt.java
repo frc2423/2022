@@ -3,13 +3,7 @@ import frc.robot.Subsystems;
 import frc.robot.Devices;
 
 public class Belt {
-
-    
-    public Belt() {
-        
-    }
-
-    public void run_storage(){
+    public void runStorage(){
         if (Subsystems.intake.isDown() || Subsystems.shooter.isShoot() || Devices.controller.getXButton()){
             Devices.beltMotor.setPercent(-0.2);
         }
@@ -21,8 +15,4 @@ public class Belt {
         }
         
     }
-
-
-
-
 }

@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
     Subsystems.shooter.run();
     Subsystems.climber.run();
-    Subsystems.belt.run_storage();
+    Subsystems.belt.runStorage();
     Subsystems.climber.preventClimberFromBreaking();
     telemetry();
 
