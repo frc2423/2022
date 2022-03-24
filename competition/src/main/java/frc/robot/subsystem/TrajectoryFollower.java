@@ -49,6 +49,8 @@ public class TrajectoryFollower {
         System.out.println("trajectory time: " + trajectory.getTotalTimeSeconds());
         if (moveToStart) {
             var initialPose = trajectory.getStates().get(0).poseMeters;
+            Devices.leftMotor.resetEncoder(0);
+            Devices.rightMotor.resetEncoder(0);
             Subsystems.drivetrain.odometryReset(initialPose, initialPose.getRotation());
             Devices.gyro.setAngle(-initialPose.getRotation().getDegrees());
         }
