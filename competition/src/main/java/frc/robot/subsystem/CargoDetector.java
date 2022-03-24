@@ -2,6 +2,7 @@ package frc.robot.subsystem;
 
 import frc.robot.Devices;
 import frc.robot.util.AverageFinder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class CargoDetector {
@@ -28,8 +29,8 @@ public class CargoDetector {
 
     public boolean isDetected(boolean isAllianceColor) {
         double average = isAllianceColor
-            ? allianceColorAverage.getAverage()
-            : otherColorAverage.getAverage();
+                ? allianceColorAverage.getAverage()
+                : otherColorAverage.getAverage();
 
         if (currentValue == "alliance") {
             return average > colorUnconfidenceThreshhold;

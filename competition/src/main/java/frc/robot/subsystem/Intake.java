@@ -1,15 +1,11 @@
 package frc.robot.subsystem;
 
-import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
-import frc.robot.util.ColourSensor;
 import frc.robot.util.NtHelper;
 //we are children dont judge us :P
 
@@ -29,16 +25,8 @@ public class Intake {
     private boolean isDown = false;
     private boolean shouldIntake = false;
 
-    private double colorConfidenceThreshhold = 0.7;
     private double separationDelay = 0.5; // extra seconds to run intake to separate cargo
-    private String allianceColor;
-    private String oppositionColor;
-    private MedianFilter allianceColorFilter = new MedianFilter(10);
-    private MedianFilter oppositionColorFilter = new MedianFilter(10);
-    private ColourSensor colourSensor;
     private Timer timer;
-
-    private Alliance currentAlliance = DriverStation.getAlliance();
 
     public Intake() {
         NtHelper.setDouble(NtKeys.SVG_INTAKE_MAX_POSITION, bottomPosition);
@@ -47,23 +35,8 @@ public class Intake {
         rollerMotor = Devices.intakeRollerMotor;
         leftLimit = Devices.leftLimit;
         rightLimit = Devices.rightLimit;
-        colourSensor = Devices.colourSensor;
         timer = new Timer();
-
-        initColors(); 
     }
-
-    private void initColors() {
-        if (currentAlliance == Alliance.Blue) {
-            allianceColor = "blue";
-            oppositionColor = "red";
-        }
-        else {
-            allianceColor = "red";
-            oppositionColor = "blue";
-        }
-    }
-
 
     public void intakeUp(){
         rollerMotor.setPercent(0);
@@ -98,11 +71,8 @@ public class Intake {
     }
 
     public void run(){
-        // detect current ball color
-        double allianceColorConfidence = allianceColorFilter.calculate(colourSensor.isColor(allianceColor) ? 1 : 0);
-        double oppositionColorConfidence = oppositionColorFilter.calculate(colourSensor.isColor(oppositionColor) ? 1 : 0);
-        
-        if(allianceColorConfidence  >= colorConfidenceThreshhold) {
+      
+        if(Subsystems.cargoDetector.isDetected(true)) {
             // have target color. let the intake belt run if it's the first ball
             if(Subsystems.cargoCounter.getNumCargo() == 0) {
                 Subsystems.cargoCounter.addCargo();
@@ -115,12 +85,9 @@ public class Intake {
                 Subsystems.cargoCounter.addCargo();
                 shouldIntake = false;
             }
-            else {
-                // more than 2 cargo, should not be here!
-            }
         }
-        else if (oppositionColorConfidence >= colorConfidenceThreshhold ){
-            // have opposite color. abort! (not sure if this is needed)
+        else if (Subsystems.cargoDetector.isDetected(false)){
+            // has other color. abort! (not sure if this is needed)
             timer.stop();
             timer.reset();
             shouldIntake = false;
