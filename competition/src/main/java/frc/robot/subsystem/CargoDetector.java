@@ -32,7 +32,9 @@ public class CargoDetector {
                 ? allianceColorAverage.getAverage()
                 : otherColorAverage.getAverage();
 
-        if (currentValue == "alliance") {
+        String colorType = isAllianceColor ? "alliance" : "other";
+
+        if (currentValue.equals(colorType)) {
             return average > colorUnconfidenceThreshhold;
         } else {
             return average > colorConfidenceThreshhold;
@@ -40,7 +42,7 @@ public class CargoDetector {
     }
 
     public boolean hasChanged() {
-        return currentValue != previousValue;
+        return !currentValue.equals(previousValue);
     }
 
     public void run() {

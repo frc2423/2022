@@ -38,9 +38,10 @@ public class Robot extends TimedRobot {
     Subsystems.intake.runIntake();
     Subsystems.belt.runStorage();
     Subsystems.climber.preventClimberFromBreaking();
-    telemetry();
-
+    Subsystems.cargoDetector.run();
+    Subsystems.intake.runCargoDetection();
     Subsystems.intake.runIntake();
+    telemetry();
   }
 
   @Override

@@ -74,7 +74,7 @@ public class Intake {
     }
 
     private void intakeUp() {
-        rollerMotor.setPercent(0);
+        rollerMotor.setPercent(intakeState == IntakeState.ShallReject ? -rollerSpeed : 0);
         if (isLeftPressed()) {
             armMotorLeft.setPercent(0);
         } else {
@@ -88,7 +88,7 @@ public class Intake {
     }
 
     private void intakeDown() {
-        rollerMotor.setPercent(rollerSpeed);
+        rollerMotor.setPercent(intakeState == IntakeState.ShallReject ? -rollerSpeed : rollerSpeed);
         armMotor.setDistance(bottomPosition);
         armMotorLeft.setDistance(bottomPosition);
     }
@@ -120,7 +120,11 @@ public class Intake {
 
     }
 
-    public void handleCargoDetection() {
+    public IntakeState getIntakeState() {
+        return intakeState;
+    }
+
+    public void runCargoDetection() {
         if (Subsystems.cargoDetector.hasChanged()) {
             if (Subsystems.cargoDetector.isDetected(true)) {
                 int cargoCount = Subsystems.cargoCounter.getNumCargo();
