@@ -23,7 +23,7 @@ public class Shooter extends StateMachine{
 
     private double beltSpeed = -0.2;
     private double kickerSpeed = -0.3;
-    private double shooterSpeed = -60;
+    private double shooterSpeed = -65;
 
     private double revDuration = 1;
     private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
@@ -35,6 +35,14 @@ public class Shooter extends StateMachine{
         beltMotor = Devices.beltMotor;
         kickerMotor = Devices.kickerMotor;
         shooterMotor = Devices.shooterMotor;
+    }
+
+    public void setUpperHubSpeed(){
+        shooterSpeed = -65;
+    }
+
+    public void setLowerHubSpeed(){
+        shooterSpeed = -42;
     }
 
     public boolean isShoot(){

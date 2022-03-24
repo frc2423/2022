@@ -9,8 +9,8 @@ import frc.robot.constants.constants;
 public class Trajectories {
     private static HashMap<String, Trajectory> trajectoryKeeper= new HashMap<String, Trajectory>();
     public static HashMap<String, Trajectory> getTrajectories() {
-        trajectoryUploader("Taxi", true);
-        trajectoryUploader("BottomTarmacToBottomCargo");
+        trajectoryUploader("Taxi", true, 2, 2);
+        trajectoryUploader("BottomTarmacToBottomCargo",false, 2,2);
         trajectoryUploader("MiddleTarmacToMiddleCargo", false, 2, 2);
         trajectoryUploader("TopTarmacToTopCargo");
         trajectoryUploader("BottomCargoToHub");
@@ -21,6 +21,8 @@ public class Trajectories {
         trajectoryUploader("BottomHubBackUp");
         trajectoryUploader("BottomTarmacToMiddleCargo");
         trajectoryUploader("MiddleCargoToBottomHub");
+        trajectoryUploader("ShortBottomCargoToHub");
+        trajectoryUploader("ShortMiddleCargoToHub", false, 2, 2);
       //  trajectoryUploader("AngledMiddleCargoToHub");
         return trajectoryKeeper;  
     }

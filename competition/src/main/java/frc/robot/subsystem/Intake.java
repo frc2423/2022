@@ -101,11 +101,15 @@ public class Intake {
     }
 
     public void runIntake() {
+        NtHelper.setBoolean(NtKeys.INTAKE_LEFT_LIMIT_PRESSED, isLeftPressed());
+        NtHelper.setBoolean(NtKeys.INTAKE_RIGHT_LIMIT_PRESSED, isRightPressed());
         if (!calibrated) {
             calibrate();
         } else if (!isDown()){
+            NtHelper.setString(NtKeys.INTAKE_STATE, "up");
             intakeUp();
         } else {
+            NtHelper.setString(NtKeys.INTAKE_STATE, "down");
             intakeDown();
         }
     }

@@ -45,7 +45,7 @@ public class ShootTwoTaxi extends StateMachine {
     public void initIntakeDown() {
         timer.reset();
         timer.start();
-        Subsystems.intake.intakeDown();
+        Subsystems.intake.goDown();
     }
 
     @RunState(name = "IntakeDown")
@@ -87,6 +87,7 @@ public class ShootTwoTaxi extends StateMachine {
     @RunState(name = "Intake")
     public void Intake() {
         if (timer.get() > 1.5) {
+            timer.stop();
             setState("Rotate");
         }
         // Seconds; subject to change
@@ -95,7 +96,7 @@ public class ShootTwoTaxi extends StateMachine {
 
     @InitState(name = "Rotate")
     public void rotateInit() {
-        Subsystems.intake.intakeUp();
+        Subsystems.intake.goUp();
         angle = Devices.gyro.getAngle() + 180;
         rotate = new Rotation(.15, .3, 5, 150);
     }
@@ -126,7 +127,7 @@ public class ShootTwoTaxi extends StateMachine {
         } else if (position.equals("middle")) {
             Subsystems.follower.setTrajectory("MiddleCargoToHub", false);
         } else { // bottom
-            Subsystems.follower.setTrajectory("BottomCargoToHub", false);
+            Subsystems.follower.setTrajectory("ShortBottomCargoToHub", false);
         }
         Subsystems.follower.startFollowing();
     }
@@ -144,6 +145,9 @@ public class ShootTwoTaxi extends StateMachine {
     public void ShootTwoInit() {
         timer.reset();
         timer.start();
+        Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
+        Subsystems.shooter.setUpperHubSpeed();
+
     }
 
     @RunState(name = "ShootTwo")

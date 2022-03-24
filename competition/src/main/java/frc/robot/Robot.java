@@ -58,6 +58,12 @@ public class Robot extends TimedRobot {
     //Targeting Code
     if (Devices.controller.getRightTriggerAxis() > 0.2){
       Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
+      Subsystems.shooter.setUpperHubSpeed();
+      Subsystems.shooter.shoot();
+    }
+    else if(Devices.controller.getLeftTriggerAxis() > 0.2){
+      Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
+      Subsystems.shooter.setLowerHubSpeed();
       Subsystems.shooter.shoot();
     }
     else {
