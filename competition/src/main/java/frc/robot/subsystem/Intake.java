@@ -65,15 +65,15 @@ public class Intake {
 
     private void intakeUp(){
         rollerMotor.setPercent(0);
-        if(isLeftPressed()) {
+        if(isLeftPressed() || armMotorLeft.getDistance() > topPosition) {
             armMotorLeft.setPercent(0);
         } else {
-            armMotorLeft.setDistance(topPosition);
+            armMotorLeft.setPercent(0.15); 
         }
-        if(isRightPressed()) {
+        if(isRightPressed() || armMotor.getDistance() > topPosition) {
             armMotor.setPercent(0);
         } else {
-            armMotor.setDistance(topPosition); 
+            armMotor.setPercent(0.15); 
         }
     }
 
