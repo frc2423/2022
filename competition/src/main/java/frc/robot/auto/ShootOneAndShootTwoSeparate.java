@@ -1,14 +1,23 @@
 package frc.robot.auto;
 
-import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
-import frc.robot.Subsystems;
-
+import frc.robot.util.stateMachine.StateMachine;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.util.NtHelper;
+import frc.robot.Devices;
+import frc.robot.Subsystems;
+import frc.robot.constants.NtKeys;
+import frc.robot.util.DriveHelper;
+import frc.robot.util.Rotation;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
+
 
 public class ShootOneAndShootTwoSeparate extends StateMachine{
     private Timer timer = new Timer();
+    private double angle;
+    private Rotation rotate;
 
     public ShootOneAndShootTwoSeparate() {
         super("FirstShot");
@@ -27,17 +36,42 @@ public class ShootOneAndShootTwoSeparate extends StateMachine{
         if (timer.get() > 4){
             timer.stop();
             Subsystems.shooter.stop();
-            setState ("CargoAdvance");
+            setState ("Rotate");
         }
         //Seconds subject to change upon testing
     }
 
-    @InitState(name = "CargoAdvance")
-    public void cargoAdvanceInit(){
-        Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
-        Subsystems.follower.startFollowing();
+    @InitState(name = "Rotate")
+    public void rotateInit() {
+        Subsystems.intake.goUp();
+        angle = Devices.gyro.getAngle() + 180;
+        rotate = new Rotation(.15, .3, 5, 150);
     }
 
+    private double getAngleErrorRadians(double errorDegrees) {
+        return Units.radiansToDegrees(MathUtil.angleModulus(Units.degreesToRadians(errorDegrees)));
+    }
+
+    @RunState(name = "Rotate")
+    public void rotate() {
+        double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
+        double rotationSpeed = rotate.calculate(angleError);
+        double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
+        double leftSpeed = arcadeSpeeds[0];
+        double rightSpeed = arcadeSpeeds[1];
+        Devices.leftMotor.setPercent(leftSpeed);
+        Devices.rightMotor.setPercent(rightSpeed);
+        if (rotate.isDone(angleError)) {
+            setState("CargoAdvance");
+        }
+    }
+
+    @InitState(name = "CargoAdvance")
+    public void cargoAdvanceInit(){
+        Subsystems.follower.setTrajectory("BottomTarmacToCargosToHub");
+
+        Subsystems.follower.startFollowing();
+    }
     @RunState(name = "CargoAdvance")
     public void cargoAdvanceRun(){
         Subsystems.intake.goDown();
