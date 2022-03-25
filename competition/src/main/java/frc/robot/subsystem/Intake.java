@@ -31,8 +31,10 @@ public class Intake {
 
     private boolean calibrated = false;
     private boolean isDown = false;
-    private Timer timer = new Timer();
+    private Timer spacingTimer = new Timer();
+    private Timer rejectionTimer = new Timer();
     private double separationDelay = 0.5; // extra seconds to run intake to separate cargo
+    private double rejectionDelay = 0.5; // seconds to run belt motor backwards on bad cargo
     private IntakeState intakeState = IntakeState.ShallStop;
 
     public Intake() {
@@ -91,6 +93,8 @@ public class Intake {
         rollerMotor.setPercent(intakeState == IntakeState.ShallReject ? -rollerSpeed : rollerSpeed);
         armMotor.setDistance(bottomPosition);
         armMotorLeft.setDistance(bottomPosition);
+        rejectionTimer.reset();
+       
     }
 
     public boolean isDown() {
@@ -125,6 +129,15 @@ public class Intake {
     }
 
     public void runCargoDetection() {
+        if(intakeState == IntakeState.ShallReject) {
+            if(rejectionTimer.get() > rejectionDelay) {
+                rejectionTimer.stop();
+                rejectionTimer.reset();
+                intakeState = IntakeState.ShallStop;
+            }
+            return;
+        }
+
         if (Subsystems.cargoDetector.hasChanged()) {
             if (Subsystems.cargoDetector.isDetected(true)) {
                 int cargoCount = Subsystems.cargoCounter.getNumCargo();
@@ -132,7 +145,7 @@ public class Intake {
                 if (cargoCount == 0) {
                     Subsystems.cargoCounter.addCargo();
                     intakeState = IntakeState.ShallIntake;
-                    timer.start();
+                    spacingTimer.start();
                 } else if (cargoCount == 1) {
                     // on the second cargo, we want to stop the belt
                     // as soon as we see it (rising edge counting)
@@ -141,16 +154,19 @@ public class Intake {
                 }
             } else if (Subsystems.cargoDetector.isDetected(false)) {
                 // has other color. abort! (not sure if this is needed)
-                timer.stop();
-                timer.reset();
+                spacingTimer.stop();
+                spacingTimer.reset();
                 intakeState = IntakeState.ShallReject;
+                rejectionTimer.reset();
+                rejectionTimer.start();
             }
+            
         }
 
         // in the 1-cargo case, stop the belt motor after a bit of a delay
-        if (timer.get() > separationDelay) {
-            timer.stop();
-            timer.reset();
+        if (spacingTimer.get() > separationDelay) {
+            spacingTimer.stop();
+            spacingTimer.reset();
             intakeState = IntakeState.ShallStop;
         }
     }
