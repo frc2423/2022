@@ -29,7 +29,7 @@ public class ShootTwoAndShootOne extends StateMachine{
 
     @InitState(name = "FirstIntake")
     public void FirstIntakeInit(){
-        Subsystems.intake.intakeDown();
+        Subsystems.intake.goDown();
         timer.reset ();
         timer.start ();
     }
@@ -83,7 +83,7 @@ public class ShootTwoAndShootOne extends StateMachine{
 
     @InitState(name = "SecondIntake")
     public void SecondIntakeInit(){
-        Subsystems.intake.intakeDown();
+        Subsystems.intake.goDown();
         timer.reset ();
         timer.start ();
     }

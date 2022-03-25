@@ -3,9 +3,6 @@
     "SmartDashboard": {
       "open": true
     },
-    "Usage": {
-      "open": true
-    },
     "robot": {
       "auto": {
         "open": true
@@ -52,8 +49,7 @@
   },
   "NetworkTables Settings": {
     "mode": "Client",
-    "serverTeam": "10.24.23.2",
-    "visible": false
+    "serverTeam": "10.24.23.2"
   },
   "Plots": {
     "Plot <0>": {

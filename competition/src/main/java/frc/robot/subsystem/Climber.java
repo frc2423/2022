@@ -12,10 +12,7 @@ public class Climber extends StateMachine {
 
     private NeoMotor leftMotor;
     private NeoMotor rightMotor;
-    private final double LOW_POSITION = 80;
     private final double MEDIUM_POSITION = 160;
-    private final double CLIMB_POSITION = 25;
-    private final double BOTTOM_POSITION = 10;
     private double desiredPosition = 0;
 
     private DigitalInput leftLimitSwitch; 
@@ -80,15 +77,22 @@ public class Climber extends StateMachine {
         }
     }
 
+    private boolean isLeftLimitPressed() {
+        return !leftLimitSwitch.get();
+    }
+
+    private boolean isRightLimitPressed() {
+        return rightLimitSwitch.get();
+    }
+
+
     @RunState(name = "down")
     public void down() {
-        boolean isDown = (leftLimitSwitch.get() && rightLimitSwitch.get());
-        if (leftLimitSwitch.get() || rightLimitSwitch.get()) {
-            if (leftLimitSwitch.get()) {
+        if (isLeftLimitPressed() || isRightLimitPressed()) {
+            if (isLeftLimitPressed()) {
                 leftMotor.setPercent(0);
-
             }
-            if (rightLimitSwitch.get()) {
+            if (isRightLimitPressed()) {
                 rightMotor.setPercent(0);
             }
         } else {

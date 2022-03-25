@@ -21,7 +21,7 @@ public class Intake {
     private double bottomPosition = -14.5;
     private double rollerSpeed = 0.50;
 
-
+    private boolean calibrated = false;
     private boolean isDown = false;
 
     public Intake() {
@@ -31,36 +31,82 @@ public class Intake {
         rollerMotor = Devices.intakeRollerMotor;
         leftLimit = Devices.leftLimit;
         rightLimit = Devices.rightLimit;
+
+        armMotor.resetEncoder(0);
+        armMotorLeft.resetEncoder(0);
  
     }
 
+    public boolean isRightPressed(){
+        return !rightLimit.get();
+    }
 
-    public void intakeUp(){
-        rollerMotor.setPercent(0);
-        if(!leftLimit.get()) {
+    public boolean isLeftPressed(){
+        return !leftLimit.get();
+    }
+
+    private void calibrate(){
+        if(isLeftPressed()) {
             armMotorLeft.setPercent(0);
             armMotorLeft.resetEncoder(0);
         } else {
-            armMotorLeft.setDistance(topPosition);
+            armMotorLeft.setPercent(0.1); 
         }
-        if(!rightLimit.get()) {
+        if(isRightPressed()) {
             armMotor.setPercent(0);
             armMotor.resetEncoder(0);
         } else {
-            armMotor.setDistance(topPosition); 
+            armMotor.setPercent(0.1); 
         }
-        isDown = false;
+        if (isLeftPressed() && isRightPressed()){
+            calibrated = true;
+        }
     }
 
-    public void intakeDown(){
+    private void intakeUp(){
+        rollerMotor.setPercent(0);
+        if(isLeftPressed() || armMotorLeft.getDistance() > topPosition) {
+            armMotorLeft.setPercent(0);
+        } else {
+            armMotorLeft.setPercent(0.15); 
+        }
+        if(isRightPressed() || armMotor.getDistance() > topPosition) {
+            armMotor.setPercent(0);
+        } else {
+            armMotor.setPercent(0.15); 
+        }
+    }
+
+    private void intakeDown(){
         rollerMotor.setPercent(rollerSpeed);
         armMotor.setDistance(bottomPosition);
         armMotorLeft.setDistance(bottomPosition);
-        isDown = true;
     }
 
     public boolean isDown(){
         return isDown;
+    }
+
+    public void goUp() {
+        isDown = false;
+    }
+
+    public void goDown() {
+        isDown = true;
+    }
+
+    public void unCalibrate(){
+        calibrated = false;
+    }
+
+    public void runIntake() {
+        if (!calibrated) {
+            calibrate();
+        } else if (!isDown()){
+            intakeUp();
+        } else {
+            intakeDown();
+        }
     }
 
 }

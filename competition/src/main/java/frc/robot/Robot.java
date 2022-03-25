@@ -22,6 +22,8 @@ public class Robot extends TimedRobot {
   private RateLimiter speedLimiter = new RateLimiter(0.7, 1.2);
   private RateLimiter turnLimiter = new RateLimiter(2, 3.5);
 
+  private double slowCoefficient = .6;
+
   @Override
   public void robotInit() {
     Devices.init();
@@ -35,9 +37,11 @@ public class Robot extends TimedRobot {
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
     Subsystems.shooter.run();
     Subsystems.climber.run();
-    Subsystems.belt.run_storage();
+    Subsystems.belt.runStorage();
     Subsystems.climber.preventClimberFromBreaking();
     telemetry();
+
+    Subsystems.intake.runIntake();
   }
 
   @Override
@@ -60,14 +64,24 @@ public class Robot extends TimedRobot {
     }
     else {
       Subsystems.shooter.stop();
-      double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX()));
+      if (Devices.controller.getRightBumper()){
+        slowCoefficient = .8;
+      } else {
+        slowCoefficient = .6;
+      }
+      double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX())) * slowCoefficient;
       double ySpeed = speedLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getLeftY()));
   
       double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
-  
-      double leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
-      double rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
-  
+
+      double leftSpeed;
+      double rightSpeed;
+
+     
+      leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
+      rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
+      
+
       double[] motorValues = Subsystems.drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
   
       Devices.leftMotor.setPercent(motorValues[0]);
@@ -75,9 +89,11 @@ public class Robot extends TimedRobot {
     }
 
     if (Devices.controller.getAButton()){
-      Subsystems.intake.intakeDown();
+      Subsystems.intake.goDown();
+    } else if (Devices.controller.getYButtonPressed() && Devices.controller.getStartButton()) {
+      Subsystems.intake.unCalibrate();
     } else if (Devices.controller.getYButton()) {
-      Subsystems.intake.intakeUp();
+      Subsystems.intake.goUp();
     }
   }
 
@@ -90,6 +106,7 @@ public class Robot extends TimedRobot {
     Targeting.init();
     Subsystems.climber.calibrate();
     Subsystems.auto.setState("init");
+    Subsystems.intake.unCalibrate();
   }
 
   public void telemetry() {
