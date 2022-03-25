@@ -39,9 +39,10 @@ public class Robot extends TimedRobot {
     Subsystems.climber.run();
     Subsystems.belt.runStorage();
     Subsystems.climber.preventClimberFromBreaking();
+    Subsystems.cargoDetector.run();
+    Subsystems.intake.runCargoDetection();
+    Subsystems.intake.runIntake(); 
     telemetry();
-
-    Subsystems.intake.runIntake();
   }
 
   @Override
@@ -60,7 +61,6 @@ public class Robot extends TimedRobot {
 
     //Targeting Code
     if (Devices.controller.getRightTriggerAxis() > 0.2){
-      Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
       Subsystems.shooter.shoot();
     }
     else {
@@ -89,11 +89,11 @@ public class Robot extends TimedRobot {
       Devices.rightMotor.setPercent(motorValues[1]);
     }
 
-    if (Devices.controller.getAButton()){
+    if (Devices.controller.getAButton() || Devices.controller.getRawAxis(1) > 0.8){
       Subsystems.intake.goDown();
     } else if (Devices.controller.getYButtonPressed() && Devices.controller.getStartButton()) {
       Subsystems.intake.unCalibrate();
-    } else if (Devices.controller.getYButton()) {
+    } else if (Devices.controller.getYButton() || Devices.controller.getRawAxis(1) < -0.8) {
       Subsystems.intake.goUp();
     }
 
