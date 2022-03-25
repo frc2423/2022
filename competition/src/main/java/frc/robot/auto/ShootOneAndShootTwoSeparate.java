@@ -1,25 +1,16 @@
 package frc.robot.auto;
 
+import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.InitState;
 import frc.robot.util.stateMachine.RunState;
-import frc.robot.util.stateMachine.StateMachine;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.util.NtHelper;
-import frc.robot.Devices;
 import frc.robot.Subsystems;
-import frc.robot.constants.NtKeys;
-import frc.robot.util.DriveHelper;
-import frc.robot.util.Rotation;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
 
+import edu.wpi.first.wpilibj.Timer;
 
-public class ShootOneAndShootTwo extends StateMachine{
+public class ShootOneAndShootTwoSeparate extends StateMachine{
     private Timer timer = new Timer();
-    private double angle;
-    private Rotation rotate;
 
-    public ShootOneAndShootTwo() {
+    public ShootOneAndShootTwoSeparate() {
         super("FirstShot");
       }
 
@@ -36,15 +27,14 @@ public class ShootOneAndShootTwo extends StateMachine{
         if (timer.get() > 4){
             timer.stop();
             Subsystems.shooter.stop();
-            setState ("Rotate");
+            setState ("CargoAdvance");
         }
         //Seconds subject to change upon testing
     }
 
     @InitState(name = "CargoAdvance")
     public void cargoAdvanceInit(){
-        Subsystems.follower.setTrajectory("BottomTarmacToCargosToHub");
-
+        Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
         Subsystems.follower.startFollowing();
     }
 
@@ -53,32 +43,36 @@ public class ShootOneAndShootTwo extends StateMachine{
         Subsystems.intake.goDown();
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
-            setState("ShootTwo");
+            setState("MiddleCargoAdvance");
         }
     }
 
-    @InitState(name = "Rotate")
-    public void rotateInit() {
+    @InitState(name = "MiddleCargoAdvance")
+    public void middleCargoAdvanceInit(){
+        Subsystems.follower.setTrajectory("BottomCargoToMiddleCargo");
+        Subsystems.follower.startFollowing();
+    }
+
+    @RunState(name = "MiddleCargoAdvance")
+    public void middleCargoAdvanceRun(){
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
+            setState("HubAdvance");
+        }
+    }
+
+    @InitState(name = "HubAdvance")
+    public void hubAdvanceInit(){
+        Subsystems.follower.setTrajectory("MiddleCargoToHubThreeBall");
+        Subsystems.follower.startFollowing();
+    }
+
+    @RunState(name = "HubAdvance")
+    public void hubAdvanceRun(){
         Subsystems.intake.goUp();
-        angle = Devices.gyro.getAngle() + 180;
-        rotate = new Rotation(.15, .3, 5, 150);
-    }
-
-    private double getAngleErrorRadians(double errorDegrees) {
-        return Units.radiansToDegrees(MathUtil.angleModulus(Units.degreesToRadians(errorDegrees)));
-    }
-
-    @RunState(name = "Rotate")
-    public void rotate() {
-        double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
-        double rotationSpeed = rotate.calculate(angleError);
-        double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
-        double leftSpeed = arcadeSpeeds[0];
-        double rightSpeed = arcadeSpeeds[1];
-        Devices.leftMotor.setPercent(leftSpeed);
-        Devices.rightMotor.setPercent(rightSpeed);
-        if (rotate.isDone(angleError)) {
-            setState("CargoAdvance");
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
+            setState("ShootTwo");
         }
     }
 
@@ -92,7 +86,6 @@ public class ShootOneAndShootTwo extends StateMachine{
     @RunState(name = "ShootTwo")
     public void shootTwoRun(){
         Subsystems.shooter.shoot();
-        Subsystems.intake.goUp();
         if (timer.get() > 4){
             timer.stop();
             Subsystems.shooter.stop();
