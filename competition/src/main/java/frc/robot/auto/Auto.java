@@ -16,7 +16,7 @@ public class Auto extends StateMachine {
     StateMachine shootTwoAndShootOne;
     StateMachine testAuto;
     StateMachine shootOneAndShootTwoSeparate;
-
+    StateMachine shootTwoPlayerSation;
     
     public Auto(){
         super("init");
@@ -27,6 +27,7 @@ public class Auto extends StateMachine {
         shootTwoAndShootOne = new ShootTwoAndShootOne();
         testAuto = new TestAuto();
         shootOneAndShootTwoSeparate = new ShootOneAndShootTwoSeparate();
+        shootTwoPlayerSation = new ShootTwoPlayerStation();
         NtHelper.setString(NtKeys.AUTO_MODE_NAME, "shootTwoTaxi");
     }
 
@@ -51,6 +52,9 @@ public class Auto extends StateMachine {
                 break;
             case "shootOneAndShootTwoSeparate":
                 selectedAutonomous = shootOneAndShootTwoSeparate;
+                break;
+            case "ShootTwoPlayerSation":
+                selectedAutonomous = shootTwoPlayerSation;
                 break;
             default:
                 selectedAutonomous = taxi;

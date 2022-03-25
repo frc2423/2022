@@ -23,6 +23,11 @@ public class Trajectories {
         trajectoryUploader("MiddleCargoToBottomHub", false, 2, 1);
         trajectoryUploader("MiddleCargoToHubThreeBall", false, 2, 1);
 
+        trajectoryUploader("HubToPlayerStation", false, 2, 1);
+        trajectoryUploader("PlayerStationToHub", false, 2, 1);
+
+
+
         trajectoryUploader("TestStraightPath", false, 2, 1);
         trajectoryUploader("TestCurvyPath", false, 2, 1);
 

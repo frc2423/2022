@@ -156,6 +156,7 @@ public class ShootTwoPlayerStation extends StateMachine {
         // Seconds subject to change upon testing
 
     }
+
     @InitState(name = "HubToPlayerStation")
     public void HubToPlayerStationInit() {
         Subsystems.follower.setTrajectory("HubToPlayerStation", false);
@@ -181,23 +182,55 @@ public class ShootTwoPlayerStation extends StateMachine {
     @RunState(name = "Intake")
     public void Intake2() {
         if (timer.get() > 0.5) {
-            setState("Rotate");
+            timer.stop();
+            setState("PlayerToHub");
         }
     }
 
-    //@InitState(name = )
+    @InitState(name = "PlayerToHub")
+    public void PlayerToHubInit() {
+        Subsystems.follower.setTrajectory("PlayerStationToHub", false);
+        Subsystems.follower.startFollowing();
+    }
+
+    @RunState(name = "PlayerToHub")
+    public void PlayerToHub() {
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
+            setState("shoot2");
+        }
+
+    }
+
+    @InitState(name = "shoot2")
+    public void shoot2init() {
+        timer.reset();
+        timer.start();
+    }
+
+    @RunState(name = "shoot2")
+    public void shoot2() {
+        Subsystems.shooter.shoot();
+        if (timer.get() > 3) {
+            setState("TaxiBack");
+            Subsystems.shooter.stop();
+        }
+        // Seconds subject to change upon testing
+
+    }
+
     
 
-    // @InitState(name = "TaxiBack")
-    // public void TaxiBackInit() {
-    //     Subsystems.follower.setTrajectory("Taxi");
-    //     Subsystems.follower.startFollowing();
-    //     timer.stop();
-    // }
+    @InitState(name = "TaxiBack")
+    public void TaxiBackInit() {
+        Subsystems.follower.setTrajectory("Taxi");
+        Subsystems.follower.startFollowing();
+        timer.stop();
+    }
 
-    // @RunState(name = "TaxiBack")
-    // public void TaxiBack() {
-    //     Subsystems.follower.follow();
-    // }
+    @RunState(name = "TaxiBack")
+    public void TaxiBack() {
+        Subsystems.follower.follow();
+    }
 
 }
