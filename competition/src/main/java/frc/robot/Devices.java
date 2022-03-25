@@ -36,6 +36,9 @@ public class Devices {
     //color sensor thing
     public static ColourSensor colourSensor = new ColourSensor();
 
+    public static DigitalInput leftLimitSwitchClimber = new DigitalInput(3); // needs actual ports
+    public static DigitalInput rightLimitSwitchClimber = new DigitalInput(4);
+
 
     static void init() {
         rightMotor.setInverted(true);

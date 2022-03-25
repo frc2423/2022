@@ -26,6 +26,8 @@ public class NtKeys {
     public static final String CLIMBER_DESIRED_POSITION = "/robot/climber/desiredPosition";
     public static final String CLIMBER_LEFT_POSITION = "/robot/climber/leftPosition";
     public static final String CLIMBER_RIGHT_POSITION = "/robot/climber/rightPosition";
+    public static final String CLIMBER_IS_LEFT_LIMIT_PRESSED = "/robot/climber/isLeftLimitPressed";
+    public static final String CLIMBER_IS_RIGHT_LIMIT_PRESSED = "/robot/climber/isRightLimitPressed";
     // Intake
     public static final String CARGO_COUNT = "/robot/cargoCount";
     public static final String LEFT_INTAKE_POSITION = "/robot/intake/leftdistance";

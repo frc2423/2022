@@ -22,6 +22,8 @@ public class Robot extends TimedRobot {
   private RateLimiter speedLimiter = new RateLimiter(0.7, 1.2);
   private RateLimiter turnLimiter = new RateLimiter(2, 3.5);
 
+  private double slowCoefficient = .6;
+
   @Override
   public void robotInit() {
     Devices.init();
@@ -56,20 +58,31 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+
     //Targeting Code
     if (Devices.controller.getRightTriggerAxis() > 0.2){
       Subsystems.shooter.shoot();
     }
     else {
       Subsystems.shooter.stop();
-      double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX()));
+      if (Devices.controller.getRightBumper()){
+        slowCoefficient = .8;
+      } else {
+        slowCoefficient = .6;
+      }
+      double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX())) * slowCoefficient;
       double ySpeed = speedLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getLeftY()));
   
       double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
-  
-      double leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
-      double rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
-  
+
+      double leftSpeed;
+      double rightSpeed;
+
+     
+      leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
+      rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
+      
+
       double[] motorValues = Subsystems.drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
   
       Devices.leftMotor.setPercent(motorValues[0]);
@@ -82,6 +95,12 @@ public class Robot extends TimedRobot {
       Subsystems.intake.unCalibrate();
     } else if (Devices.controller.getYButton() || Devices.controller.getRawAxis(1) < -0.8) {
       Subsystems.intake.goUp();
+    }
+
+    if (Devices.climbController.getAButtonPressed()) {
+      NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "down");
+    } else if (Devices.climbController.getYButtonPressed()) {
+      NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "up");
     }
   }
 

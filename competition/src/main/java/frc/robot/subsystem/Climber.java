@@ -1,5 +1,6 @@
 package frc.robot.subsystem;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Devices;
 import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
@@ -11,17 +12,19 @@ public class Climber extends StateMachine {
 
     private NeoMotor leftMotor;
     private NeoMotor rightMotor;
-    private final double LOW_POSITION = 80;
     private final double MEDIUM_POSITION = 160;
-    private final double CLIMB_POSITION = 25;
-    private final double BOTTOM_POSITION = 10;
     private double desiredPosition = 0;
-    private boolean safe = false;
+
+    private DigitalInput leftLimitSwitch; 
+    private DigitalInput rightLimitSwitch;
 
     public Climber() {
         super("down");
         leftMotor = Devices.climberLeftMotor;
         rightMotor = Devices.climberRightMotor;
+
+        leftLimitSwitch = Devices.leftLimitSwitchClimber;
+        rightLimitSwitch = Devices.rightLimitSwitchClimber;
         setState("down");
     }
 
@@ -31,7 +34,6 @@ public class Climber extends StateMachine {
         double bottomPosition = -5;
 
         if (leftPosition < bottomPosition || rightPosition < bottomPosition){
-            safe = true;
             setState("down");
         }
     }
@@ -75,17 +77,28 @@ public class Climber extends StateMachine {
         }
     }
 
+    private boolean isLeftLimitPressed() {
+        return leftLimitSwitch.get();
+    }
+
+    private boolean isRightLimitPressed() {
+        return rightLimitSwitch.get();
+    }
+
+
     @RunState(name = "down")
     public void down() {
-        boolean isDown = (leftMotor.getDistance() < BOTTOM_POSITION && rightMotor.getDistance() < BOTTOM_POSITION) || safe;
-        if (isDown) {
-            leftMotor.setPercent(0);
-            rightMotor.setPercent(0);
+        if (isLeftLimitPressed() || isRightLimitPressed()) {
+            if (isLeftLimitPressed()) {
+                leftMotor.setPercent(0);
+            }
+            if (isRightLimitPressed()) {
+                rightMotor.setPercent(0);
+            }
         } else {
             setDesiredPosition(0);
         }
         if (getDesiredState().equals("up")) {
-            safe = false;
             setState("up");
         }
     }
@@ -98,5 +111,7 @@ public class Climber extends StateMachine {
     public void climberInfo(){
         NtHelper.setDouble(NtKeys.CLIMBER_LEFT_POSITION, leftMotor.getDistance());
         NtHelper.setDouble(NtKeys.CLIMBER_RIGHT_POSITION, rightMotor.getDistance());
+        NtHelper.setBoolean(NtKeys.CLIMBER_IS_LEFT_LIMIT_PRESSED, isLeftLimitPressed());
+        NtHelper.setBoolean(NtKeys.CLIMBER_IS_RIGHT_LIMIT_PRESSED, isRightLimitPressed());
     }
 }
