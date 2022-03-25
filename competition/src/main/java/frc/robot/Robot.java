@@ -76,11 +76,11 @@ public class Robot extends TimedRobot {
       Devices.rightMotor.setPercent(motorValues[1]);
     }
 
-    if (Devices.controller.getAButton()){
+    if (Devices.controller.getAButton() || Devices.controller.getRawAxis(1) > 0.8){
       Subsystems.intake.goDown();
     } else if (Devices.controller.getYButtonPressed() && Devices.controller.getStartButton()) {
       Subsystems.intake.unCalibrate();
-    } else if (Devices.controller.getYButton()) {
+    } else if (Devices.controller.getYButton() || Devices.controller.getRawAxis(1) < -0.8) {
       Subsystems.intake.goUp();
     }
   }

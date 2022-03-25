@@ -33,7 +33,7 @@ public class NtKeys {
     public static final String INTAKE_STATE = "/robot/intake/state";
     public static final String INTAKE_LEFT_LIMIT_PRESSED = "/robot/intake/leftLimitPressed";
     public static final String INTAKE_RIGHT_LIMIT_PRESSED = "/robot/intake/rightLimitPressed";
-    public static final String DETECTED_CARGO_COLOR = "/robot/intake/currentcolor";
-    public static final String CURRENT_COLOR_STATE = "/robot/intake/currentcolorstate";
-    
+    public static final String DETECTED_CARGO_COLOR = "/robot/intake/cargoColor";
+    public static final String INTAKE_ARM_STATE = "/robot/intake/armState";
+  
 }

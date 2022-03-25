@@ -46,8 +46,21 @@ public class CargoDetector {
     }
 
     public void run() {
-        allianceColorAverage.addSample(Devices.colourSensor.isColor(allianceColor) ? 1 : 0);
-        otherColorAverage.addSample(Devices.colourSensor.isColor(otherColor) ? 1 : 0);
+        if(Devices.controller.getRawAxis(0) < -0.8) {
+            allianceColorAverage.addSample(1);
+        } else {
+            allianceColorAverage.addSample(0);
+        }
+
+        if(Devices.controller.getRawAxis(0) > 0.8) {
+            otherColorAverage.addSample(1);
+        }
+        else {
+            otherColorAverage.addSample(0);
+        }
+        
+        // allianceColorAverage.addSample(Devices.colourSensor.isColor(allianceColor) ? 1 : 0);
+        // otherColorAverage.addSample(Devices.colourSensor.isColor(otherColor) ? 1 : 0);
         previousValue = currentValue;
         if (isDetected(true)) {
             currentValue = "alliance";
