@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+
     //Targeting Code
     if (Devices.controller.getRightTriggerAxis() > 0.2){
       Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
@@ -94,6 +95,12 @@ public class Robot extends TimedRobot {
       Subsystems.intake.unCalibrate();
     } else if (Devices.controller.getYButton()) {
       Subsystems.intake.goUp();
+    }
+
+    if (Devices.climbController.getAButtonPressed()) {
+      NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "down");
+    } else if (Devices.climbController.getYButtonPressed()) {
+      NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "up");
     }
   }
 

@@ -78,7 +78,7 @@ public class Climber extends StateMachine {
     }
 
     private boolean isLeftLimitPressed() {
-        return !leftLimitSwitch.get();
+        return leftLimitSwitch.get();
     }
 
     private boolean isRightLimitPressed() {
@@ -111,5 +111,7 @@ public class Climber extends StateMachine {
     public void climberInfo(){
         NtHelper.setDouble(NtKeys.CLIMBER_LEFT_POSITION, leftMotor.getDistance());
         NtHelper.setDouble(NtKeys.CLIMBER_RIGHT_POSITION, rightMotor.getDistance());
+        NtHelper.setBoolean(NtKeys.CLIMBER_IS_LEFT_LIMIT_PRESSED, isLeftLimitPressed());
+        NtHelper.setBoolean(NtKeys.CLIMBER_IS_RIGHT_LIMIT_PRESSED, isRightLimitPressed());
     }
 }
