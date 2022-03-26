@@ -24,7 +24,7 @@ public class Shooter extends StateMachine{
     private double beltSpeed = -0.2;
     private double kickerSpeed = -0.3;
     private double highGoalSpeed = -60;  //for upper hub
-    private double lowGoalShooterSpeed = -.38; //-42; //for lower hub
+    private double lowGoalShooterSpeed = -38; //-42; //for lower hub
     private double shooterSpeed = highGoalSpeed;
 
     private double revDuration = 1;
