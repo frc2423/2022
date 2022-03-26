@@ -1,8 +1,12 @@
 package frc.robot.devices;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 public interface IGyro{
 
     public void reset();
+
+    public Rotation2d getRotation();
 
     /**
      * Returns angle reported by the gyro. Clockwise means positive angle.

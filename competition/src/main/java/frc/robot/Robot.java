@@ -46,6 +46,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void simulationPeriodic() {
+    Subsystems.drivetrainSim.simulate();
+  }
+
+  @Override
   public void autonomousPeriodic() {
     Subsystems.auto.run();
   }

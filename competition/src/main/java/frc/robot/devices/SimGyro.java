@@ -1,6 +1,7 @@
 package frc.robot.devices;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 
 public class SimGyro implements IGyro{
@@ -21,6 +22,10 @@ public class SimGyro implements IGyro{
 
     public void reset(){
         gyroSim.setAngle(0.0);
+    }
+
+    public Rotation2d getRotation (){
+        return gyro.getRotation2d();
     }
 
     public double getAngle(){

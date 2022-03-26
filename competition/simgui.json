@@ -5,6 +5,13 @@
         "visible": true
       }
     },
+    "Other Devices": {
+      "AnalogGyro[0]": {
+        "header": {
+          "open": true
+        }
+      }
+    },
     "PWM Outputs": {
       "window": {
         "visible": true
@@ -51,6 +58,15 @@
     }
   },
   "NetworkTables": {
+    "LiveWindow": {
+      "open": true
+    },
+    "SmartDashboard": {
+      "Field": {
+        "open": true
+      },
+      "open": true
+    },
     "robot": {
       "auto": {
         "open": true

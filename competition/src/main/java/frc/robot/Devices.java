@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Relay;
 public class Devices {
     public static XboxController controller = new XboxController(0);
     public static XboxController climbController = new XboxController(1);
-    public static Gyro gyro = new Gyro();
+    public static IGyro gyro;
     // Drivetrain motors
     public static  IMotor leftMotor; // front left
     private static IMotor leftFollowerMotor; // back left
@@ -44,12 +44,13 @@ public class Devices {
     static void init(boolean isSimulation) {
 
         if (!isSimulation) {
+            gyro = new Gyro();
             leftMotor = new NeoMotor(1);
             leftFollowerMotor = new NeoMotor (2);
             rightMotor = new NeoMotor(3);
             rightFollowerMotor = new NeoMotor (4);
         } else {
-            System.out.println("SIMULATION");
+            gyro = new SimGyro(0);
             leftMotor = new SimMotor(1, 5, 6);
             leftFollowerMotor = new SimMotor (2, 7, 8);
             rightMotor = new SimMotor(3, 9, 10);
