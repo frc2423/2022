@@ -24,9 +24,10 @@ public class Robot extends TimedRobot {
 
   private double slowCoefficient = .6;
 
+
   @Override
   public void robotInit() {
-    Devices.init();
+    Devices.init(isSimulation());
     Subsystems.init();
     CameraServer.startAutomaticCapture();
     NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, false);

@@ -1,24 +1,26 @@
 {
   "NetworkTables": {
     "SmartDashboard": {
+      "Field": {
+        "open": true
+      },
       "open": true
     },
     "robot": {
-      "auto": {
+      "climber": {
         "open": true
       },
       "intake": {
         "open": true
       },
-      "open": true,
-      "shooter": {
-        "open": true
-      }
+      "open": true
     },
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[3]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[4]": "Digital Input",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/SmartDashboard/Field": "Field2d"
     },
