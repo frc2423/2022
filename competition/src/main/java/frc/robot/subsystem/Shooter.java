@@ -23,7 +23,9 @@ public class Shooter extends StateMachine{
 
     private double beltSpeed = -0.2;
     private double kickerSpeed = -0.3;
-    private double shooterSpeed = -60; // -42 for low
+    private double highGoalSpeed = -60;  //for upper hub
+    private double lowGoalShooterSpeed = -42; //for lower hub
+    private double shooterSpeed = highGoalSpeed;
 
     private double revDuration = 1;
     private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
@@ -45,10 +47,21 @@ public class Shooter extends StateMachine{
         autoMode = bool;
     }
 
-    public void shoot() {
+    public void shoot(boolean isHighGoal) {
+        if (isHighGoal) {
+            setShooterSpeed(highGoalSpeed);
+        }
+        else {
+            setShooterSpeed(lowGoalShooterSpeed);
+        }
+
         if (getState() == "stop"){
             this.setState("rev");
         }
+    }
+
+    public void shoot(){
+        shoot(true);
     }
 
     public void stop() {
