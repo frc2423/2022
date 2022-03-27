@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
     Devices.init();
     Subsystems.init();
     CameraServer.startAutomaticCapture();
-    NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, true);
+    NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, false);
   }
 
   @Override

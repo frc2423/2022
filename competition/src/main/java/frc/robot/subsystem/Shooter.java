@@ -76,14 +76,6 @@ public class Shooter extends StateMachine{
         shooterSpeed = speed;
     }
 
-    public void beltForward() {
-        beltMotor.setPercent(beltSpeed);
-    }
-
-    public void beltStop() {
-        beltMotor.setPercent(0);
-    }
-
     public void kicker() {
         kickerMotor.setPercent(kickerSpeed);
     }
@@ -106,7 +98,6 @@ public class Shooter extends StateMachine{
     @InitState(name="stop") 
     public void runStoppedInit() {
         // initialize stopped (runs once)
-        beltStop();
         kickerStop();
         shooterStop();
         timer.stop();
@@ -155,7 +146,6 @@ public class Shooter extends StateMachine{
     
     @RunState(name="shoot")
     public void runShoot() {
-        beltForward();
         kicker();
         Devices.leftMotor.setPercent(0);
         Devices.rightMotor.setPercent(0); 
