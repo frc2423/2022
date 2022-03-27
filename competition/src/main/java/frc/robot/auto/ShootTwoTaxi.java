@@ -166,7 +166,17 @@ public class ShootTwoTaxi extends StateMachine {
 
     @RunState(name = "TaxiBack")
     public void TaxiBack() {
-        Subsystems.follower.follow();
+        if (!Subsystems.follower.isDone()) {
+            Subsystems.follower.follow();
+        } else {
+            setState("done");
+        }
+    }
+
+    @InitState(name = "done")
+    public void done(){
+        Devices.leftMotor.setPercent(0);
+        Devices.rightMotor.setPercent(0);
     }
 
 }
