@@ -13,7 +13,7 @@ public class NeoMotor implements IMotor {
     private double voltage = 0.0;
     private double motorValue = 0.0;
     private CANSparkMax.ControlType motorControlType = CANSparkMax.ControlType.kDutyCycle;
-    private NeoMotor leaderMotor;
+    private NeoMotor followerMotor;
 
     // These are needed because getting these values from the PIDController
     // takes an excessively long time for some reason
@@ -35,9 +35,7 @@ public class NeoMotor implements IMotor {
     }
 
     public void setSpeed(double speed){
-        motorValue = speed / encoder.getVelocityConversionFactor();
-        motorControlType = CANSparkMax.ControlType.kVelocity;
-        pidController.setReference(motorValue, motorControlType);
+        updateMotor(speed / encoder.getVelocityConversionFactor(), CANSparkMax.ControlType.kVelocity);
     }
 
     public double getSpeed(){
@@ -47,10 +45,11 @@ public class NeoMotor implements IMotor {
     }
 
     public void setPercent(double percent){
-        motorValue = percent;
-        motorControlType = CANSparkMax.ControlType.kDutyCycle;
         voltage = percent;
-        pidController.setReference(motorValue, motorControlType);
+        updateMotor(percent, CANSparkMax.ControlType.kDutyCycle);
+        if (followerMotor != null) {
+            followerMotor.setPercent(percent);
+        }
     }
 
     public double getPercent(){
@@ -58,9 +57,7 @@ public class NeoMotor implements IMotor {
     }
 
     public void setDistance(double dist){
-        motorValue = dist;
-        motorControlType = CANSparkMax.ControlType.kPosition;
-        pidController.setReference(motorValue, motorControlType);
+        updateMotor(dist, CANSparkMax.ControlType.kPosition);
     }
 
     public void resetEncoder(double distance) {
@@ -137,12 +134,17 @@ public class NeoMotor implements IMotor {
     }
 
     public void follow(IMotor leader){
-        if(leader.getClass() == NeoMotor.class) {
-            leaderMotor = (NeoMotor)leader;
-            this.motor.follow(this.leaderMotor.motor);
+        // if(leader.getClass() == NeoMotor.class) {
+        //     leaderMotor = (NeoMotor)leader;
+        //     this.motor.follow(this.leaderMotor.motor);
         
-        }
+        // }
     }
+
+    public void setFollower(NeoMotor follower) {
+        this.followerMotor = follower;
+    }
+
     public void setEncoderPositionAndRate(double position, double rate){
     }
 
@@ -150,4 +152,12 @@ public class NeoMotor implements IMotor {
         return getDistance() / getConversionFactor();
     }
 
+    private void updateMotor(double newValue, CANSparkMax.ControlType newControlType) {
+        boolean hasChanged = newValue != motorValue || newControlType != motorControlType;
+        if (hasChanged) {
+            motorValue = newValue;
+            motorControlType = newControlType;
+            pidController.setReference(motorValue, motorControlType);
+        }
+    }
 }
