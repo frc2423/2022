@@ -4,7 +4,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
 import frc.robot.constants.NtKeys;
-import frc.robot.devices.NeoMotor;
+import frc.robot.devices.IMotor;
 import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.StateMachine;
@@ -15,9 +15,9 @@ import edu.wpi.first.wpilibj.RobotController;
 
 
 public class Shooter extends StateMachine{
-    private NeoMotor beltMotor;
-    private NeoMotor kickerMotor;
-    private NeoMotor shooterMotor;
+    private IMotor beltMotor;
+    private IMotor kickerMotor;
+    private IMotor shooterMotor;
 
     private Timer timer = new Timer();
 

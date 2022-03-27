@@ -3,16 +3,16 @@ package frc.robot.subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Devices;
 import frc.robot.constants.NtKeys;
-import frc.robot.devices.NeoMotor;
+import frc.robot.devices.IMotor;
 import frc.robot.util.NtHelper;
 
 //we are children dont judge us :P
 
 public class Intake {
 
-    private NeoMotor armMotor;
-    private NeoMotor armMotorLeft;
-    private NeoMotor rollerMotor;
+    private IMotor armMotor;
+    private IMotor armMotorLeft;
+    private IMotor rollerMotor;
 
     private DigitalInput leftLimit;
     private DigitalInput rightLimit;

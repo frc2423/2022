@@ -18,16 +18,16 @@ public class Devices {
     public static NeoMotor rightMotor = new NeoMotor(3); // front right
     private static NeoMotor rightFollowerMotor = new NeoMotor (4); // back right
     // Intake motors
-    public static NeoMotor intakeArmMotor = new NeoMotor (5);
-    public static NeoMotor intakeArmFollowerMotor = new NeoMotor (6);
-    public static NeoMotor intakeRollerMotor = new NeoMotor (7);
+    public static IMotor intakeArmMotor = new NeoMotor (5);
+    public static IMotor intakeArmFollowerMotor = new NeoMotor (6);
+    public static IMotor intakeRollerMotor = new NeoMotor (7);
     // Intake limit switches
     public static DigitalInput leftLimit = new DigitalInput(1);
     public static DigitalInput rightLimit = new DigitalInput(2);
     // Belt and shooter motors
-    public static NeoMotor beltMotor = new NeoMotor(8);
-    public static NeoMotor kickerMotor = new NeoMotor(10);
-    public static NeoMotor shooterMotor = new NeoMotor(9);
+    public static IMotor beltMotor = new NeoMotor(8);
+    public static IMotor kickerMotor = new NeoMotor(10);
+    public static IMotor shooterMotor = new NeoMotor(9);
     // Climber motors
     public static NeoMotor climberLeftMotor = new NeoMotor(12);
     public static NeoMotor climberRightMotor = new NeoMotor(11);
