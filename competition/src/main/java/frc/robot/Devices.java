@@ -1,7 +1,6 @@
 package frc.robot;
 
 import frc.robot.devices.NeoMotor;
-import frc.robot.util.ColourSensor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.util.Units;
@@ -14,53 +13,67 @@ public class Devices {
     public static Gyro gyro = new Gyro();
     // Drivetrain motors
     public static NeoMotor leftMotor = new NeoMotor(1); // front left
-    private static NeoMotor leftFollowerMotor = new NeoMotor (2); // back left
+    private static NeoMotor leftFollowerMotor = new NeoMotor(2); // back left
     public static NeoMotor rightMotor = new NeoMotor(3); // front right
-    private static NeoMotor rightFollowerMotor = new NeoMotor (4); // back right
+    private static NeoMotor rightFollowerMotor = new NeoMotor(4); // back right
     // Intake motors
-    public static NeoMotor intakeArmMotor = new NeoMotor (5);
-    public static NeoMotor intakeArmFollowerMotor = new NeoMotor (6);
-    public static NeoMotor intakeRollerMotor = new NeoMotor (7);
+    public static IMotor intakeArmMotor;
+    public static IMotor intakeArmFollowerMotor;
+    public static IMotor intakeRollerMotor;
     // Intake limit switches
     public static DigitalInput leftLimit = new DigitalInput(1);
     public static DigitalInput rightLimit = new DigitalInput(2);
     // Belt and shooter motors
-    public static NeoMotor beltMotor = new NeoMotor(8);
-    public static NeoMotor kickerMotor = new NeoMotor(10);
-    public static NeoMotor shooterMotor = new NeoMotor(9);
+    public static IMotor beltMotor;
+    public static IMotor kickerMotor;
+    public static IMotor shooterMotor;
     // Climber motors
     public static NeoMotor climberLeftMotor = new NeoMotor(12);
     public static NeoMotor climberRightMotor = new NeoMotor(11);
-    //relay stuff for LEDs on stinky (the camera) - please don't lose it again
-    public static final Relay camLed = new Relay(0);
-    //color sensor thing
-    public static ColourSensor colourSensor = new ColourSensor();
 
     public static DigitalInput leftLimitSwitchClimber = new DigitalInput(3); // needs actual ports
     public static DigitalInput rightLimitSwitchClimber = new DigitalInput(4);
 
+    private static final boolean IS_DEFENSE_MODE = true;
 
     static void init() {
         rightMotor.setInverted(true);
         rightFollowerMotor.setInverted(true);
         rightMotor.setFollower(rightFollowerMotor);
         leftMotor.setFollower(leftFollowerMotor);
-        // rightFollowerMotor.follow(rightMotor);
-        // leftFollowerMotor.follow(leftMotor);
-        //this is because the motors are put in the opposite way, so the wheels move in the opposite direction of the motor. 
+
+        // this is because the motors are put in the opposite way, so the wheels move in
+        // the opposite direction of the motor.
         rightMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
         leftMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
+
+        if (IS_DEFENSE_MODE) {
+            intakeArmMotor = new DisabledMotor(5);
+            intakeArmFollowerMotor = new DisabledMotor(6);
+            intakeRollerMotor = new DisabledMotor(7);
+
+            // beltMotor = new DisabledMotor(8);
+            // kickerMotor = new DisabledMotor(10);
+            // shooterMotor = new DisabledMotor(9);
+            beltMotor = new NeoMotor(8);
+            kickerMotor = new NeoMotor(10);
+            shooterMotor = new NeoMotor(9);
+        } else {
+            intakeArmMotor = new NeoMotor(5);
+            intakeArmFollowerMotor = new NeoMotor(6);
+            intakeRollerMotor = new NeoMotor(7);
+
+            beltMotor = new NeoMotor(8);
+            kickerMotor = new NeoMotor(10);
+            shooterMotor = new NeoMotor(9);
+        }
 
         intakeArmMotor.setPid(.035, 0.00025, 0);
         intakeArmFollowerMotor.setPid(.035, 0.00025, 0);
         intakeArmMotor.setIZone(2);
         intakeArmFollowerMotor.setIZone(2);
         intakeArmFollowerMotor.setInverted(true);
-        
-        colourSensor.addColor("red", .475, .382, .142);
-        colourSensor.addColor("blue", .17, .42, .39);
-    
-        Devices.camLed.set(Relay.Value.kForward);
+
         climberLeftMotor.setPid(.03, 0.0000, 0);
         climberRightMotor.setPid(.03, 0.0000, 0);
     }

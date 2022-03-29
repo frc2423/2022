@@ -5,6 +5,7 @@ import frc.robot.util.stateMachine.RunState;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.Subsystems;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Devices;
 
 public class Taxi extends StateMachine {
     
@@ -18,7 +19,10 @@ public class Taxi extends StateMachine {
     @RunState(name = "Stop")
     public void stop(){
         timer.reset();
-        setState("Wait");
+        Subsystems.shooter.shoot();
+        Devices.leftMotor.setPercent(0);
+        Devices.rightMotor.setPercent(0);
+        // setState("Wait");
     }
 
     @InitState(name = "Wait")
@@ -36,12 +40,16 @@ public class Taxi extends StateMachine {
 
     @InitState(name = "Taxi")
     public void taxiInit(){
-        Subsystems.follower.startFollowing();
+        // Subsystems.follower.startFollowing();
+        Devices.leftMotor.setPercent(-.3);
+        Devices.rightMotor.setPercent(-.3);
         timer.stop();
     }
 
     @RunState(name = "Taxi")
     public void taxiRun(){
+        Devices.leftMotor.setPercent(-.3);
+        Devices.rightMotor.setPercent(-.3);
         Subsystems.follower.follow();
     }
 }
