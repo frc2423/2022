@@ -26,6 +26,13 @@ public class Climber extends StateMachine {
         leftLimitSwitch = Devices.leftLimitSwitchClimber;
         rightLimitSwitch = Devices.rightLimitSwitchClimber;
         setState("down");
+
+        NtHelper.setDouble("/climberDownPosition", 0);
+    }
+
+    private double getClimberDownPosition() {
+        return NtHelper.getDouble("/climberDownPosition", 0);
+
     }
 
     public void preventClimberFromBreaking() {
@@ -96,7 +103,9 @@ public class Climber extends StateMachine {
                 rightMotor.setPercent(0);
             }
         } else {
+            // setDesiredPosition(getClimberDownPosition());
             setDesiredPosition(0);
+
         }
         if (getDesiredState().equals("up")) {
             setState("up");

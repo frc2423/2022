@@ -34,7 +34,7 @@ public class Devices {
     public static DigitalInput leftLimitSwitchClimber = new DigitalInput(3); // needs actual ports
     public static DigitalInput rightLimitSwitchClimber = new DigitalInput(4);
 
-    private static final boolean IS_DEFENSE_MODE = false;
+    private static final boolean IS_DEFENSE_MODE = true;
 
     static void init() {
         rightMotor.setInverted(true);
@@ -52,9 +52,12 @@ public class Devices {
             intakeArmFollowerMotor = new DisabledMotor(6);
             intakeRollerMotor = new DisabledMotor(7);
 
-            beltMotor = new DisabledMotor(8);
-            kickerMotor = new DisabledMotor(10);
-            shooterMotor = new DisabledMotor(9);
+            // beltMotor = new DisabledMotor(8);
+            // kickerMotor = new DisabledMotor(10);
+            // shooterMotor = new DisabledMotor(9);
+            beltMotor = new NeoMotor(8);
+            kickerMotor = new NeoMotor(10);
+            shooterMotor = new NeoMotor(9);
         } else {
             intakeArmMotor = new NeoMotor(5);
             intakeArmFollowerMotor = new NeoMotor(6);
