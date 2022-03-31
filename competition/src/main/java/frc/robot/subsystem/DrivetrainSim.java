@@ -17,7 +17,7 @@ public class DrivetrainSim {
 
     public DrivetrainSim(double trackWidth, double wheelRadius) {
         m_drivetrainSimulator = new DifferentialDrivetrainSim(
-                m_drivetrainSystem, DCMotor.getCIM(2), 8, trackWidth, wheelRadius, null);
+                m_drivetrainSystem, DCMotor.getNEO(2), 8, trackWidth, wheelRadius, null);
     }
 
     /** Update our simulation. This should be run every robot loop in simulation. */
