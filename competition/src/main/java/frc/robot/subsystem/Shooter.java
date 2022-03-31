@@ -24,7 +24,7 @@ public class Shooter extends StateMachine{
     private double beltSpeed = -0.2;
     private double kickerSpeed = -0.3;
     private double highGoalSpeed = -60;  //for upper hub
-    private double lowGoalShooterSpeed = -42; //for lower hub
+    private double lowGoalShooterSpeed = -38; //-42; //for lower hub
     private double shooterSpeed = highGoalSpeed;
 
     private double revDuration = 1;
@@ -76,14 +76,6 @@ public class Shooter extends StateMachine{
         shooterSpeed = speed;
     }
 
-    public void beltForward() {
-        beltMotor.setPercent(beltSpeed);
-    }
-
-    public void beltStop() {
-        beltMotor.setPercent(0);
-    }
-
     public void kicker() {
         kickerMotor.setPercent(kickerSpeed);
     }
@@ -106,7 +98,6 @@ public class Shooter extends StateMachine{
     @InitState(name="stop") 
     public void runStoppedInit() {
         // initialize stopped (runs once)
-        beltStop();
         kickerStop();
         shooterStop();
         timer.stop();
@@ -155,7 +146,6 @@ public class Shooter extends StateMachine{
     
     @RunState(name="shoot")
     public void runShoot() {
-        beltForward();
         kicker();
         Devices.leftMotor.setPercent(0);
         Devices.rightMotor.setPercent(0); 

@@ -59,8 +59,10 @@ public class Devices {
 
         rightMotor.setInverted(true);
         rightFollowerMotor.setInverted(true);
-        rightFollowerMotor.follow(rightMotor);
-        leftFollowerMotor.follow(leftMotor);
+        rightMotor.setFollower(rightFollowerMotor);
+        leftMotor.setFollower(leftFollowerMotor);
+        // rightFollowerMotor.follow(rightMotor);
+        // leftFollowerMotor.follow(leftMotor);
         //this is because the motors are put in the opposite way, so the wheels move in the opposite direction of the motor. 
         rightMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
         leftMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);

@@ -35,6 +35,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    if (this.isDisabled()) {
+      return;
+    }
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
     Subsystems.shooter.run();
     Subsystems.climber.run();
@@ -56,8 +59,14 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void autonomousInit() {
+    resetRobot();
+  }
+
+  @Override
   public void teleopInit() {
     NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
+    resetRobot();
   }
 
   @Override
@@ -115,6 +124,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    // resetRobot();
+  }
+
+  public void resetRobot() {
     Devices.leftMotor.resetEncoder(0);
     Devices.rightMotor.resetEncoder(0);
     Devices.gyro.reset();

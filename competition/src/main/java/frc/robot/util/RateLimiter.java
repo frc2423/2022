@@ -46,7 +46,8 @@ public class RateLimiter {
      * @return The filtered value, which will not change faster than the rate.
      */
     public double calculate(double input) {
-        boolean isSlower = Math.abs(input) < Math.abs(prevVal);
+        boolean sameSign = Math.signum(input) == Math.signum(prevVal);
+        boolean isSlower = Math.abs(input) < Math.abs(prevVal) || !sameSign;
         double rateLimit = isSlower ? deaccelLimit : accelLimit;
         double currentTime = Timer.getFPGATimestamp();
         double elapsedTime = currentTime - prevTime;
