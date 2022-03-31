@@ -6,10 +6,15 @@
       }
     },
     "Other Devices": {
-      "SPARK MAX [1]": {
+      "AnalogGyro[0]": {
         "header": {
           "open": true
         }
+      }
+    },
+    "PWM Outputs": {
+      "window": {
+        "visible": true
       }
     },
     "RoboRIO": {
@@ -21,15 +26,31 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Ungrouped/AnalogGyro[0]": "Gyro",
       "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[3]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[4]": "Digital Input",
+      "/LiveWindow/Ungrouped/MotorControllerGroup[1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/MotorControllerGroup[2]": "Motor Controller",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/PWMVictorSPX[1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/PWMVictorSPX[2]": "Motor Controller",
+      "/LiveWindow/Ungrouped/PWMVictorSPX[3]": "Motor Controller",
+      "/LiveWindow/Ungrouped/PWMVictorSPX[4]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
       "/SmartDashboard/Field": {
+        "image": "C:\\Users\\amory\\Downloads\\PathWeaver-main\\PathWeaver-main\\src\\main\\resources\\edu\\wpi\\first\\pathweaver\\2022-field.png",
+        "traj": {
+          "style": "Line"
+        },
+        "traj2": {
+          "style": "Line"
+        },
         "window": {
           "visible": true
         }
@@ -37,6 +58,15 @@
     }
   },
   "NetworkTables": {
+    "LiveWindow": {
+      "open": true
+    },
+    "SmartDashboard": {
+      "Field": {
+        "open": true
+      },
+      "open": true
+    },
     "robot": {
       "auto": {
         "open": true

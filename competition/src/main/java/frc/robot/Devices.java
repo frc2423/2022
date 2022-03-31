@@ -1,6 +1,7 @@
 package frc.robot;
 
 import frc.robot.devices.NeoMotor;
+import frc.robot.devices.SimMotor;
 import frc.robot.util.ColourSensor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
@@ -11,12 +12,12 @@ import edu.wpi.first.wpilibj.Relay;
 public class Devices {
     public static XboxController controller = new XboxController(0);
     public static XboxController climbController = new XboxController(1);
-    public static Gyro gyro = new Gyro();
+    public static IGyro gyro;
     // Drivetrain motors
-    public static NeoMotor leftMotor = new NeoMotor(1); // front left
-    private static NeoMotor leftFollowerMotor = new NeoMotor (2); // back left
-    public static NeoMotor rightMotor = new NeoMotor(3); // front right
-    private static NeoMotor rightFollowerMotor = new NeoMotor (4); // back right
+    public static  IMotor leftMotor; // front left
+    private static IMotor leftFollowerMotor; // back left
+    public static  IMotor rightMotor; // front right
+    private static IMotor rightFollowerMotor; // back right
     // Intake motors
     public static NeoMotor intakeArmMotor = new NeoMotor (5);
     public static NeoMotor intakeArmFollowerMotor = new NeoMotor (6);
@@ -40,13 +41,28 @@ public class Devices {
     public static DigitalInput rightLimitSwitchClimber = new DigitalInput(4);
 
 
-    static void init() {
-        rightMotor.setInverted(true);
-        rightFollowerMotor.setInverted(true);
-        rightMotor.setFollower(rightFollowerMotor);
-        leftMotor.setFollower(leftFollowerMotor);
-        // rightFollowerMotor.follow(rightMotor);
-        // leftFollowerMotor.follow(leftMotor);
+    static void init(boolean isSimulation) {
+
+        if (!isSimulation) {
+            gyro = new Gyro();
+            leftMotor = new NeoMotor(1);
+            leftFollowerMotor = new NeoMotor (2);
+            rightMotor = new NeoMotor(3);
+            rightFollowerMotor = new NeoMotor (4);
+          
+            rightMotor.setInverted(true);
+            rightFollowerMotor.setInverted(true);
+        } else {
+            gyro = new SimGyro(0);
+            leftMotor = new SimMotor(1, 5, 6);
+            leftFollowerMotor = new SimMotor (2, 7, 8);
+            rightMotor = new SimMotor(3, 9, 10);
+            rightFollowerMotor = new SimMotor (4, 11, 12);
+      
+        }
+
+        rightFollowerMotor.follow(rightMotor);
+        leftFollowerMotor.follow(leftMotor);
         //this is because the motors are put in the opposite way, so the wheels move in the opposite direction of the motor. 
         rightMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
         leftMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);

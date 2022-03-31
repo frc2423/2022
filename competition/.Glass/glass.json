@@ -7,16 +7,13 @@
       "open": true
     },
     "robot": {
-      "auto": {
+      "climber": {
         "open": true
       },
       "intake": {
         "open": true
       },
-      "open": true,
-      "shooter": {
-        "open": true
-      }
+      "open": true
     },
     "types": {
       "/FMSInfo": "FMSInfo",
