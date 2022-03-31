@@ -33,7 +33,7 @@ public class SimMotor implements IMotor {
 
     public void setPercent(double percent) {
         desiredPercent = percent;
-        motor.setVoltage(desiredPercent);
+        motor.set(desiredPercent);
 
         for (SimMotor follower : followers) {
             follower.setPercent(desiredPercent);

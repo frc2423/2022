@@ -43,9 +43,9 @@ public class Robot extends TimedRobot {
     Subsystems.climber.run();
     Subsystems.belt.runStorage();
     Subsystems.climber.preventClimberFromBreaking();
-    telemetry();
-
     Subsystems.intake.runIntake();
+    
+    telemetry();
   }
 
   @Override
@@ -120,11 +120,6 @@ public class Robot extends TimedRobot {
     } else if (Devices.climbController.getYButtonPressed()) {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "up");
     }
-  }
-
-  @Override
-  public void disabledPeriodic() {
-    // resetRobot();
   }
 
   public void resetRobot() {

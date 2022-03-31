@@ -49,20 +49,20 @@ public class Devices {
             leftFollowerMotor = new NeoMotor (2);
             rightMotor = new NeoMotor(3);
             rightFollowerMotor = new NeoMotor (4);
+          
+            rightMotor.setInverted(true);
+            rightFollowerMotor.setInverted(true);
         } else {
             gyro = new SimGyro(0);
             leftMotor = new SimMotor(1, 5, 6);
             leftFollowerMotor = new SimMotor (2, 7, 8);
             rightMotor = new SimMotor(3, 9, 10);
             rightFollowerMotor = new SimMotor (4, 11, 12);
+      
         }
 
-        rightMotor.setInverted(true);
-        rightFollowerMotor.setInverted(true);
-        rightMotor.setFollower(rightFollowerMotor);
-        leftMotor.setFollower(leftFollowerMotor);
-        // rightFollowerMotor.follow(rightMotor);
-        // leftFollowerMotor.follow(leftMotor);
+        rightFollowerMotor.follow(rightMotor);
+        leftFollowerMotor.follow(leftMotor);
         //this is because the motors are put in the opposite way, so the wheels move in the opposite direction of the motor. 
         rightMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
         leftMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
