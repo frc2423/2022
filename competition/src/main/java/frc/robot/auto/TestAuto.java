@@ -4,7 +4,6 @@ import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.Subsystems;
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
 
 public class TestAuto extends StateMachine {
