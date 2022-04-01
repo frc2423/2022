@@ -46,7 +46,6 @@ public class TrajectoryFollower {
     public void setTrajectory (String name, boolean moveToStart){
         NtHelper.setString("/robot/auto/currTrajectory", name);
         trajectory = trajectoryMap.get(name);
-        System.out.println("trajectory time: " + trajectory.getTotalTimeSeconds());
         if (moveToStart) {
             var initialPose = trajectory.getStates().get(0).poseMeters;
             Devices.leftMotor.resetEncoder(0);

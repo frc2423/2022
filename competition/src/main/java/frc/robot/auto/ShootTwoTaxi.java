@@ -29,14 +29,14 @@ public class ShootTwoTaxi extends StateMachine {
     }
 
     @State(name = "IntakeDown")
-    public void runIntakeDown(StateContext ctx) {
+    public void intakeDown(StateContext ctx) {
         Subsystems.intake.goDown();
         if (ctx.getTime() > .5) {
-            setState("CargoAdvance");
+            setState("CargoAdvance2");
         }
     }
 
-    @State(name = "CargoAdvance")
+    @State(name = "CargoAdvance2")
     public void CargoAdvance(StateContext ctx) {
         if (ctx.isInit()) {
             String position = NtHelper.getString(NtKeys.AUTO_MODE_ROBOT_POSITION, "bottom");

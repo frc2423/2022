@@ -8,7 +8,7 @@ public class StateContext {
     private boolean initialized = false;
 
     public boolean isInit() {
-        return initialized;
+        return !initialized;
     }
 
     protected void initialize() {

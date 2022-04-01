@@ -5,7 +5,7 @@ import frc.robot.Devices;
 import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.NtHelper;
-import frc.robot.util.stateMachine.RunState;
+import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateMachine;
 
 public class Climber extends StateMachine {
@@ -69,7 +69,7 @@ public class Climber extends StateMachine {
         NtHelper.setDouble(NtKeys.CLIMBER_DESIRED_POSITION, desiredPosition);
     }
     
-    @RunState(name = "up")
+    @State(name = "up")
     public void goUp() {
         setDesiredPosition(MEDIUM_POSITION);
         if (getDesiredState().equals("down")) {
@@ -86,7 +86,7 @@ public class Climber extends StateMachine {
     }
 
 
-    @RunState(name = "down")
+    @State(name = "down")
     public void down() {
         if (isLeftLimitPressed() || isRightLimitPressed()) {
             if (isLeftLimitPressed()) {

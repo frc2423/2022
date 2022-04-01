@@ -16,8 +16,7 @@ public class Auto extends StateMachine {
     StateMachine shootTwoAndShootOne;
     StateMachine testAuto;
 
-    
-    public Auto(){
+    public Auto() {
         super("run");
         taxi = new Taxi();
         shootOneAndTaxi = new ShootOneAndTaxi();
@@ -28,7 +27,7 @@ public class Auto extends StateMachine {
         NtHelper.setString(NtKeys.AUTO_MODE_NAME, "shootTwoTaxi");
     }
 
-    public void getAuto(){
+    public void getAuto() {
         String name = NtHelper.getString(NtKeys.AUTO_MODE_NAME, "taxi");
         // selectedAutonomous = testAuto;
         switch (name) {
@@ -53,8 +52,12 @@ public class Auto extends StateMachine {
         }
     }
 
+    public void restart() {
+        setState("run");
+    }
+
     @State(name = "run")
-    public void runRun(StateContext ctx){
+    public void runState(StateContext ctx) {
         if (ctx.isInit()) {
             getAuto();
             selectedAutonomous.setState(selectedAutonomous.getDefaultState());
