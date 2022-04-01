@@ -1,29 +1,24 @@
 package frc.robot.auto;
 
-import frc.robot.util.stateMachine.InitState;
-import frc.robot.util.stateMachine.RunState;
+import frc.robot.util.stateMachine.State;
+import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.Subsystems;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
 
 public class TestAuto extends StateMachine {
-    
-    private Timer timer = new Timer();
 
-    public TestAuto(){
+    public TestAuto() {
         super("Start");
     }
 
-    @InitState(name = "Start")
-    public void initStart(){
-        timer.reset();
-        Subsystems.follower.setTrajectory("TestCurvyPath");   
-        Subsystems.follower.startFollowing();
-    }
-
-    @RunState(name = "Start")
-    public void runStart(){
+    @State(name = "Start")
+    public void start(StateContext ctx) {
+        if (ctx.isInit()) {
+            Subsystems.follower.setTrajectory("TestCurvyPath");
+            Subsystems.follower.startFollowing();
+        }
         if (!Subsystems.follower.isDone()) {
             Subsystems.follower.follow();
         } else {
@@ -31,9 +26,9 @@ public class TestAuto extends StateMachine {
         }
     }
 
-    @RunState(name = "Stop")
-    public void runStop(){
+    @State(name = "Stop")
+    public void stop() {
         Devices.leftMotor.setPercent(0);
-        Devices.rightMotor.setPercent(0); 
+        Devices.rightMotor.setPercent(0);
     }
 }

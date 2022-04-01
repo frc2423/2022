@@ -6,31 +6,23 @@ import java.util.HashMap;
 
 public class StateMachine {
 
-  private HashMap<String, Method> initStates;
-  private HashMap<String, Method> runStates;
+  private HashMap<String, Method> states;
   private String state = "";
   private String defaultState;
-  private boolean initCalled = false;
+  private StateContext ctx;
 
   public StateMachine(String defaultState) {
     this.defaultState = defaultState;
-    initStates = new HashMap<String, Method>();
-    runStates = new HashMap<String, Method>();
+    states = new HashMap<String, Method>();
     Method[] methods= this.getClass().getMethods(); //obtain all method objects
     for(Method method : methods){
       Annotation[] annotations = method.getDeclaredAnnotations();
       for(Annotation annotation : annotations){
-        // Gathers each method that has InitState annotations
-        if(annotation instanceof InitState){
-          InitState myAnnotation = (InitState) annotation;
-          //System.out.println("state name: " + myAnnotation.name());
-          initStates.put(myAnnotation.name(), method);
-        }
-        // Gathers each method that has RunState annotations
-        if(annotation instanceof RunState){
-          RunState myAnnotation = (RunState) annotation;
+        // Gathers each method that has State annotations
+        if(annotation instanceof State){
+          State myAnnotation = (State) annotation;
           //System.out.println("endState name: " + myAnnotation.name());
-          runStates.put(myAnnotation.name(), method);
+          states.put(myAnnotation.name(), method);
         }
       }
     }
@@ -51,11 +43,8 @@ public class StateMachine {
   */
   public void run(){
     String name = this.state;
-    if (initCalled) {
-      runState(name);
-    } else {
-      initState(name);
-    }
+    runState(name);
+    ctx.initialize();
   }
 
   /**
@@ -63,27 +52,15 @@ public class StateMachine {
   * @param name : String <i>name of the state</i>
   */
   public void setState(String name){
+    ctx = new StateContext();
     state = name;
-    initCalled = false;
-  }
-
-  public void initState(String name){
-    initCalled = true;
-    try {
-      var initFunction = initStates.get(name);
-      if (initFunction != null) {
-        initFunction.invoke(this);
-      }
-    } catch (Exception e){
-      System.out.println(e + ": initState-> " + name);
-    }
   }
 
   public void runState(String name){
     try {
-      Object returnObject = runStates.get(name).invoke(this);
+      Object returnObject = states.get(name).invoke(this);
     } catch (Exception e){
-      System.out.println(e + ": runState-> " + name + " cause:"+ e.getCause());
+      System.out.println(e + ": State -> " + name + " cause:"+ e.getCause());
     }
   }
 

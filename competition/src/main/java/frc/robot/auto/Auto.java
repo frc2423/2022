@@ -2,8 +2,8 @@ package frc.robot.auto;
 
 import frc.robot.constants.NtKeys;
 import frc.robot.util.NtHelper;
-import frc.robot.util.stateMachine.InitState;
-import frc.robot.util.stateMachine.RunState;
+import frc.robot.util.stateMachine.State;
+import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.stateMachine.StateMachine;
 
 public class Auto extends StateMachine {
@@ -18,7 +18,7 @@ public class Auto extends StateMachine {
 
     
     public Auto(){
-        super("init");
+        super("run");
         taxi = new Taxi();
         shootOneAndTaxi = new ShootOneAndTaxi();
         shootTwoTaxi = new ShootTwoTaxi();
@@ -53,19 +53,12 @@ public class Auto extends StateMachine {
         }
     }
 
-    @RunState(name = "init")
-    public void runInit(){
-        setState("run");
-    }
-
-    @InitState(name = "run")
-    public void initRun(){
-        getAuto();
-        selectedAutonomous.setState(selectedAutonomous.getDefaultState());
-    }
-
-    @RunState(name = "run")
-    public void runRun(){
+    @State(name = "run")
+    public void runRun(StateContext ctx){
+        if (ctx.isInit()) {
+            getAuto();
+            selectedAutonomous.setState(selectedAutonomous.getDefaultState());
+        }
         selectedAutonomous.run();
     }
 }

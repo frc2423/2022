@@ -1,7 +1,7 @@
 package frc.robot.auto;
 
 import frc.robot.util.stateMachine.InitState;
-import frc.robot.util.stateMachine.RunState;
+import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateMachine;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.NtHelper;
@@ -36,7 +36,7 @@ public class ShootTwoTaxi extends StateMachine {
         Devices.rightMotor.setPercent(0);
     }
 
-    @RunState(name = "Stop")
+    @State(name = "Stop")
     public void stopState() {
         setState("IntakeDown");
     }
@@ -48,7 +48,7 @@ public class ShootTwoTaxi extends StateMachine {
         Subsystems.intake.goDown();
     }
 
-    @RunState(name = "IntakeDown")
+    @State(name = "IntakeDown")
     public void runIntakeDown() {
         if (timer.get() > .5) {
             setState("CargoAdvance");
@@ -68,7 +68,7 @@ public class ShootTwoTaxi extends StateMachine {
         Subsystems.follower.startFollowing();
     }
 
-    @RunState(name = "CargoAdvance")
+    @State(name = "CargoAdvance")
     public void CargoAdvanceRun() {
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
@@ -84,7 +84,7 @@ public class ShootTwoTaxi extends StateMachine {
         timer.start();
     }
 
-    @RunState(name = "Intake")
+    @State(name = "Intake")
     public void Intake() {
         if (timer.get() > 1.5) {
             setState("Rotate");
@@ -104,7 +104,7 @@ public class ShootTwoTaxi extends StateMachine {
         return Units.radiansToDegrees(MathUtil.angleModulus(Units.degreesToRadians(errorDegrees)));
     }
 
-    @RunState(name = "Rotate")
+    @State(name = "Rotate")
     public void rotate() {
         double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
         double rotationSpeed = rotate.calculate(angleError);
@@ -131,7 +131,7 @@ public class ShootTwoTaxi extends StateMachine {
         Subsystems.follower.startFollowing();
     }
 
-    @RunState(name = "ShooterAdvance")
+    @State(name = "ShooterAdvance")
     public void ShooterAdvance() {
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
@@ -146,7 +146,7 @@ public class ShootTwoTaxi extends StateMachine {
         timer.start();
     }
 
-    @RunState(name = "ShootTwo")
+    @State(name = "ShootTwo")
     public void ShootTwo() {
         Subsystems.shooter.shoot();
         if (timer.get() > 4) {
@@ -164,7 +164,7 @@ public class ShootTwoTaxi extends StateMachine {
         timer.stop();
     }
 
-    @RunState(name = "TaxiBack")
+    @State(name = "TaxiBack")
     public void TaxiBack() {
         if (!Subsystems.follower.isDone()) {
             Subsystems.follower.follow();
