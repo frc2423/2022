@@ -1,7 +1,8 @@
 package frc.robot.subsystem;
 
-
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
@@ -11,13 +12,22 @@ import frc.robot.Devices;
 
 public class DrivetrainSim {
 
-    private final LinearSystem<N2, N2, N2> m_drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(1.98, 0.2, 1.5,
+    private final LinearSystem<N2, N2, N2> m_drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(1.98, 0.2,
+            1.5,
             0.3);
     private final DifferentialDrivetrainSim m_drivetrainSimulator;
 
     public DrivetrainSim(double trackWidth, double wheelRadius) {
         m_drivetrainSimulator = new DifferentialDrivetrainSim(
                 m_drivetrainSystem, DCMotor.getNEO(2), 8, trackWidth, wheelRadius, null);
+    }
+
+    public void setPose(Pose2d pose, Rotation2d rotation) {
+        setPose(new Pose2d(pose.getTranslation(), rotation));
+    }
+
+    public void setPose(Pose2d pose) {
+        m_drivetrainSimulator.setPose(pose);
     }
 
     /** Update our simulation. This should be run every robot loop in simulation. */

@@ -127,6 +127,7 @@ public class Robot extends TimedRobot {
     Devices.rightMotor.resetEncoder(0);
     Devices.gyro.reset();
     Subsystems.drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
+    Subsystems.drivetrainSim.setPose(new Pose2d(), Devices.gyro.getRotation());
     Targeting.init();
     Subsystems.climber.calibrate();
     Subsystems.auto.restart();
