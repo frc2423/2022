@@ -42,7 +42,6 @@ public class Robot extends TimedRobot {
     Subsystems.shooter.run();
     Subsystems.climber.run();
     Subsystems.belt.runStorage();
-    Subsystems.climber.preventClimberFromBreaking();
     Subsystems.intake.runIntake();
     
     telemetry();
@@ -119,6 +118,8 @@ public class Robot extends TimedRobot {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "down");
     } else if (Devices.climbController.getYButtonPressed()) {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "up");
+    } else if (Devices.climbController.getStartButton() && Devices.climbController.getBackButton()){
+      NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "manual");
     }
   }
 
