@@ -1,5 +1,6 @@
 package frc.robot.subsystem;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Devices;
 import frc.robot.constants.NtKeys;
@@ -26,16 +27,6 @@ public class Climber extends StateMachine {
         leftLimitSwitch = Devices.leftLimitSwitchClimber;
         rightLimitSwitch = Devices.rightLimitSwitchClimber;
         setState("down");
-    }
-
-    public void preventClimberFromBreaking() {
-        double leftPosition = leftMotor.getDistance();
-        double rightPosition = rightMotor.getDistance();
-        double bottomPosition = -5;
-
-        if (leftPosition < bottomPosition || rightPosition < bottomPosition){
-            setState("down");
-        }
     }
 
     public void calibrate() {
@@ -74,6 +65,8 @@ public class Climber extends StateMachine {
         setDesiredPosition(MEDIUM_POSITION);
         if (getDesiredState().equals("down")) {
             setState("down");
+        } else if (getDesiredState().equals("manual")) {
+            setState("manual");
         }
     }
 
@@ -100,6 +93,20 @@ public class Climber extends StateMachine {
         }
         if (getDesiredState().equals("up")) {
             setState("up");
+        } else if (getDesiredState().equals("manual")) {
+            setState("manual");
+        }
+    }
+
+    @State(name = "manual")
+    public void manual() {
+        var left = -MathUtil.applyDeadband(Devices.climbController.getLeftY(), .1) * .2;
+        var right = -MathUtil.applyDeadband(Devices.climbController.getRightY(), .1) * .2;
+        leftMotor.setPercent(left);
+        rightMotor.setPercent(right);
+
+        if (getDesiredState().equals("down")) {
+            setState("down");
         }
     }
 
