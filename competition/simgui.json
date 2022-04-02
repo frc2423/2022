@@ -66,6 +66,9 @@
     "CameraPublisher": {
       "open": true
     },
+    "FMSInfo": {
+      "open": true
+    },
     "LiveWindow": {
       "open": true
     },

@@ -25,7 +25,7 @@ public class ShootTwoTaxi extends StateMachine {
 
     public ShootTwoTaxi() {
         super("IntakeDown");
-        NtHelper.setString(NtKeys.AUTO_MODE_ROBOT_POSITION, "middle");
+        NtHelper.setString(NtKeys.AUTO_MODE_ROBOT_POSITION, "bottom");
     }
 
     @State(name = "IntakeDown")
