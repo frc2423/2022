@@ -8,23 +8,20 @@ import frc.robot.devices.NeoMotor;
 import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.StateMachine;
-import frc.robot.util.stateMachine.InitState;
-import frc.robot.util.stateMachine.RunState;
+import frc.robot.util.stateMachine.State;
+import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.Targeting;
 import edu.wpi.first.wpilibj.RobotController;
 
-
-public class Shooter extends StateMachine{
-    private NeoMotor beltMotor;
+public class Shooter extends StateMachine {
     private NeoMotor kickerMotor;
     private NeoMotor shooterMotor;
 
     private Timer timer = new Timer();
 
-    private double beltSpeed = -0.2;
     private double kickerSpeed = -0.3;
-    private double highGoalSpeed = -60;  //for upper hub
-    private double lowGoalShooterSpeed = -38; //-42; //for lower hub
+    private double highGoalSpeed = -60; // for upper hub
+    private double lowGoalShooterSpeed = -38; // -42; //for lower hub
     private double shooterSpeed = highGoalSpeed;
 
     private double revDuration = 1;
@@ -34,33 +31,31 @@ public class Shooter extends StateMachine{
 
     public Shooter() {
         super("stop");
-        beltMotor = Devices.beltMotor;
         kickerMotor = Devices.kickerMotor;
         shooterMotor = Devices.shooterMotor;
     }
 
-    public boolean isShoot(){
+    public boolean isShoot() {
         return isShoot;
     }
 
-    public void setAuto(boolean bool){
+    public void setAuto(boolean bool) {
         autoMode = bool;
     }
 
     public void shoot(boolean isHighGoal) {
         if (isHighGoal) {
             setShooterSpeed(highGoalSpeed);
-        }
-        else {
+        } else {
             setShooterSpeed(lowGoalShooterSpeed);
         }
 
-        if (getState() == "stop"){
+        if (getState() == "stop") {
             this.setState("rev");
         }
     }
 
-    public void shoot(){
+    public void shoot() {
         shoot(true);
     }
 
@@ -72,7 +67,7 @@ public class Shooter extends StateMachine{
         return super.getState();
     }
 
-    public void setShooterSpeed(double speed){
+    public void setShooterSpeed(double speed) {
         shooterSpeed = speed;
     }
 
@@ -88,72 +83,58 @@ public class Shooter extends StateMachine{
         shooterMotor.setPercent(0);
     }
 
-    public void setShooterVolt(double speed){
+    public void setShooterVolt(double speed) {
         double voltage = feedForward.calculate(speed);
         double percent = voltage / RobotController.getBatteryVoltage();
         shooterMotor.setPercent(percent);
     }
 
-
-    @InitState(name="stop") 
-    public void runStoppedInit() {
-        // initialize stopped (runs once)
-        kickerStop();
-        shooterStop();
-        timer.stop();
-        isShoot = false;
+    @State(name = "stop")
+    public void runStopped(StateContext ctx) {
+        if (ctx.isInit()) {
+            kickerStop();
+            shooterStop();
+            timer.stop();
+            isShoot = false;
+        }
     }
 
-    @RunState(name="stop") 
-    public void runStopped() {
-        // run stopped (runs a bunch)
-    }
-
-    @InitState(name="rev")
-    public void runRevInit() {
-        timer.reset();
-        timer.start();
-        // initialize rev
-    }
-
-    @RunState(name="rev") 
-    public void runRev() {
+    @State(name = "rev")
+    public void runRev(StateContext ctx) {
         boolean isAimed = true;
-        if (autoMode == true){
+        if (autoMode == true) {
             double rotationSpeed = Targeting.calculate();
             double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
             double leftSpeed = arcadeSpeeds[0];
             double rightSpeed = arcadeSpeeds[1];
             Devices.leftMotor.setPercent(leftSpeed);
-            Devices.rightMotor.setPercent(rightSpeed); 
+            Devices.rightMotor.setPercent(rightSpeed);
             isAimed = rotationSpeed == 0 && Targeting.hasTargets();
         } else {
             Devices.leftMotor.setPercent(0);
             Devices.rightMotor.setPercent(0);
         }
-        
+
         setShooterVolt(shooterSpeed);
 
-        if (timer.get() > this.revDuration && isAimed) this.setState("shoot");
+        if (ctx.getTime() > this.revDuration && isAimed)
+            this.setState("shoot");
 
     }
 
-    @InitState(name="shoot")
-    public void runShootInit() {
-        isShoot = true;
-        NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
-    }
-    
-    @RunState(name="shoot")
-    public void runShoot() {
+    @State(name = "shoot")
+    public void runShoot(StateContext ctx) {
+        if (ctx.isInit()) {
+            isShoot = true;
+            NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
+        }
         kicker();
         Devices.leftMotor.setPercent(0);
-        Devices.rightMotor.setPercent(0); 
+        Devices.rightMotor.setPercent(0);
         setShooterVolt(shooterSpeed);
     }
 
-
-    public void shooterInfo(){
+    public void shooterInfo() {
         NtHelper.setString(NtKeys.SHOOTER_STATE, getState());
         NtHelper.setDouble(NtKeys.SHOOTER_SPEED, shooterMotor.getSpeed());
         NtHelper.setDouble(NtKeys.DESIRED_SHOOTER_SPEED, shooterSpeed);

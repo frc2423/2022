@@ -1,9 +1,8 @@
 package frc.robot.auto;
-import frc.robot.util.stateMachine.InitState;
-import frc.robot.util.stateMachine.RunState;
+
+import frc.robot.util.stateMachine.State;
+import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.stateMachine.StateMachine;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.util.NtHelper;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
 import frc.robot.util.DriveHelper;
@@ -13,165 +12,124 @@ import frc.robot.util.Rotation;
  * Intake cargo
  * Aim and shoot both cargos at upper hub (testing necessary)
  * Move backwards to taxi
- */ 
+ */
 
-public class ShootTwoShootOne extends StateMachine{
-    //TODO: Values subject to change upon completed trajcetory integration
-    private Timer timer = new Timer();
+public class ShootTwoShootOne extends StateMachine {
+    // TODO: Values subject to change upon completed trajcetory integration
     private double angle;
-    private Rotation rotate;
+    private Rotation rotate = new Rotation(.1, .3, angle - 5, angle + 5);
     private int rotations = 0;
 
     public ShootTwoShootOne() {
-        super("Stop");
+        super("CargoAdvance");
     }
 
-    @RunState(name = "Stop")
-    public void stopState(){
-        setState("CargoAdvance");
-    }
-
-    @InitState(name = "CargoAdvance")
-    public void CargoAdvanceInit (){
-        Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
-        Subsystems.follower.resetPosition();
-    }
-
-    @RunState(name = "CargoAdvance")
-    public void CargoAdvanceRun(){
+    @State(name = "CargoAdvance")
+    public void CargoAdvanceRun(StateContext ctx) {
+        if (ctx.isInit()) {
+            Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
+        }
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
             setState("Intake");
         }
-    
+
     }
 
-    @InitState(name = "Intake")
-    public void IntakeInit (){
-        Subsystems.intake.goDown();
-        timer.reset ();
-        timer.start ();
-    }
-
-    @RunState(name = "Intake")
-    public void Intake (){
-        if (timer.get() > 2){
+    @State(name = "Intake")
+    public void Intake(StateContext ctx) {
+        if (ctx.isInit()) {
+            Subsystems.intake.goDown();
+        }
+        if (ctx.getTime() > 2) {
             Subsystems.intake.goUp();
             setState("Rotate");
         }
-        //Seconds; subject to change
-
     }
 
-    @InitState(name = "Rotate")
-    public void rotateInit(){
-        angle = Devices.gyro.getAngle() + 180;
-        rotate = new Rotation(.1, .3, angle - 5, angle + 5);
-    }
-
-    @RunState(name = "Rotate")
-    public void rotate(){
+    @State(name = "Rotate")
+    public void rotate(StateContext ctx) {
+        if (ctx.isInit()) {
+            angle = Devices.gyro.getAngle() + 180;
+        }
         double rotationSpeed = rotate.calculate(Devices.gyro.getAngle());
         double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
         Devices.leftMotor.setPercent(leftSpeed);
-        Devices.rightMotor.setPercent(rightSpeed); 
-        if(rotate.isDone(Devices.gyro.getAngle())){
-            if(rotations == 0){
+        Devices.rightMotor.setPercent(rightSpeed);
+        if (rotate.isDone(Devices.gyro.getAngle())) {
+            if (rotations == 0) {
                 setState("ShooterAdvance");
-            } else if (rotations == 1){
+            } else if (rotations == 1) {
                 setState("SecondAdvanceCargo");
             }
         }
     }
 
-    @InitState(name = "ShooterAdvance")
-    public void ShooterAdvanceInit (){
-        Subsystems.follower.setTrajectory("BottomCargoToHub");
-        Subsystems.follower.resetPosition();
-    }
-
-    @RunState(name = "ShooterAdvance")
-    public void ShooterAdvance (){
-        Subsystems.follower.follow ();
-        if (Subsystems.follower.isDone()){
-            setState ("ShootTwo");
+    @State(name = "ShooterAdvance")
+    public void ShooterAdvance(StateContext ctx) {
+        if (ctx.isInit()) {
+            Subsystems.follower.setTrajectory("BottomCargoToHub");
+            Subsystems.follower.resetPosition();
+        }
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
+            setState("ShootTwo");
         }
 
     }
 
-    @InitState(name = "ShootTwo")
-    public void ShootTwoInit (){
-        timer.reset();
-        timer.start();
-    }
-
-    @RunState(name = "ShootTwo")
-    public void ShootTwo(){
+    @State(name = "ShootTwo")
+    public void ShootTwo(StateContext ctx) {
         Subsystems.shooter.shoot();
-        if (timer.get() > 4){
-            setState ("TaxiBack");
+        if (ctx.getTime() > 4) {
+            setState("TaxiBack");
         }
-        //Seconds subject to change upon testing
-    
     }
 
-    @InitState(name = "BackUp")
-    public void TaxiBackInit (){
-        Subsystems.follower.setTrajectory ("BottomHubBackUp");
-        Subsystems.follower.resetPosition();
-    }
-
-    @RunState(name = "TaxiBack")
-    public void TaxiBack (){
-        Subsystems.follower.follow ();
-        if (Subsystems.follower.isDone()){
+    @State(name = "TaxiBack")
+    public void TaxiBack(StateContext ctx) {
+        if (ctx.isInit()) {
+            Subsystems.follower.setTrajectory("BottomHubBackUp");
+            Subsystems.follower.resetPosition();
+        }
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
             setState("Rotate");
         }
     }
 
-    @InitState(name = "SecondCargoAdvance")
-    public void initSecondCargoAdvance(){
-        Subsystems.follower.setTrajectory("BottomtarmacToMiddleCargo");
-        Subsystems.follower.resetPosition();
-    }
-
-    @RunState(name = "SecondCargoAdvance")
-    public void secondCargoAdvance(){
-        Subsystems.follower.follow ();
-        if (Subsystems.follower.isDone()){
+    @State(name = "SecondCargoAdvance")
+    public void secondCargoAdvance(StateContext ctx) {
+        if (ctx.isInit()) {
+            Subsystems.follower.setTrajectory("BottomtarmacToMiddleCargo");
+            Subsystems.follower.resetPosition();
+        }
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
             setState("SecondShooterAdvance");
         }
     }
 
-    @InitState(name = "SecondShooterAdvance")
-    public void initSecondShooterAdvance(){
-        Subsystems.follower.setTrajectory("MiddleCargoToBottomHub");
-        Subsystems.follower.resetPosition();
-    }
-
-    @RunState(name = "SecondShooterAdvance")
-    public void secondShooterAdvance(){
-        Subsystems.follower.follow ();
-        if (Subsystems.follower.isDone()){
-            setState ("ShootOne");
+    @State(name = "SecondShooterAdvance")
+    public void secondShooterAdvance(StateContext ctx) {
+        if (ctx.isInit()) {
+            Subsystems.follower.setTrajectory("MiddleCargoToBottomHub");
+            Subsystems.follower.resetPosition();
+        }
+        Subsystems.follower.follow();
+        if (Subsystems.follower.isDone()) {
+            setState("ShootOne");
         }
     }
 
-    @InitState(name = "ShootOne")
-    public void initShootOne(){
-        timer.reset();
-        timer.start();
-    }
-
-    @RunState(name = "ShootOne")
-    public void ShootOne(){
+    @State(name = "ShootOne")
+    public void ShootOne(StateContext ctx) {
         Subsystems.shooter.shoot();
-        if (timer.get() > 4){
-        }
-        //Seconds subject to change upon testing
-    
-    }
+        if (ctx.getTime() > 4) {
 
+        }
+        // Seconds subject to change upon testing
+    }
 }

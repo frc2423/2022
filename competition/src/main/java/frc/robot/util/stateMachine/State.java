@@ -9,6 +9,6 @@ import java.lang.annotation.ElementType;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 
-public @interface RunState {
+public @interface State {
   public String name();
 }

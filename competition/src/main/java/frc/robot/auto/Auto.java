@@ -2,8 +2,8 @@ package frc.robot.auto;
 
 import frc.robot.constants.NtKeys;
 import frc.robot.util.NtHelper;
-import frc.robot.util.stateMachine.InitState;
-import frc.robot.util.stateMachine.RunState;
+import frc.robot.util.stateMachine.State;
+import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.stateMachine.StateMachine;
 
 public class Auto extends StateMachine {
@@ -16,9 +16,8 @@ public class Auto extends StateMachine {
     StateMachine shootTwoAndShootOne;
     StateMachine testAuto;
 
-    
-    public Auto(){
-        super("init");
+    public Auto() {
+        super("run");
         taxi = new Taxi();
         shootOneAndTaxi = new ShootOneAndTaxi();
         shootTwoTaxi = new ShootTwoTaxi();
@@ -28,7 +27,7 @@ public class Auto extends StateMachine {
         NtHelper.setString(NtKeys.AUTO_MODE_NAME, "shootTwoTaxi");
     }
 
-    public void getAuto(){
+    public void getAuto() {
         String name = NtHelper.getString(NtKeys.AUTO_MODE_NAME, "taxi");
         // selectedAutonomous = testAuto;
         switch (name) {
@@ -53,19 +52,16 @@ public class Auto extends StateMachine {
         }
     }
 
-    @RunState(name = "init")
-    public void runInit(){
+    public void restart() {
         setState("run");
     }
 
-    @InitState(name = "run")
-    public void initRun(){
-        getAuto();
-        selectedAutonomous.setState(selectedAutonomous.getDefaultState());
-    }
-
-    @RunState(name = "run")
-    public void runRun(){
+    @State(name = "run")
+    public void runState(StateContext ctx) {
+        if (ctx.isInit()) {
+            getAuto();
+            selectedAutonomous.setState(selectedAutonomous.getDefaultState());
+        }
         selectedAutonomous.run();
     }
 }
