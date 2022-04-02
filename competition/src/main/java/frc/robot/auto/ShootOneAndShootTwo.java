@@ -1,6 +1,7 @@
 package frc.robot.auto;
 
 import frc.robot.util.stateMachine.StateMachine;
+import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.Subsystems;
@@ -13,11 +14,13 @@ public class ShootOneAndShootTwo extends StateMachine {
 
     @State(name = "FirstShot")
     public void firstShot(StateContext ctx) {
+        NtHelper.setString("/robot/auto/state", "FirstShot");
         if (ctx.isInit()) {
             Subsystems.follower.setTrajectory("BottomTarmacToCargosToHub");
         }
-        // shooter.shootOne();
-        if (ctx.getTime() > 4) {
+        Subsystems.shooter.shoot();
+        if (ctx.getTime() > 2.5) {
+            Subsystems.shooter.stop();
             setState("CargoAdvance");
         }
         // Seconds subject to change upon testing
@@ -30,6 +33,7 @@ public class ShootOneAndShootTwo extends StateMachine {
             Subsystems.intake.goDown();
         }
         Subsystems.follower.follow();
+        NtHelper.setString("/robot/auto/state", "CargoAdvance");
         if (Subsystems.follower.isDone()) {
             setState("ShootTwo");
         }
@@ -37,11 +41,14 @@ public class ShootOneAndShootTwo extends StateMachine {
 
     @State(name = "ShootTwo")
     public void shootTwo(StateContext ctx) {
+        NtHelper.setString("/robot/auto/state", "ShootTwo");
         if (ctx.isInit()) {
             Subsystems.intake.goUp();
         }
-        // shooter.shootTwo();
-        if (ctx.getTime() > 4) {
+        Subsystems.shooter.shoot();
+
+        if (ctx.getTime() > 3) {
+            Subsystems.shooter.stop();
             setState("TaxiBack");
         }
         // Seconds subject to change upon testing
@@ -50,7 +57,7 @@ public class ShootOneAndShootTwo extends StateMachine {
     @State(name = "TaxiBack")
     public void taxiBack(StateContext ctx) {
         if (ctx.isInit()) {
-            Subsystems.follower.setTrajectory("Taxi4");
+            Subsystems.follower.setTrajectory("Taxi");
             Subsystems.follower.startFollowing();
         }
         Subsystems.follower.follow();

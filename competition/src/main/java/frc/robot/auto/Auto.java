@@ -24,7 +24,7 @@ public class Auto extends StateMachine {
         shootOneAndShootTwo = new ShootOneAndShootTwo();
         shootTwoAndShootOne = new ShootTwoAndShootOne();
         testAuto = new TestAuto();
-        NtHelper.setString(NtKeys.AUTO_MODE_NAME, "shootTwoTaxi");
+        NtHelper.setString(NtKeys.AUTO_MODE_NAME, "shootOneAndShootTwo");
     }
 
     public void getAuto() {
