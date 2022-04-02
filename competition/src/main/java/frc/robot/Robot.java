@@ -98,8 +98,7 @@ public class Robot extends TimedRobot {
 
      
       leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
-      rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
-      
+      rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);      
 
       double[] motorValues = Subsystems.drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
   

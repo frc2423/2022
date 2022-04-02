@@ -15,6 +15,8 @@ import frc.robot.util.Rotation;
  * Move backwards to taxi
  */
 
+ //CAUTION: THIS DOESN'T WORK DO NOT USE
+
 public class ShootTwoShootOne extends StateMachine {
     // TODO: Values subject to change upon completed trajcetory integration
     private double angle;

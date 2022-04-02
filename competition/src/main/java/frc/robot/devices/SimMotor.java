@@ -133,4 +133,6 @@ public class SimMotor implements IMotor {
         encoderSim.setRate(rate);
     }
 
+    public void setBrakeMode(boolean b){}
+
 }

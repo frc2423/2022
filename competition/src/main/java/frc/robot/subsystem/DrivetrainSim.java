@@ -9,10 +9,11 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.LinearSystem;
 import frc.robot.Devices;
+import frc.robot.constants.constants;
 
 public class DrivetrainSim {
 
-    private final LinearSystem<N2, N2, N2> m_drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(1.4125, 0.238, 1.5, 0.3);
+    private final LinearSystem<N2, N2, N2> m_drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(constants.Kv, constants.Ka, constants.KvAngular, constants.KaAngular);
     private final DifferentialDrivetrainSim m_drivetrainSimulator;
 
     public DrivetrainSim(double trackWidth, double wheelRadius) {
