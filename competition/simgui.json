@@ -10,6 +10,11 @@
         "header": {
           "open": true
         }
+      },
+      "SPARK MAX [9]": {
+        "header": {
+          "open": true
+        }
       }
     },
     "PWM Outputs": {
@@ -44,7 +49,7 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\amory\\Downloads\\PathWeaver-main\\PathWeaver-main\\src\\main\\resources\\edu\\wpi\\first\\pathweaver\\2022-field.png",
+        "image": "C:\\Users\\GuestRBE\\Desktop\\rbe\\2022\\field-image\\2022-field.png",
         "traj": {
           "style": "Line"
         },
@@ -58,6 +63,12 @@
     }
   },
   "NetworkTables": {
+    "CameraPublisher": {
+      "open": true
+    },
+    "FMSInfo": {
+      "open": true
+    },
     "LiveWindow": {
       "open": true
     },

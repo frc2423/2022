@@ -160,4 +160,13 @@ public class NeoMotor implements IMotor {
             pidController.setReference(motorValue, motorControlType);
         }
     }
+
+    public void setBrakeMode(boolean brake) {
+        if (brake) {
+            motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        } else {
+            motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        }
+    }
+
 }

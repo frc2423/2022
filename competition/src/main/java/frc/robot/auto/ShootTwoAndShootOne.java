@@ -5,6 +5,8 @@ import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.Subsystems;
 
+//CAUTION: THIS DOESN'T WORK DO NOT USE
+
 public class ShootTwoAndShootOne extends StateMachine {
 
     public ShootTwoAndShootOne() {
@@ -15,6 +17,7 @@ public class ShootTwoAndShootOne extends StateMachine {
     public void CargoAdvance(StateContext ctx) {
         if (ctx.isInit()) {
             Subsystems.follower.setTrajectory("CargoAdvance1");
+            Subsystems.follower.startFollowing();
         }
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
@@ -36,6 +39,7 @@ public class ShootTwoAndShootOne extends StateMachine {
     public void FirstShooterAdvance(StateContext ctx) {
         if (ctx.isInit()) {
             Subsystems.follower.setTrajectory("FirstShooterAdvance");
+            Subsystems.follower.startFollowing();
         }
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
@@ -55,6 +59,7 @@ public class ShootTwoAndShootOne extends StateMachine {
     public void SecondCargoAdvance(StateContext ctx) {
         if (ctx.isInit()) {
             Subsystems.follower.setTrajectory("SecondCargoAdvance");
+            Subsystems.follower.startFollowing();
         }
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {

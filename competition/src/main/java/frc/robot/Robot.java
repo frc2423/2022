@@ -97,8 +97,7 @@ public class Robot extends TimedRobot {
 
      
       leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
-      rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
-      
+      rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);      
 
       double[] motorValues = Subsystems.drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
   
@@ -128,6 +127,7 @@ public class Robot extends TimedRobot {
     Devices.rightMotor.resetEncoder(0);
     Devices.gyro.reset();
     Subsystems.drivetrain.odometryReset(new Pose2d(), Devices.gyro.getRotation());
+    Subsystems.drivetrainSim.setPose(new Pose2d(), Devices.gyro.getRotation());
     Targeting.init();
     Subsystems.climber.calibrate();
     Subsystems.auto.restart();

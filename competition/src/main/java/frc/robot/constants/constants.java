@@ -5,6 +5,8 @@ public class constants {
     public static final double Kv = 2.8626;
     public static final double Ka = 0.34362;
     public static final double Kp = 1.2916; 
+    public static final double KvAngular = 101.18/100;
+    public static final double KaAngular = 20.285/100;
     public static final double gearRatio = 10.7; // 10.7 : 1.0
     public static final double maxSpeedo = 10; // feet per second
 

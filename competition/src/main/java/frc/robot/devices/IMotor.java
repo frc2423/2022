@@ -110,4 +110,6 @@ public interface IMotor {
 
     public double getEncoderCount();
 
+    public void setBrakeMode(boolean brake);
+
 }

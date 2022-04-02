@@ -6,6 +6,7 @@ import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
 import frc.robot.util.DriveHelper;
+import frc.robot.util.NtHelper;
 import frc.robot.util.Rotation;
 
 /* Move towards cargo in straight line
@@ -13,6 +14,8 @@ import frc.robot.util.Rotation;
  * Aim and shoot both cargos at upper hub (testing necessary)
  * Move backwards to taxi
  */
+
+ //CAUTION: THIS DOESN'T WORK DO NOT USE
 
 public class ShootTwoShootOne extends StateMachine {
     // TODO: Values subject to change upon completed trajcetory integration
@@ -28,7 +31,10 @@ public class ShootTwoShootOne extends StateMachine {
     public void CargoAdvanceRun(StateContext ctx) {
         if (ctx.isInit()) {
             Subsystems.follower.setTrajectory("BottomTarmacToBottomCargo");
+            Subsystems.follower.startFollowing();
         }
+        NtHelper.setString("/robot/auto/state", "cargoAdvance");
+
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
             setState("Intake");
@@ -41,6 +47,8 @@ public class ShootTwoShootOne extends StateMachine {
         if (ctx.isInit()) {
             Subsystems.intake.goDown();
         }
+        NtHelper.setString("/robot/auto/state", "instake");
+
         if (ctx.getTime() > 2) {
             Subsystems.intake.goUp();
             setState("Rotate");
@@ -71,7 +79,7 @@ public class ShootTwoShootOne extends StateMachine {
     public void ShooterAdvance(StateContext ctx) {
         if (ctx.isInit()) {
             Subsystems.follower.setTrajectory("BottomCargoToHub");
-            Subsystems.follower.resetPosition();
+            Subsystems.follower.startFollowing();
         }
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
@@ -92,7 +100,7 @@ public class ShootTwoShootOne extends StateMachine {
     public void TaxiBack(StateContext ctx) {
         if (ctx.isInit()) {
             Subsystems.follower.setTrajectory("BottomHubBackUp");
-            Subsystems.follower.resetPosition();
+            Subsystems.follower.startFollowing();
         }
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
@@ -104,7 +112,7 @@ public class ShootTwoShootOne extends StateMachine {
     public void secondCargoAdvance(StateContext ctx) {
         if (ctx.isInit()) {
             Subsystems.follower.setTrajectory("BottomtarmacToMiddleCargo");
-            Subsystems.follower.resetPosition();
+            Subsystems.follower.startFollowing();
         }
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
@@ -116,7 +124,7 @@ public class ShootTwoShootOne extends StateMachine {
     public void secondShooterAdvance(StateContext ctx) {
         if (ctx.isInit()) {
             Subsystems.follower.setTrajectory("MiddleCargoToBottomHub");
-            Subsystems.follower.resetPosition();
+            Subsystems.follower.startFollowing();
         }
         Subsystems.follower.follow();
         if (Subsystems.follower.isDone()) {
@@ -128,6 +136,7 @@ public class ShootTwoShootOne extends StateMachine {
     public void ShootOne(StateContext ctx) {
         Subsystems.shooter.shoot();
         if (ctx.getTime() > 4) {
+            Subsystems.shooter.stop();
 
         }
         // Seconds subject to change upon testing

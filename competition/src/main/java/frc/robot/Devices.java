@@ -67,6 +67,12 @@ public class Devices {
         rightMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
         leftMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
 
+        leftMotor.setBrakeMode(false);
+        leftFollowerMotor.setBrakeMode(false);
+        rightMotor.setBrakeMode(false);
+        rightFollowerMotor.setBrakeMode(false);
+
+
         intakeArmMotor.setPid(.035, 0.00025, 0);
         intakeArmFollowerMotor.setPid(.035, 0.00025, 0);
         intakeArmMotor.setIZone(2);

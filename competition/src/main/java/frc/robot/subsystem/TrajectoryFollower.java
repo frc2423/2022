@@ -51,6 +51,7 @@ public class TrajectoryFollower {
             Devices.leftMotor.resetEncoder(0);
             Devices.rightMotor.resetEncoder(0);
             Subsystems.drivetrain.odometryReset(initialPose, initialPose.getRotation());
+            Subsystems.drivetrainSim.setPose(initialPose, initialPose.getRotation());
             Devices.gyro.setAngle(-initialPose.getRotation().getDegrees());
         }
         Subsystems.drivetrain.setTrajectory("traj", trajectory);
@@ -114,6 +115,7 @@ public class TrajectoryFollower {
         Devices.rightMotor.resetEncoder(0);
         Devices.gyro.reset();
         Subsystems.drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
+        Subsystems.drivetrainSim.setPose(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
     }
 
     public boolean isDone(){
