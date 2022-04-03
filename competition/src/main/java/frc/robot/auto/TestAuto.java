@@ -4,8 +4,6 @@ import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.Subsystems;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import frc.robot.Devices;
 
 public class TestAuto extends StateMachine {
 
@@ -28,6 +26,6 @@ public class TestAuto extends StateMachine {
 
     @State(name = "Stop")
     public void stop() {
-        Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+        Subsystems.drive.setSpeeds(0, 0);
     }
 }

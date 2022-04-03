@@ -11,7 +11,6 @@ import frc.robot.constants.constants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.Targeting;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.util.RateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -32,20 +31,11 @@ public class Robot extends TimedRobot {
     NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, false);
   }
 
-  private void setDrivetrainSpeeds() {
-    // set speeds based on Subsystems.desiredWheelSpeeds
-    double[] motorValues = Subsystems.drivetrain.getMotorValues(Subsystems.desiredWheelSpeeds);
-    Devices.leftMotor.setPercent(motorValues[0]);
-    Devices.rightMotor.setPercent(motorValues[1]);
-  }
-
   @Override
   public void robotPeriodic() {
     if (this.isDisabled()) {
       return;
     }
-
-    setDrivetrainSpeeds();
 
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
         Devices.rightMotor.getDistance());
@@ -53,6 +43,7 @@ public class Robot extends TimedRobot {
     Subsystems.climber.run();
     Subsystems.belt.runStorage();
     Subsystems.intake.runIntake();
+    Subsystems.drive.run();
 
     telemetry();
   }
@@ -107,7 +98,7 @@ public class Robot extends TimedRobot {
       leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
       rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
 
-      Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
+      Subsystems.drive.setSpeeds(leftSpeed, rightSpeed);
     }
 
     if (Devices.controller.getAButton()) {

@@ -11,7 +11,6 @@ import frc.robot.constants.constants;
 import frc.robot.util.DriveHelper;
 import frc.robot.util.Rotation;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 
 /* Move towards cargo in straight line
@@ -59,7 +58,7 @@ public class ShootTwoTaxi extends StateMachine {
 
     @State(name = "Intake")
     public void Intake(StateContext ctx) {
-        Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+        Subsystems.drive.setSpeeds(0, 0);
         if (ctx.getTime() > 1.5) {
             setState("Rotate");
         }
@@ -81,9 +80,8 @@ public class ShootTwoTaxi extends StateMachine {
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
 
-        Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(
-            leftSpeed * Units.feetToMeters(constants.maxSpeedo),
-            rightSpeed * Units.feetToMeters(constants.maxSpeedo));
+        Subsystems.drive.setSpeeds(leftSpeed * Units.feetToMeters(constants.maxSpeedo),
+                rightSpeed * Units.feetToMeters(constants.maxSpeedo));
 
         if (rotate.isDone(angleError)) {
             setState("ShooterAdvance");
@@ -133,7 +131,7 @@ public class ShootTwoTaxi extends StateMachine {
 
     @State(name = "done")
     public void done(StateContext ctx) {
-        Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+        Subsystems.drive.setSpeeds(0, 0);
     }
 
 }

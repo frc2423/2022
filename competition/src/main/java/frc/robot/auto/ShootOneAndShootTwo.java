@@ -7,7 +7,6 @@ import frc.robot.util.Rotation;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
@@ -51,7 +50,7 @@ public class ShootOneAndShootTwo extends StateMachine {
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
 
-        Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(
+        Subsystems.drive.setSpeeds(
                 leftSpeed * Units.feetToMeters(constants.maxSpeedo),
                 rightSpeed * Units.feetToMeters(constants.maxSpeedo));
 

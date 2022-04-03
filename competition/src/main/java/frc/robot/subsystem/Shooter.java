@@ -1,10 +1,8 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
@@ -113,13 +111,13 @@ public class Shooter extends StateMachine {
             double leftSpeed = arcadeSpeeds[0];
             double rightSpeed = arcadeSpeeds[1];
 
-            Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(
-                leftSpeed * Units.feetToMeters(constants.maxSpeedo),
-                rightSpeed * Units.feetToMeters(constants.maxSpeedo));
+            Subsystems.drive.setSpeeds(leftSpeed * Units.feetToMeters(constants.maxSpeedo),
+                    rightSpeed * Units.feetToMeters(constants.maxSpeedo));
             isAimed = rotationSpeed == 0 && Targeting.hasTargets();
 
         } else {
-            Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+            Subsystems.drive.setSpeeds(0, 0);
+
         }
 
         setShooterVolt(shooterSpeed);
@@ -136,7 +134,7 @@ public class Shooter extends StateMachine {
             NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
         }
         kicker();
-        Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+        Subsystems.drive.setSpeeds(0, 0);
         setShooterVolt(shooterSpeed);
     }
 

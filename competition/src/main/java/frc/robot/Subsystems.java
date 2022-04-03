@@ -15,14 +15,12 @@ public class Subsystems {
     public static Climber climber;
     public static Drivetrain drivetrain;
     public static DrivetrainSim drivetrainSim;
+    public static Drive drive;
     public static Intake intake;
     public static Shooter shooter;
     public static TrajectoryFollower follower;
     public static Auto auto;
     public static Belt belt;
-
-    // robot state
-    public static DifferentialDriveWheelSpeeds desiredWheelSpeeds = new DifferentialDriveWheelSpeeds();
 
     static void init() {
         climber = new Climber();
@@ -33,6 +31,7 @@ public class Subsystems {
                 Devices.gyro.getRotation());
         drivetrainSim = new DrivetrainSim(constants.trackWidth,
                 Units.feetToMeters(constants.wheelRadius));
+        drive = new Drive();
         intake = new Intake();
         shooter = new Shooter();
         follower = new TrajectoryFollower(Trajectories.getTrajectories());

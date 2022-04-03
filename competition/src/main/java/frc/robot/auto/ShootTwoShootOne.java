@@ -3,7 +3,6 @@ package frc.robot.auto;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.stateMachine.StateMachine;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
@@ -67,11 +66,10 @@ public class ShootTwoShootOne extends StateMachine {
         double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
-        
-        Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(
-                leftSpeed * Units.feetToMeters(constants.maxSpeedo),
+
+        Subsystems.drive.setSpeeds(leftSpeed * Units.feetToMeters(constants.maxSpeedo),
                 rightSpeed * Units.feetToMeters(constants.maxSpeedo));
-                
+
         if (rotate.isDone(Devices.gyro.getAngle())) {
             if (rotations == 0) {
                 setState("ShooterAdvance");

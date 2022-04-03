@@ -3,8 +3,6 @@ package frc.robot.auto;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import frc.robot.Devices;
 import frc.robot.Subsystems;
 
 public class ShootOneAndTaxi extends StateMachine {
@@ -40,6 +38,6 @@ public class ShootOneAndTaxi extends StateMachine {
 
     @State(name = "done")
     public void done(StateContext ctx) {
-        Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
+        Subsystems.drive.setSpeeds(0, 0);
     }
 }
