@@ -13,6 +13,7 @@ import frc.robot.util.DriveHelper;
 import edu.wpi.first.wpilibj.Timer;
 import java.util.HashMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 
@@ -65,13 +66,9 @@ public class TrajectoryFollower {
     
             Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
             ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(Subsystems.drivetrain.getPose(), desiredPose);
-            double[] motorValues = Subsystems.drivetrain.getMotorValues(refChassisSpeeds);
-
-            Devices.leftMotor.setPercent(motorValues[0]);
-            Devices.rightMotor.setPercent(motorValues[1]);
-
-            NtHelper.setDouble("/robot/auto/leftmotor", motorValues[0]);
-            NtHelper.setDouble("/robot/auto/rightmotor", motorValues[1]);
+            Subsystems.desiredWheelSpeeds = Subsystems.drivetrain.getWheelSpeeds(refChassisSpeeds);
+            // NtHelper.setDouble("/robot/auto/leftmotor", motorValues[0]);
+            // NtHelper.setDouble("/robot/auto/rightmotor", motorValues[1]);
 
         } else if (!isDoneRotating()) {
             rotateToEndHeading();
@@ -105,8 +102,9 @@ public class TrajectoryFollower {
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
 
-        Devices.leftMotor.setPercent(leftSpeed);
-        Devices.rightMotor.setPercent(rightSpeed);
+        Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(
+            leftSpeed * Units.feetToMeters(constants.maxSpeedo),
+            rightSpeed * Units.feetToMeters(constants.maxSpeedo));
     }
 
     public void resetPosition (){

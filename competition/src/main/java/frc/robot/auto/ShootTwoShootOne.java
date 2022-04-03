@@ -3,8 +3,11 @@ package frc.robot.auto;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.stateMachine.StateMachine;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
+import frc.robot.constants.constants;
 import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
 import frc.robot.util.Rotation;
@@ -15,7 +18,7 @@ import frc.robot.util.Rotation;
  * Move backwards to taxi
  */
 
- //CAUTION: THIS DOESN'T WORK DO NOT USE
+//CAUTION: THIS DOESN'T WORK DO NOT USE
 
 public class ShootTwoShootOne extends StateMachine {
     // TODO: Values subject to change upon completed trajcetory integration
@@ -64,8 +67,11 @@ public class ShootTwoShootOne extends StateMachine {
         double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
-        Devices.leftMotor.setPercent(leftSpeed);
-        Devices.rightMotor.setPercent(rightSpeed);
+        
+        Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(
+                leftSpeed * Units.feetToMeters(constants.maxSpeedo),
+                rightSpeed * Units.feetToMeters(constants.maxSpeedo));
+                
         if (rotate.isDone(Devices.gyro.getAngle())) {
             if (rotations == 0) {
                 setState("ShooterAdvance");

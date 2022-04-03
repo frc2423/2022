@@ -24,7 +24,6 @@ public class Robot extends TimedRobot {
 
   private double slowCoefficient = .6;
 
-
   @Override
   public void robotInit() {
     Devices.init(isSimulation());
@@ -33,17 +32,28 @@ public class Robot extends TimedRobot {
     NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, false);
   }
 
+  private void setDrivetrainSpeeds() {
+    // set speeds based on Subsystems.desiredWheelSpeeds
+    double[] motorValues = Subsystems.drivetrain.getMotorValues(Subsystems.desiredWheelSpeeds);
+    Devices.leftMotor.setPercent(motorValues[0]);
+    Devices.rightMotor.setPercent(motorValues[1]);
+  }
+
   @Override
   public void robotPeriodic() {
     if (this.isDisabled()) {
       return;
     }
-    Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
+
+    setDrivetrainSpeeds();
+
+    Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
+        Devices.rightMotor.getDistance());
     Subsystems.shooter.run();
     Subsystems.climber.run();
     Subsystems.belt.runStorage();
     Subsystems.intake.runIntake();
-    
+
     telemetry();
   }
 
@@ -71,41 +81,36 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-
-    //Targeting Code
+    // Targeting Code
     if (Devices.controller.getRightTriggerAxis() > 0.2) {
       Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
       Subsystems.shooter.shoot();
     } else if (Devices.controller.getLeftTriggerAxis() > 0.2) {
       Subsystems.shooter.setAuto(false);
       Subsystems.shooter.shoot(false);
-    }
-    else {
+    } else {
       Subsystems.shooter.stop();
-      if (Devices.controller.getRightBumper()){
+      if (Devices.controller.getRightBumper()) {
         slowCoefficient = .8;
       } else {
         slowCoefficient = .6;
       }
-      double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX())) * slowCoefficient;
+      double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX()))
+          * slowCoefficient;
       double ySpeed = speedLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getLeftY()));
-  
+
       double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
 
       double leftSpeed;
       double rightSpeed;
 
-     
       leftSpeed = arcadeSpeeds[0] * Units.feetToMeters(constants.maxSpeedo);
-      rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);      
+      rightSpeed = arcadeSpeeds[1] * Units.feetToMeters(constants.maxSpeedo);
 
-      double[] motorValues = Subsystems.drivetrain.getMotorValues(new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed));
-  
-      Devices.leftMotor.setPercent(motorValues[0]);
-      Devices.rightMotor.setPercent(motorValues[1]);
+      Subsystems.desiredWheelSpeeds = new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
     }
 
-    if (Devices.controller.getAButton()){
+    if (Devices.controller.getAButton()) {
       Subsystems.intake.goDown();
     } else if (Devices.controller.getYButtonPressed() && Devices.controller.getStartButton()) {
       Subsystems.intake.unCalibrate();
@@ -117,7 +122,7 @@ public class Robot extends TimedRobot {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "down");
     } else if (Devices.climbController.getYButtonPressed()) {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "up");
-    } else if (Devices.climbController.getStartButton() && Devices.climbController.getBackButton()){
+    } else if (Devices.climbController.getStartButton() && Devices.climbController.getBackButton()) {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "manual");
     }
   }
@@ -135,14 +140,14 @@ public class Robot extends TimedRobot {
   }
 
   public void telemetry() {
-    NtHelper.setDouble (NtKeys.LEFT_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
-    NtHelper.setDouble (NtKeys.RIGHT_INTAKE_POSITION, Devices.intakeArmFollowerMotor.getDistance());
-    NtHelper.setDouble(NtKeys.GYRO_ANGLE, Devices.gyro.getAngle());  
+    NtHelper.setDouble(NtKeys.LEFT_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
+    NtHelper.setDouble(NtKeys.RIGHT_INTAKE_POSITION, Devices.intakeArmFollowerMotor.getDistance());
+    NtHelper.setDouble(NtKeys.GYRO_ANGLE, Devices.gyro.getAngle());
 
     NtHelper.setString(NtKeys.SVG_ALLIANCE_COLOR, DriverStation.getAlliance().toString());
-    NtHelper.setDouble(NtKeys.SVG_ROTATIONS_PER_SECOND, Devices.leftMotor.getSpeed()/(2 * Math.PI * Units.inchesToMeters(3)));
-    NtHelper.setDouble (NtKeys.SVG_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
-
+    NtHelper.setDouble(NtKeys.SVG_ROTATIONS_PER_SECOND,
+        Devices.leftMotor.getSpeed() / (2 * Math.PI * Units.inchesToMeters(3)));
+    NtHelper.setDouble(NtKeys.SVG_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
 
     Subsystems.shooter.shooterInfo();
     Subsystems.climber.climberInfo();
