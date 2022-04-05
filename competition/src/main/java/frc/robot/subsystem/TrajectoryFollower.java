@@ -17,7 +17,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 
 public class TrajectoryFollower {
-    private Timer timer = new Timer ();
+    private Timer timer = new Timer();
     private Trajectory trajectory;
     private final RamseteController m_ramseteController = new RamseteController();
     // private Rotation rotate = new Rotation(.15, .3, 5, 150);
@@ -35,15 +35,15 @@ public class TrajectoryFollower {
         timer.start();
     }
 
-    public void addTrajectory(String name, Trajectory trajectoryName){
+    public void addTrajectory(String name, Trajectory trajectoryName) {
         trajectoryMap.put(name, trajectoryName);
     }
 
-    public void setTrajectory (String name){
+    public void setTrajectory(String name) {
         setTrajectory(name, true);
     }
 
-    public void setTrajectory (String name, boolean moveToStart){
+    public void setTrajectory(String name, boolean moveToStart) {
         NtHelper.setString("/robot/auto/currTrajectory", name);
         trajectory = trajectoryMap.get(name);
         if (moveToStart) {
@@ -55,23 +55,21 @@ public class TrajectoryFollower {
             Devices.gyro.setAngle(-initialPose.getRotation().getDegrees());
         }
         Subsystems.drivetrain.setTrajectory("traj", trajectory);
-        
+
     }
 
-    public void follow (){
+    public void follow() {
         if (timer.get() < trajectory.getTotalTimeSeconds()) {
             var currTime = timer.get();
             var desiredPose = trajectory.sample(currTime);
-    
-            Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(), Devices.rightMotor.getDistance());
-            ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(Subsystems.drivetrain.getPose(), desiredPose);
-            double[] motorValues = Subsystems.drivetrain.getMotorValues(refChassisSpeeds);
 
-            Devices.leftMotor.setPercent(motorValues[0]);
-            Devices.rightMotor.setPercent(motorValues[1]);
-
-            NtHelper.setDouble("/robot/auto/leftmotor", motorValues[0]);
-            NtHelper.setDouble("/robot/auto/rightmotor", motorValues[1]);
+            Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
+                    Devices.rightMotor.getDistance());
+            ChassisSpeeds refChassisSpeeds = m_ramseteController.calculate(Subsystems.drivetrain.getPose(),
+                    desiredPose);
+            Subsystems.drive.setSpeeds(Subsystems.drivetrain.getWheelSpeeds(refChassisSpeeds));
+            // NtHelper.setDouble("/robot/auto/leftmotor", motorValues[0]);
+            // NtHelper.setDouble("/robot/auto/rightmotor", motorValues[1]);
 
         } else if (!isDoneRotating()) {
             rotateToEndHeading();
@@ -87,14 +85,14 @@ public class TrajectoryFollower {
     }
 
     public boolean isDoneRotating() {
-        var lastState = trajectory.getStates().get( trajectory.getStates().size() - 1);
+        var lastState = trajectory.getStates().get(trajectory.getStates().size() - 1);
         var angle = -lastState.poseMeters.getRotation().getDegrees();
         double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
         return rotate.isDone(angleError);
     }
 
     public void rotateToEndHeading() {
-        var lastState = trajectory.getStates().get( trajectory.getStates().size() - 1);
+        var lastState = trajectory.getStates().get(trajectory.getStates().size() - 1);
         var angle = -lastState.poseMeters.getRotation().getDegrees();
 
         double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
@@ -105,25 +103,25 @@ public class TrajectoryFollower {
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
 
-        Devices.leftMotor.setPercent(leftSpeed);
-        Devices.rightMotor.setPercent(rightSpeed);
+        Subsystems.drive.setSpeeds(leftSpeed * Units.feetToMeters(constants.maxSpeedo),
+                rightSpeed * Units.feetToMeters(constants.maxSpeedo));
     }
 
-    public void resetPosition (){
+    public void resetPosition() {
         timer.stop();
         Devices.leftMotor.resetEncoder(0);
         Devices.rightMotor.resetEncoder(0);
         Devices.gyro.reset();
-        Subsystems.drivetrain.odometryReset(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
-        Subsystems.drivetrainSim.setPose(new Pose2d(0,0,Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
+        Subsystems.drivetrain.odometryReset(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
+        Subsystems.drivetrainSim.setPose(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), Devices.gyro.getRotation());
     }
 
-    public boolean isDone(){
-        // Maybe we should also use  m_ramseteController.atReference()
-        if (timer.get() > trajectory.getTotalTimeSeconds() && isDoneRotating()){
+    public boolean isDone() {
+        // Maybe we should also use m_ramseteController.atReference()
+        if (timer.get() > trajectory.getTotalTimeSeconds() && isDoneRotating()) {
             return true;
         }
         return false;
     }
-    
+
 }

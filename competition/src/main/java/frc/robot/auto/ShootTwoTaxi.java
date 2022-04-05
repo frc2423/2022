@@ -7,6 +7,7 @@ import frc.robot.util.NtHelper;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
+import frc.robot.constants.constants;
 import frc.robot.util.DriveHelper;
 import frc.robot.util.Rotation;
 import edu.wpi.first.math.MathUtil;
@@ -57,8 +58,7 @@ public class ShootTwoTaxi extends StateMachine {
 
     @State(name = "Intake")
     public void Intake(StateContext ctx) {
-        Devices.leftMotor.setPercent(0);
-        Devices.rightMotor.setPercent(0);
+        Subsystems.drive.setSpeeds(0, 0);
         if (ctx.getTime() > 1.5) {
             setState("Rotate");
         }
@@ -79,8 +79,10 @@ public class ShootTwoTaxi extends StateMachine {
         double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
-        Devices.leftMotor.setPercent(leftSpeed);
-        Devices.rightMotor.setPercent(rightSpeed);
+
+        Subsystems.drive.setSpeeds(leftSpeed * Units.feetToMeters(constants.maxSpeedo),
+                rightSpeed * Units.feetToMeters(constants.maxSpeedo));
+
         if (rotate.isDone(angleError)) {
             setState("ShooterAdvance");
         }
@@ -129,8 +131,7 @@ public class ShootTwoTaxi extends StateMachine {
 
     @State(name = "done")
     public void done(StateContext ctx) {
-        Devices.leftMotor.setPercent(0);
-        Devices.rightMotor.setPercent(0);
+        Subsystems.drive.setSpeeds(0, 0);
     }
 
 }

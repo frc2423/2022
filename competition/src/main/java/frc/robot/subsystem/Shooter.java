@@ -1,9 +1,12 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Devices;
+import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
+import frc.robot.constants.constants;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
@@ -107,12 +110,14 @@ public class Shooter extends StateMachine {
             double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
             double leftSpeed = arcadeSpeeds[0];
             double rightSpeed = arcadeSpeeds[1];
-            Devices.leftMotor.setPercent(leftSpeed);
-            Devices.rightMotor.setPercent(rightSpeed);
+
+            Subsystems.drive.setSpeeds(leftSpeed * Units.feetToMeters(constants.maxSpeedo),
+                    rightSpeed * Units.feetToMeters(constants.maxSpeedo));
             isAimed = rotationSpeed == 0 && Targeting.hasTargets();
+
         } else {
-            Devices.leftMotor.setPercent(0);
-            Devices.rightMotor.setPercent(0);
+            Subsystems.drive.setSpeeds(0, 0);
+
         }
 
         setShooterVolt(shooterSpeed);
@@ -129,8 +134,7 @@ public class Shooter extends StateMachine {
             NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
         }
         kicker();
-        Devices.leftMotor.setPercent(0);
-        Devices.rightMotor.setPercent(0);
+        Subsystems.drive.setSpeeds(0, 0);
         setShooterVolt(shooterSpeed);
     }
 

@@ -4,7 +4,6 @@ import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.Subsystems;
-import frc.robot.Devices;
 
 public class TestAuto extends StateMachine {
 
@@ -27,7 +26,6 @@ public class TestAuto extends StateMachine {
 
     @State(name = "Stop")
     public void stop() {
-        Devices.leftMotor.setPercent(0);
-        Devices.rightMotor.setPercent(0);
+        Subsystems.drive.setSpeeds(0, 0);
     }
 }

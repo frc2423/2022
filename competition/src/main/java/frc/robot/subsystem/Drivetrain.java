@@ -39,6 +39,10 @@ public class Drivetrain {
         return odometryFinder.getPoseMeters();
     }
 
+    public DifferentialDriveWheelSpeeds getWheelSpeeds(ChassisSpeeds refChassisSpeeds) {
+        return kinematics.toWheelSpeeds(refChassisSpeeds);
+    }
+
     public double[] getMotorValues(ChassisSpeeds refChassisSpeeds) {
         var wheelSpeeds = kinematics.toWheelSpeeds(refChassisSpeeds);
         return getMotorValues(wheelSpeeds);

@@ -49,7 +49,6 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\GuestRBE\\Desktop\\rbe\\2022\\field-image\\2022-field.png",
         "traj": {
           "style": "Line"
         },
@@ -82,10 +81,7 @@
       "auto": {
         "open": true
       },
-      "open": true,
-      "shooter": {
-        "open": true
-      }
+      "open": true
     }
   }
 }

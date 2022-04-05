@@ -4,6 +4,7 @@ import frc.robot.constants.constants;
 import frc.robot.subsystem.*;
 import frc.robot.auto.Auto;
 import frc.robot.auto.Trajectories;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.Targeting;
 
@@ -14,6 +15,7 @@ public class Subsystems {
     public static Climber climber;
     public static Drivetrain drivetrain;
     public static DrivetrainSim drivetrainSim;
+    public static Drive drive;
     public static Intake intake;
     public static Shooter shooter;
     public static TrajectoryFollower follower;
@@ -29,6 +31,7 @@ public class Subsystems {
                 Devices.gyro.getRotation());
         drivetrainSim = new DrivetrainSim(constants.trackWidth,
                 Units.feetToMeters(constants.wheelRadius));
+        drive = new Drive();
         intake = new Intake();
         shooter = new Shooter();
         follower = new TrajectoryFollower(Trajectories.getTrajectories());
