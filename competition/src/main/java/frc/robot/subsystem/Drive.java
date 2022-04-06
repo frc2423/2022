@@ -1,10 +1,15 @@
 package frc.robot.subsystem;
 
 import frc.robot.Subsystems;
+import frc.robot.util.NtHelper;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.Devices;
 
 public class Drive {
+
+    private PIDController leftPid = new PIDController(1, 0, 0);
+    private PIDController rightPid = new PIDController(1, 0, 0);
 
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds();
 
@@ -21,8 +26,13 @@ public class Drive {
     }
 
     public void run() {
-        double[] motorValues = Subsystems.drivetrain.getMotorValues(wheelSpeeds);
-        Devices.leftMotor.setPercent(motorValues[0]);
-        Devices.rightMotor.setPercent(motorValues[1]);
+        double[] feedForward = Subsystems.drivetrain.getMotorValues(wheelSpeeds);
+
+        double leftFeedback = leftPid.calculate(Devices.leftMotor.getSpeed(), wheelSpeeds.leftMetersPerSecond);
+        double rightFeedback = rightPid.calculate(Devices.rightMotor.getSpeed(), wheelSpeeds.rightMetersPerSecond);
+
+        Devices.leftMotor.setSpeed(feedForward[0] );
+        Devices.rightMotor.setSpeed(feedForward[1]);
     }
+
 }
