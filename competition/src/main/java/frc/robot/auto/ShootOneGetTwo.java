@@ -11,11 +11,12 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
 
-public class ShootOneAndShootTwo extends StateMachine {
+public class ShootOneGetTwo extends StateMachine {
+    
     private double angle;
     private Rotation rotate = new Rotation(.15, .3, 5, 150);;
 
-    public ShootOneAndShootTwo() {
+    public ShootOneGetTwo() {
         super("FirstShot");
     }
 
@@ -23,6 +24,7 @@ public class ShootOneAndShootTwo extends StateMachine {
     public void firstShot(StateContext ctx) {
         NtHelper.setString("/robot/auto/state", "FirstShot");
         Subsystems.shooter.shoot();
+
         if (ctx.getTime() > 2.5) {
             Subsystems.shooter.stop();
             setState("rotate");
@@ -40,6 +42,7 @@ public class ShootOneAndShootTwo extends StateMachine {
             Subsystems.intake.goUp();
             angle = Devices.gyro.getAngle()-180;
         }
+
         double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
         double rotationSpeed = rotate.calculate(angleError);
         double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
@@ -47,46 +50,62 @@ public class ShootOneAndShootTwo extends StateMachine {
         double rightSpeed = arcadeSpeeds[1];
         Devices.leftMotor.setPercent(leftSpeed);
         Devices.rightMotor.setPercent(rightSpeed);
+
         if (rotate.isDone(angleError)) {
-            setState("CargoAdvance");
+            setState("get");
         }
     }
 
-    @State(name = "CargoAdvance")
-    public void cargoAdvance(StateContext ctx) {
-        if (ctx.isInit()) {
-            Subsystems.follower.setTrajectory("BottomTarmacToCargosToHub");
+    @State(name = "get")
+    public void get(StateContext ctx){
+        if (ctx.isInit()){
+            Subsystems.follower.setTrajectory("GoHummusPlayer"); // exept its the correct trajectory
             Subsystems.follower.startFollowing();
             Subsystems.intake.goDown();
         }
+
         Subsystems.follower.follow();
-        NtHelper.setString("/robot/auto/state", "CargoAdvance");
+        NtHelper.setString("/robot/auto/state", "GoHummusPlayer");
+        
         if (Subsystems.follower.isDone()) {
-            setState("ShootTwo");
+            setState("rotateTwo");
         }
     }
 
-    @State(name = "ShootTwo")
-    public void shootTwo(StateContext ctx) {
-        NtHelper.setString("/robot/auto/state", "ShootTwo");
+    @State(name = "rotateTwo")
+    public void rotateTwo(StateContext ctx) {
         if (ctx.isInit()) {
             Subsystems.intake.goUp();
+            angle = Devices.gyro.getAngle()-180;
         }
-        Subsystems.shooter.shoot();
 
-        if (ctx.getTime() > 3) {
-            Subsystems.shooter.stop();
-            setState("TaxiBack");
+        double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
+        double rotationSpeed = rotate.calculate(angleError);
+        double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
+        double leftSpeed = arcadeSpeeds[0];
+        double rightSpeed = arcadeSpeeds[1];
+        Devices.leftMotor.setPercent(leftSpeed);
+        Devices.rightMotor.setPercent(rightSpeed);
+
+        if (rotate.isDone(angleError)) {
+            setState("return");
         }
-        // Seconds subject to change upon testing
     }
 
-    @State(name = "TaxiBack")
-    public void taxiBack(StateContext ctx) {
-        if (ctx.isInit()) {
-            Subsystems.follower.setTrajectory("Taxi");
+    @State(name = "return")
+    public void returnHome(StateContext ctx){
+        if (ctx.isInit()){
+            Subsystems.follower.setTrajectory("HPToHome"); // exept its the correct trajectory
             Subsystems.follower.startFollowing();
+            Subsystems.intake.goDown();
         }
+
         Subsystems.follower.follow();
+        NtHelper.setString("/robot/auto/state", "HPToHome");
+        
+        if (Subsystems.follower.isDone()) {
+         //   setState("rotateTwo");
+        }
     }
+
 }

@@ -24,7 +24,8 @@ public class Trajectories {
 
         trajectoryUploader("TestStraightPath", false, 2, 1);
         trajectoryUploader("TestCurvyPath", false, 2, 1);
-
+        trajectoryUploader("GoHummusPlayer", false, 2, 1);
+        trajectoryUploader("HPToHome", false, 2, 1);
 
         return trajectoryKeeper;  
     }
