@@ -5,6 +5,7 @@ import frc.robot.util.NtHelper;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.Devices;
+import frc.robot.Robot;
 
 public class Drive {
 
@@ -31,8 +32,13 @@ public class Drive {
         double leftFeedback = leftPid.calculate(Devices.leftMotor.getSpeed(), wheelSpeeds.leftMetersPerSecond);
         double rightFeedback = rightPid.calculate(Devices.rightMotor.getSpeed(), wheelSpeeds.rightMetersPerSecond);
 
-        Devices.leftMotor.setSpeed(feedForward[0] );
-        Devices.rightMotor.setSpeed(feedForward[1]);
+        // NtHelper - print out actual left value
+        NtHelper.setDouble("/robot/PIDControllers/Actual", Devices.leftMotor.getSpeed());
+        NtHelper.setDouble("/robot/PIDControllers/Desired", wheelSpeeds.leftMetersPerSecond);
+        // NtHelper - print desired left value
+         
+        Devices.leftMotor.setPercent(feedForward[0] + leftFeedback);
+        Devices.rightMotor.setPercent(feedForward[1] + rightFeedback);
     }
 
 }
