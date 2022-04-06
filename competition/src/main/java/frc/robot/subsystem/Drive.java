@@ -5,12 +5,11 @@ import frc.robot.util.NtHelper;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import frc.robot.Devices;
-import frc.robot.Robot;
 
 public class Drive {
 
-    private PIDController leftPid = new PIDController(1, 0, 0);
-    private PIDController rightPid = new PIDController(1, 0, 0);
+    private PIDController leftPid = new PIDController(0.001, 0, 0.001);
+    private PIDController rightPid = new PIDController(0.001, 0, 0.001);
 
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds();
 
