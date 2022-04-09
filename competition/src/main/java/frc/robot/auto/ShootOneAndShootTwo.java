@@ -14,7 +14,7 @@ import frc.robot.constants.constants;
 
 public class ShootOneAndShootTwo extends StateMachine {
     private double angle;
-    private Rotation rotate = new Rotation(.15, .3, 5, 150);;
+    private Rotation rotate = new Rotation(.2, .35, 5, 150);
 
     public ShootOneAndShootTwo() {
         super("FirstShot");
@@ -24,7 +24,7 @@ public class ShootOneAndShootTwo extends StateMachine {
     public void firstShot(StateContext ctx) {
         NtHelper.setString("/robot/auto/state", "FirstShot");
         Subsystems.shooter.shoot();
-        if (ctx.getTime() > 2.5) {
+        if (ctx.getTime() > 2) {
             Subsystems.shooter.stop();
             setState("rotate");
         }
@@ -78,7 +78,7 @@ public class ShootOneAndShootTwo extends StateMachine {
         }
         Subsystems.shooter.shoot();
 
-        if (ctx.getTime() > 3) {
+        if (ctx.getTime() > 2) {
             Subsystems.shooter.stop();
             setState("TaxiBack");
         }

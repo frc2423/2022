@@ -49,6 +49,7 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
+        "image": "C:\\Users\\amory\\Documents\\repos\\kwarqs\\2022\\field-image\\2022-field.png",
         "traj": {
           "style": "Line"
         },

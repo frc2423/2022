@@ -22,7 +22,7 @@ public class TrajectoryFollower {
     private final RamseteController m_ramseteController = new RamseteController();
     // private Rotation rotate = new Rotation(.15, .3, 5, 150);
 
-    private Rotation rotate = new Rotation(.1, .3, 5, 150);
+    private Rotation rotate = new Rotation(.2, .35, 5, 150);
 
     private HashMap<String, Trajectory> trajectoryMap;
 
