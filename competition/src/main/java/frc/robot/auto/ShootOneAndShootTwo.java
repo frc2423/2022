@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Devices;
 import frc.robot.Subsystems;
+import frc.robot.constants.constants;
 
 public class ShootOneAndShootTwo extends StateMachine {
     private double angle;
@@ -45,8 +46,11 @@ public class ShootOneAndShootTwo extends StateMachine {
         double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
         double leftSpeed = arcadeSpeeds[0];
         double rightSpeed = arcadeSpeeds[1];
-        Devices.leftMotor.setPercent(leftSpeed);
-        Devices.rightMotor.setPercent(rightSpeed);
+
+        Subsystems.drive.setSpeeds(
+                leftSpeed * Units.feetToMeters(constants.maxSpeedo),
+                rightSpeed * Units.feetToMeters(constants.maxSpeedo));
+
         if (rotate.isDone(angleError)) {
             setState("CargoAdvance");
         }

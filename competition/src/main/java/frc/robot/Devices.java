@@ -85,5 +85,8 @@ public class Devices {
         Devices.camLed.set(Relay.Value.kForward);
         climberLeftMotor.setPid(.03, 0.0000, 0);
         climberRightMotor.setPid(.03, 0.0000, 0);
+
+        climberLeftMotor.resetEncoder(0);
+        climberRightMotor.resetEncoder(0);
     }
 }
