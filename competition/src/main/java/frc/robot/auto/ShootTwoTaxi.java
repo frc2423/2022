@@ -22,7 +22,7 @@ import edu.wpi.first.math.util.Units;
 public class ShootTwoTaxi extends StateMachine {
     // TODO: Values subject to change upon completed trajcetory integration
     private double angle;
-    private Rotation rotate = new Rotation(.15, .3, 5, 150);
+    private Rotation rotate = new Rotation(.2, .35, 5, 150);
 
     public ShootTwoTaxi() {
         super("IntakeDown");
