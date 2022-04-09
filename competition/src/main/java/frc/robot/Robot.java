@@ -140,6 +140,9 @@ public class Robot extends TimedRobot {
         Devices.leftMotor.getSpeed() / (2 * Math.PI * Units.inchesToMeters(3)));
     NtHelper.setDouble(NtKeys.SVG_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
 
+    NtHelper.setBoolean("/robot/intake/isLeftPressed", Subsystems.intake.isLeftPressed());
+    NtHelper.setBoolean("/robot/intake/isRightPressed", Subsystems.intake.isRightPressed());
+
     Subsystems.shooter.shooterInfo();
     Subsystems.climber.climberInfo();
   }
