@@ -7,13 +7,19 @@
       "open": true
     },
     "robot": {
-      "climber": {
+      "PIDControllers": {
+        "open": true
+      },
+      "auto": {
         "open": true
       },
       "intake": {
         "open": true
       },
-      "open": true
+      "open": true,
+      "shooter": {
+        "open": true
+      }
     },
     "types": {
       "/FMSInfo": "FMSInfo",
@@ -39,6 +45,7 @@
         "CargoAdvance1": {
           "style": "Line"
         },
+        "image": "C:\\Users\\amory\\Documents\\repos\\kwarqs\\2022\\field-image\\2022-field.png",
         "traj": {
           "arrowSize": 6,
           "arrowWeight": 3.0,
@@ -59,6 +66,12 @@
     "Plot <0>": {
       "plots": [
         {
+          "axis": [
+            {
+              "max": 2.0,
+              "min": -2.0
+            }
+          ],
           "height": 671,
           "series": [
             {
@@ -78,6 +91,33 @@
                 1.0
               ],
               "id": "NT:/robot/shooter/desiredshooterspeed"
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "NT:/robot/PIDControllers/Actual"
+            },
+            {
+              "color": [
+                0.7686275243759155,
+                0.30588236451148987,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/robot/PIDControllers/Desired"
+            },
+            {
+              "color": [
+                0.5058823823928833,
+                0.44705885648727417,
+                0.7019608020782471,
+                1.0
+              ],
+              "id": "NT:/robot/PIDControllers/Feedback"
             }
           ]
         }

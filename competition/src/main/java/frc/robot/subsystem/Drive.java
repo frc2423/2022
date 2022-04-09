@@ -38,8 +38,8 @@ public class Drive {
         // double rightFeedback = rightPid.calculate(Devices.rightMotor.getSpeed(), wheelSpeeds.rightMetersPerSecond);
 
         // // NtHelper - print out actual left value
-        // NtHelper.setDouble("/robot/PIDControllers/Actual", Devices.leftMotor.getSpeed());
-        // NtHelper.setDouble("/robot/PIDControllers/Desired", wheelSpeeds.leftMetersPerSecond);
+        NtHelper.setDouble("/robot/PIDControllers/Actual", Devices.leftMotor.getSpeed());
+        NtHelper.setDouble("/robot/PIDControllers/Desired", wheelSpeeds.leftMetersPerSecond);
         // NtHelper.setDouble("/robot/PIDControllers/Feedback", leftFeedback);
         // NtHelper - print desired left value
          
