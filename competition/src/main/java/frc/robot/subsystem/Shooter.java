@@ -38,6 +38,21 @@ public class Shooter extends StateMachine {
         shooterMotor = Devices.shooterMotor;
     }
 
+    public void runShooter() {
+        runFlyWheel();
+        runShooter();
+    }
+
+    // Runs the flywheel based on storage system signals and the operator controller
+    public void runFlyWheel() {
+
+    }
+
+    // Runs kicker based on storage system signals and the operator controller
+    public void runKicker() {
+
+    }
+
     public boolean isShoot() {
         return isShoot;
     }

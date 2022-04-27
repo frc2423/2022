@@ -10,8 +10,8 @@ import frc.robot.devices.*;
 import edu.wpi.first.wpilibj.Relay;
 
 public class Devices {
-    public static XboxController controller = new XboxController(0);
-    public static XboxController climbController = new XboxController(1);
+    public static XboxController driverController = new XboxController(0);
+    public static XboxController operatorController = new XboxController(1);
     public static IGyro gyro;
     // Drivetrain motors
     public static  IMotor leftMotor; // front left

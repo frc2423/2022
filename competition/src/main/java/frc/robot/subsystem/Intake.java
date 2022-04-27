@@ -109,4 +109,14 @@ public class Intake {
         }
     }
 
+    // Handle moving it up and down, setting the isDown variable appropriately
+    public void runPivot() {
+
+    }
+
+    // Decide whether to run the rollers based on isDown and the Storage system state
+    public void runRoller() {
+
+    }
+
 }
