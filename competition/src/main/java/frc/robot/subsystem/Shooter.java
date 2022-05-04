@@ -14,11 +14,15 @@ import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.Targeting;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Shooter extends StateMachine {
     private NeoMotor kickerMotor;
     private NeoMotor shooterMotor;
+    private NeoMotor turretMotor;
+    private NeoMotor hoofMotor;
+    private NeoMotor accelMotor;
 
     private Timer timer = new Timer();
 
@@ -32,10 +36,18 @@ public class Shooter extends StateMachine {
     private boolean autoMode = false;
     private boolean isShoot = false;
 
+    private DigitalInput turretLeftLimitSwitch;
+    private DigitalInput turretRightLimitSwitch;
+
     public Shooter() {
         super("stop");
         kickerMotor = Devices.kickerMotor;
         shooterMotor = Devices.shooterMotor;
+        turretMotor = Devices.turretMotor;
+        hoofMotor = Devices.hoofMotor;
+        accelMotor = Devices.accelerateMotor;
+        turretRightLimitSwitch = Devices.turretRightLimitSwitch;
+        turretLeftLimitSwitch = Devices.turretLeftLimitSwitch;
     }
 
     public boolean isShoot() {
