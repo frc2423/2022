@@ -43,6 +43,14 @@ public class Devices {
     public static BeamBreak intakeBeamBrake = new BeamBreak(new DigitalInput(5)); 
     public static BeamBreak shooterBeamBrake = new BeamBreak(new DigitalInput(6));
 
+    //turret - three motors; turret, accelerator, hoof - two limit switches
+    public static NeoMotor turretMotor = new NeoMotor(13);
+    public static NeoMotor accelerateMotor = new NeoMotor(14);
+    public static NeoMotor hoofMotor = new NeoMotor(15);
+    
+    public static DigitalInput turretLeftLimitSwitch = new DigitalInput(7);
+    public static DigitalInput turretRightLimitSwitch = new DigitalInput(8);
+
     static void init(boolean isSimulation) {
 
         if (!isSimulation) {
