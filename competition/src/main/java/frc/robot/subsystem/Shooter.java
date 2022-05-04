@@ -102,6 +102,32 @@ public class Shooter extends StateMachine {
         }
     }
 
+    @State(name = "find")
+    public void runFind(StateContext ctx) {
+        /* using camera to detect the relective tapes on upper hub
+            if it sees targets goes to aiming
+            if it doesn't see targets- find by moving turret left and right
+
+        */
+    }
+
+    @State(name ="aim") 
+    public void runAim(StateContext ctx) {
+        /**
+         * pointing turret until the desired target is in desirable position then goes to hood adjustments
+         */
+    }
+
+    @State(name="hood") 
+    public void runHood(StateContext ctx) {
+        /**
+         * - get distance from the camera 
+         * - get desired angle for hood
+         * - adjusts angle to desired angle
+         * - goes to rev
+         */
+    }
+
     @State(name = "rev")
     public void runRev(StateContext ctx) {
         boolean isAimed = true;
@@ -129,6 +155,9 @@ public class Shooter extends StateMachine {
 
     @State(name = "shoot")
     public void runShoot(StateContext ctx) {
+        /**
+         * Add code for running accelerator as well as kicker
+         */
         if (ctx.isInit()) {
             isShoot = true;
             NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
@@ -137,6 +166,8 @@ public class Shooter extends StateMachine {
         Subsystems.drive.setSpeeds(0, 0);
         setShooterVolt(shooterSpeed);
     }
+
+
 
     public void shooterInfo() {
         NtHelper.setString(NtKeys.SHOOTER_STATE, getState());
