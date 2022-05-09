@@ -1,7 +1,9 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Devices;
+import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.NtHelper;
@@ -65,12 +67,12 @@ public class Intake {
 
     private void intakeUp(){
         rollerMotor.setPercent(0);
-        if(isLeftPressed() || armMotorLeft.getDistance() > topPosition) {
+        if (isLeftPressed() || armMotorLeft.getDistance() > topPosition) {
             armMotorLeft.setPercent(0);
         } else {
             armMotorLeft.setPercent(0.15); 
         }
-        if(isRightPressed() || armMotor.getDistance() > topPosition) {
+        if (isRightPressed() || armMotor.getDistance() > topPosition) {
             armMotor.setPercent(0);
         } else {
             armMotor.setPercent(0.15); 
@@ -78,7 +80,12 @@ public class Intake {
     }
 
     private void intakeDown(){
-        rollerMotor.setPercent(rollerSpeed);
+        if (Subsystems.counter.getBallCount() == 2){
+            rollerMotor.setPercent(0);
+        }
+        else {
+            rollerMotor.setPercent(rollerSpeed);
+        }
         armMotor.setDistance(bottomPosition);
         armMotorLeft.setDistance(bottomPosition);
     }
