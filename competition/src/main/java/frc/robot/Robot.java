@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
         Devices.rightMotor.getDistance());
-    Subsystems.shooter.run();
+    Subsystems.shooterSubsystem.run();
     Subsystems.climber.run();
     Subsystems.belt.runStorage();
     Subsystems.intake.runIntake();
@@ -74,13 +74,13 @@ public class Robot extends TimedRobot {
 
     // Targeting Code
     if (Devices.controller.getRightTriggerAxis() > 0.2) {
-      Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
-      Subsystems.shooter.shoot();
+      Subsystems.shooterSubsystem.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
+      Subsystems.shooterSubsystem.shoot();
     } else if (Devices.controller.getLeftTriggerAxis() > 0.2) {
-      Subsystems.shooter.setAuto(false);
-      Subsystems.shooter.shoot(false);
+      Subsystems.shooterSubsystem.setAuto(false);
+      Subsystems.shooterSubsystem.shoot(false);
     } else {
-      Subsystems.shooter.stop();
+      Subsystems.shooterSubsystem.stop();
       if (Devices.controller.getRightBumper()) {
         slowCoefficient = .8;
       } else {
