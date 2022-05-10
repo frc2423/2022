@@ -7,7 +7,7 @@ public class Belt {
         if (Devices.controller.getBButton() || Subsystems.cargoRejector.isRejecting()){
             Devices.beltMotor.setPercent(-0.2);
         }
-        else if (Subsystems.intake.isDown() || Subsystems.shooter.isShoot() || Devices.controller.getXButton()){ 
+        else if (Subsystems.intake.isDown() || Subsystems.shooter.isShoot() || Devices.controller.getXButton() || Subsystems.cargoRejector.isForwarding()){ 
             Devices.beltMotor.setPercent(0.2);
         }
         else{ 

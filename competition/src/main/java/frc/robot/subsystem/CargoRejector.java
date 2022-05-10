@@ -48,4 +48,8 @@ public class CargoRejector extends StateMachine {
     public boolean isRejecting(){
         return getState() == "rejection";
     }
+
+    public boolean isForwarding(){
+        return getState() == "forward";
+    }
 }
