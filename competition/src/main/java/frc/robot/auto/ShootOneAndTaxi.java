@@ -14,7 +14,7 @@ public class ShootOneAndTaxi extends StateMachine {
     @State(name = "shooter")
     public void Shooter(StateContext ctx) {
         if (ctx.isInit()) {
-            Subsystems.shooter.setAuto(false);
+            Subsystems.shooterSubsystem.setAuto(false);
         }
         Subsystems.shooter.shoot();
         if (ctx.getTime() > 4) {
