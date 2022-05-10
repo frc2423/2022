@@ -10,7 +10,6 @@ import frc.robot.Devices;
 
 public class CargoRejector extends StateMachine {
 
-    private String allianceColor;
     private String otherColor;
     private AverageFinder otherColorAverage = new AverageFinder(10);
     private double colorConfidenceThreshhold = 0.7;
@@ -18,10 +17,8 @@ public class CargoRejector extends StateMachine {
     public CargoRejector(){
         super("inactive");
         if (DriverStation.getAlliance() == Alliance.Blue) {
-            allianceColor = "blue";
             otherColor = "red";
         } else {
-            allianceColor = "red";
             otherColor = "blue";
         }
     }
@@ -46,5 +43,9 @@ public class CargoRejector extends StateMachine {
         if (ctx.getTime() > 1){
             setState("inactive");
         }
+    }
+
+    public boolean isRejecting(){
+        return getState() == "rejection";
     }
 }
