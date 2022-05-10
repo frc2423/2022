@@ -24,7 +24,7 @@ public class CargoRejector extends StateMachine {
     }
 
     @State (name = "inactive")
-    public void inactive(StateContext ctx) {
+    private void inactive(StateContext ctx) {
         otherColorAverage.addSample(Devices.colourSensor.isColor(otherColor) ? 1 : 0);
         if (otherColorAverage.getAverage() > colorConfidenceThreshhold){
             setState("rejection");
@@ -32,16 +32,16 @@ public class CargoRejector extends StateMachine {
     }
 
     @State (name = "rejection")
-    public void rejection(StateContext ctx) {
+    private void rejection(StateContext ctx) {
         if (ctx.getTime() > 1){
             setState("forward");
         }
     }
 
     @State (name = "forward")
-    public void forward(StateContext ctx) {
+    private void forward(StateContext ctx) {
         if (ctx.getTime() > 1){
-            setState("inactive");
+            setState("inactive");                                     // avocado >~<
         }
     }
 
