@@ -143,6 +143,10 @@ public class Robot extends TimedRobot {
     NtHelper.setBoolean("/robot/intake/isLeftPressed", Subsystems.intake.isLeftPressed());
     NtHelper.setBoolean("/robot/intake/isRightPressed", Subsystems.intake.isRightPressed());
 
+    NtHelper.setBoolean("/robot/intake/shooterBeamBreak", Devices.shooterBeamBrake.get());
+    NtHelper.setBoolean("/robot/intake/intakeBeamBreak", Devices.intakeBeamBrake.get());
+
+
     Subsystems.shooter.shooterInfo();
     Subsystems.climber.climberInfo();
   }
