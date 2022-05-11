@@ -16,6 +16,8 @@ import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.Targeting;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.util.Targeting;
+
 
 public class ShooterSubsystem extends StateMachine {
     private Shooter shooter;
@@ -24,6 +26,9 @@ public class ShooterSubsystem extends StateMachine {
     private Timer timer = new Timer();
     private boolean autoMode = false;
     private double revDuration = 1;
+    //speed, timer
+    private double speedBeltBackwards = 0.2;
+    private double timeBeltBackwards = 0.2;
 
 
     public ShooterSubsystem() {
@@ -46,7 +51,7 @@ public class ShooterSubsystem extends StateMachine {
     public void shoot(boolean isHighGoal) {
         shooter.shoot(isHighGoal);
         if (getState() == "stop") {
-            this.setState("rev");
+            this.setState("hood");
         }
     }
 
@@ -88,6 +93,13 @@ public class ShooterSubsystem extends StateMachine {
          * - adjusts angle to desired angle
          * - goes to rev
          */
+        double distance = Targeting.getDistance();
+
+        if (distance != -1) {
+            double position = distance; //math stuff :> (to figure out later/amory problm :]) 
+            shooter.setHoodfPosition(position);
+            this.setState("rev");
+        }
     }
 
     @State(name = "rev")
@@ -106,6 +118,13 @@ public class ShooterSubsystem extends StateMachine {
         } else {
             Subsystems.drive.setSpeeds(0, 0);
 
+        }
+        
+        if (ctx.getTime() < timeBeltBackwards) {
+           // move belt speedBeltBackwards
+        }
+        else {
+            shooter.kicker();
         }
 
         shooter.setShooterVolt(shooterSpeed);

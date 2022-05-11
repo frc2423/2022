@@ -99,5 +99,8 @@ public class Devices {
 
         climberLeftMotor.resetEncoder(0);
         climberRightMotor.resetEncoder(0);
+
+        hoofMotor.setPid(.035, 0.00025, 0);
+        hoofMotor.setIZone(2);
     }
 }
