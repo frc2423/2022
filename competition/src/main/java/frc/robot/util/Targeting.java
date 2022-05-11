@@ -1,5 +1,9 @@
 package frc.robot.util;
 
+import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonPipelineResult;
+
+import edu.wpi.first.math.util.Units;
 import frc.robot.devices.Camera;
 
 public class Targeting {
@@ -9,6 +13,11 @@ public class Targeting {
 
   static double minX = 6;
   static double maxX = 25;
+// 
+  static double cameraHeight = 1; //meters - not correct number get stuff
+  static double targetHeight = 2.64; //meter
+  static double cameraPitch = 1; //radians - not correct number get stuff
+  
   
   public static void init() { 
     camera.setPipeline(0);
@@ -72,5 +81,24 @@ public class Targeting {
     minX = min;
     maxX = max;
   }
+
+
+  public static double getDistance() {
+
+    var result = camera.getLatestResult();
+
+    if (result.hasTargets()) { //this is getting the things for targeting for the hood
+      double range =
+        PhotonUtils.calculateDistanceToTargetMeters(
+                cameraHeight,
+                targetHeight,
+                cameraPitch,
+                Units.degreesToRadians(result.getBestTarget().getPitch()));
+      return range;
+    }
+    return -1; // this is because we don't have a target
+
+  }
+
   
 }
