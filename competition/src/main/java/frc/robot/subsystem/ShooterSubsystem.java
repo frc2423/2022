@@ -1,4 +1,5 @@
 package frc.robot.subsystem;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
@@ -18,29 +19,27 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.util.Targeting;
 
-
 public class ShooterSubsystem extends StateMachine {
     private Shooter shooter;
 
-    private int shooterSpeed =  -60;
+    private int shooterSpeed = -60;
     private Timer timer = new Timer();
     private boolean autoMode = false;
     private double revDuration = 1;
-    //speed, timer
+    // speed, timer
     private double speedBeltBackwards = 0.2;
     private double timeBeltBackwards = 0.2;
-
 
     public ShooterSubsystem() {
         super("stop");
         shooter = Subsystems.shooter;
     }
-    
+
     public void setAuto(boolean bool) {
         autoMode = bool;
     }
 
-    public void stop(){
+    public void stop() {
         this.setState("stop");
         shooter.stop();
     }
@@ -48,6 +47,7 @@ public class ShooterSubsystem extends StateMachine {
     public String getState() {
         return super.getState();
     }
+
     public void shoot(boolean isHighGoal) {
         shooter.shoot(isHighGoal);
         if (getState() == "stop") {
@@ -71,24 +71,25 @@ public class ShooterSubsystem extends StateMachine {
 
     // @State(name = "find")
     // public void runFind(StateContext ctx) {
-    //     /* using camera to detect the relective tapes on upper hub
-    //         if it sees targets goes to aiming
-    //         if it doesn't see targets- find by moving turret left and right
+    // /* using camera to detect the relective tapes on upper hub
+    // if it sees targets goes to aiming
+    // if it doesn't see targets- find by moving turret left and right
 
-    //     */
+    // */
     // }
 
-    // @State(name ="aim") 
+    // @State(name ="aim")
     // public void runAim(StateContext ctx) {
-    //     /**
-    //      * pointing turret until the desired target is in desirable position then goes to hood adjustments
-    //      */
+    // /**
+    // * pointing turret until the desired target is in desirable position then goes
+    // to hood adjustments
+    // */
     // }
 
-    @State(name="hood") 
+    @State(name = "hood")
     public void runHood(StateContext ctx) {
         /**
-         * - get distance from the camera 
+         * - get distance from the camera
          * - get desired angle for hood
          * - adjusts angle to desired angle
          * - goes to rev
@@ -96,7 +97,7 @@ public class ShooterSubsystem extends StateMachine {
         double distance = Targeting.getDistance();
 
         if (distance != -1) {
-            double position = distance; //math stuff :> (to figure out later/amory problm :]) 
+            double position = distance; // math stuff :> (to figure out later/amory problm :])
             shooter.setHoodfPosition(position);
             this.setState("rev");
         }
@@ -106,30 +107,31 @@ public class ShooterSubsystem extends StateMachine {
     public void runRev(StateContext ctx) {
         boolean isAimed = true;
         if (autoMode == true) {
-            double rotationSpeed = Targeting.calculate();
-            double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
-            double leftSpeed = arcadeSpeeds[0];
-            double rightSpeed = arcadeSpeeds[1];
-
-            Subsystems.drive.setSpeeds(leftSpeed * Units.feetToMeters(constants.maxSpeedo),
-                    rightSpeed * Units.feetToMeters(constants.maxSpeedo));
+            shooter.aim();
             isAimed = rotationSpeed == 0 && Targeting.hasTargets();
 
         } else {
             Subsystems.drive.setSpeeds(0, 0);
 
+            double distance = Targeting.getDistance();
+
+            if (distance != -1) {
+                double position = distance; // math stuff :> (to figure out later/amory problm :])
+                shooter.setHoodfPosition(position);
+                this.setState("rev");
+            }
+
         }
-        
+
         if (ctx.getTime() < timeBeltBackwards) {
-           // move belt speedBeltBackwards
-        }
-        else {
+            // move belt speedBeltBackwards
+        } else {
             shooter.kicker();
         }
 
         shooter.setShooterVolt(shooterSpeed);
 
-        if (ctx.getTime() > this.revDuration && isAimed)
+        if (ctx.getTime() > this.revDuration && shooter.isAimed())
             this.setState("shoot");
 
     }
@@ -153,5 +155,4 @@ public class ShooterSubsystem extends StateMachine {
         shooter.shooterInfo();
     }
 
-  
 }
