@@ -22,6 +22,7 @@ public class Subsystems {
     public static Auto auto;
     public static Belt belt;
     public static CargoCounter counter;
+    public static ShooterSubsystem shooterSubsystem;
 
     static void init() {
         climber = new Climber();
@@ -39,6 +40,7 @@ public class Subsystems {
         auto = new Auto();
         belt = new Belt();
         counter = new CargoCounter();
+        shooterSubsystem = new ShooterSubsystem();
         Targeting.init();
     }
 }
