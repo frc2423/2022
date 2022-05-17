@@ -9,6 +9,11 @@ public class BeamBreak {
     private DigitalInput beamBreak;
     private double thresholdBig = .7;
 
+    public BeamBreak(DigitalInput device, int aveNum){
+      average = new AverageFinder(aveNum);
+      beamBreak = device;
+    }
+
     public BeamBreak(DigitalInput device){
       average = new AverageFinder(10);
       beamBreak = device;

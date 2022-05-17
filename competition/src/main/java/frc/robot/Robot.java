@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
     Subsystems.belt.runStorage();
     Subsystems.intake.runIntake();
     Subsystems.drive.run();
+    Subsystems.counter.run();
 
     telemetry();
   }
