@@ -105,10 +105,8 @@ public class ShooterSubsystem extends StateMachine {
 
     @State(name = "rev")
     public void runRev(StateContext ctx) {
-        boolean isAimed = true;
         if (autoMode == true) {
             shooter.aim();
-            isAimed = rotationSpeed == 0 && Targeting.hasTargets();
 
         } else {
             Subsystems.drive.setSpeeds(0, 0);
