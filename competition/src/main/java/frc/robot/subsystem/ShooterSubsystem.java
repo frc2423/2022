@@ -53,7 +53,7 @@ public class ShooterSubsystem extends StateMachine {
     public void shoot(boolean isHighGoal) {
         shooter.shoot(isHighGoal);
         if (getState() == "stop") {
-            this.setState("hood");
+            this.setState("rev");
         }
     }
 
@@ -88,23 +88,6 @@ public class ShooterSubsystem extends StateMachine {
     // */
     // }
 
-    @State(name = "hood")
-    public void runHood(StateContext ctx) {
-        /**
-         * - get distance from the camera
-         * - get desired angle for hood
-         * - adjusts angle to desired angle
-         * - goes to rev
-         */
-        double distance = Targeting.getDistance();
-
-        if (distance != -1) {
-            double position = angleFinder.getHoodAngle(distance); 
-            shooter.setHoodfPosition(position);
-            this.setState("rev");
-        }
-    }
-
     @State(name = "rev")
     public void runRev(StateContext ctx) {
         if (autoMode == true) {
@@ -112,17 +95,14 @@ public class ShooterSubsystem extends StateMachine {
 
         } else {
             Subsystems.drive.setSpeeds(0, 0);
-
-            double distance = Targeting.getDistance();
-
-            if (distance != -1) {
-                double position = distance; // math stuff :> (to figure out later/amory problm :])
-                shooter.setHoodfPosition(position);
-                this.setState("rev");
-            }
-
         }
 
+        double distance = Targeting.getDistance();
+            
+        if (distance != -1) {
+            double position = angleFinder.getHoodAngle(distance); 
+            shooter.setHoodfPosition(position);
+        }
         if (ctx.getTime() < timeBeltBackwards) {
             // move belt speedBeltBackwards
         } else {
@@ -131,7 +111,7 @@ public class ShooterSubsystem extends StateMachine {
 
         shooter.setShooterVolt(shooterSpeed);
 
-        if (ctx.getTime() > this.revDuration && shooter.isAimed())
+        if (ctx.getTime() > this.revDuration && shooter.isAimed() && distance != -1)
             this.setState("shoot");
 
     }
