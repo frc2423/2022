@@ -9,6 +9,11 @@ import frc.robot.util.stateMachine.StateContext;
 public class CargoCounter extends StateMachine {
     
     private int ballCount = 0;
+    private double thresholdBig = .7;
+    private double thresholdsmol = .4;
+    private boolean enabled = true;
+
+    private static AverageFinder averageFinder = new AverageFinder(20);
 
     public int getBallCount(){
         return ballCount;
@@ -24,6 +29,14 @@ public class CargoCounter extends StateMachine {
 
     public CargoCounter(){
         super("wait");
+    }
+
+    public void enable(){
+        enabled = true;
+    }
+
+    public void disable(){
+        enabled = false;
     }
 
     @State(name = "wait") //wait until initial see
@@ -42,7 +55,9 @@ public class CargoCounter extends StateMachine {
 
     @State(name = "add") //after plus one, wait
     public void runAdd(StateContext ctx) {
-        ballCount ++;
+        if (enabled){
+            ballCount ++;
+        }
 
         this.setState("wait");
     }
