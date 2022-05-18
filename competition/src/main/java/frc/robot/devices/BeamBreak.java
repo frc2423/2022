@@ -20,7 +20,7 @@ public class BeamBreak {
     }
 
     public boolean get(){
-      average.addSample(beamBreak.get()? 1 : 0);
+      average.addSample(beamBreak.get()? 0 : 1);
 
       if (average.getAverage() > thresholdBig){
         return true;
