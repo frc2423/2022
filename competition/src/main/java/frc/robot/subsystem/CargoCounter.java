@@ -2,18 +2,13 @@ package frc.robot.subsystem;
 
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.Devices;
-import frc.robot.util.AverageFinder;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 
 public class CargoCounter extends StateMachine {
     
     private int ballCount = 0;
-    private double thresholdBig = .7;
-    private double thresholdsmol = .4;
     private boolean enabled = true;
-
-    private static AverageFinder averageFinder = new AverageFinder(20);
 
     public int getBallCount(){
         return ballCount;
