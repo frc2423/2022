@@ -11,6 +11,9 @@ public class CargoCounter extends StateMachine {
     private boolean enabled = true;
 
     public int getBallCount(){
+        if (Devices.intakeBeamBrake.get() && Devices.shooterBeamBrake.get()){
+            return 2;
+        }
         return ballCount;
     }
 
