@@ -86,7 +86,12 @@ public class Shooter  {
     public void setHoodfPosition(double position){
         hoofMotor.setDistance(position);
     }
+
+    public void aim(){}
  
+    public boolean isAimed(){
+        return false;
+    }
     // public void setAcceleratoorSped(double speed) {
     //     accelMotor.setSpeed(speed);
     // }
