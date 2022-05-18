@@ -9,6 +9,7 @@ import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
 import frc.robot.constants.constants;
 import frc.robot.devices.NeoMotor;
+import frc.robot.subsystem.util.TurretDistanceMapper;
 import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.StateMachine;
@@ -29,6 +30,7 @@ public class ShooterSubsystem extends StateMachine {
     // speed, timer
     private double speedBeltBackwards = 0.2;
     private double timeBeltBackwards = 0.2;
+    private TurretDistanceMapper angleFinder = new TurretDistanceMapper();
 
     public ShooterSubsystem() {
         super("stop");
@@ -97,7 +99,7 @@ public class ShooterSubsystem extends StateMachine {
         double distance = Targeting.getDistance();
 
         if (distance != -1) {
-            double position = distance; // math stuff :> (to figure out later/amory problm :])
+            double position = angleFinder.getHoodAngle(distance); 
             shooter.setHoodfPosition(position);
             this.setState("rev");
         }
