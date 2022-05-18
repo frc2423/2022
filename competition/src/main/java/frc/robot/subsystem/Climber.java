@@ -100,8 +100,8 @@ public class Climber extends StateMachine {
 
     @State(name = "manual")
     public void manual() {
-        var left = -MathUtil.applyDeadband(Devices.climbController.getLeftY(), .1) * .2;
-        var right = -MathUtil.applyDeadband(Devices.climbController.getRightY(), .1) * .2;
+        var left = -MathUtil.applyDeadband(Devices.operatorController.getLeftY(), .1) * .2;
+        var right = -MathUtil.applyDeadband(Devices.operatorController.getRightY(), .1) * .2;
         leftMotor.setPercent(left);
         rightMotor.setPercent(right);
 

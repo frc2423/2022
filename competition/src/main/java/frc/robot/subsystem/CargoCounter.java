@@ -2,18 +2,13 @@ package frc.robot.subsystem;
 
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.Devices;
-import frc.robot.util.AverageFinder;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 
 public class CargoCounter extends StateMachine {
     
     private int ballCount = 0;
-    private double thresholdBig = .7;
-    private double thresholdsmol = .4;
     private boolean enabled = true;
-
-    private static AverageFinder averageFinder = new AverageFinder(20);
 
     public int getBallCount(){
         return ballCount;
@@ -41,18 +36,14 @@ public class CargoCounter extends StateMachine {
 
     @State(name = "wait") //wait until initial see
     public void runWait(StateContext ctx) {
-        averageFinder.addSample(Devices.intakeBeamBrake.get()? 1 : 0); // -1 point Amory :<
-
-        if (averageFinder.getAverage() > thresholdBig){
+        if (Devices.intakeBeamBrake.get()){
             this.setState("see");
         }
     }
 
     @State(name = "see") //wait until no see
     public void runDetect(StateContext ctx) {
-        averageFinder.addSample(Devices.intakeBeamBrake.get()? 1 : 0);
-
-        if (averageFinder.getAverage() < thresholdsmol){
+        if (!Devices.intakeBeamBrake.get()){
             this.setState("add");
         }
     }

@@ -10,8 +10,8 @@ import frc.robot.devices.*;
 import edu.wpi.first.wpilibj.Relay;
 
 public class Devices {
-    public static XboxController controller = new XboxController(0);
-    public static XboxController climbController = new XboxController(1);
+    public static XboxController driverController = new XboxController(0);
+    public static XboxController operatorController = new XboxController(1);
     public static IGyro gyro;
     // Drivetrain motors
     public static  IMotor leftMotor; // front left
@@ -40,8 +40,8 @@ public class Devices {
     public static DigitalInput leftLimitSwitchClimber = new DigitalInput(3); // needs actual ports
     public static DigitalInput rightLimitSwitchClimber = new DigitalInput(4);
     //place holders for future beam break sensors
-    public static DigitalInput intakeBeamBrake = new DigitalInput(5); 
-    public static DigitalInput shooterBeamBrake = new DigitalInput(6);
+    public static BeamBreak intakeBeamBrake = new BeamBreak(new DigitalInput(5)); 
+    public static BeamBreak shooterBeamBrake = new BeamBreak(new DigitalInput(6));
 
     static void init(boolean isSimulation) {
 

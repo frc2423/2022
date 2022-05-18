@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
     Subsystems.belt.runStorage();
     Subsystems.intake.runIntake();
     Subsystems.drive.run();
+    Subsystems.counter.run();
 
     telemetry();
   }
@@ -73,22 +74,22 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     // Targeting Code
-    if (Devices.controller.getRightTriggerAxis() > 0.2) {
+    if (Devices.driverController.getRightTriggerAxis() > 0.2) {
       Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
       Subsystems.shooter.shoot();
-    } else if (Devices.controller.getLeftTriggerAxis() > 0.2) {
+    } else if (Devices.driverController.getLeftTriggerAxis() > 0.2) {
       Subsystems.shooter.setAuto(false);
       Subsystems.shooter.shoot(false);
     } else {
       Subsystems.shooter.stop();
-      if (Devices.controller.getRightBumper()) {
+      if (Devices.driverController.getRightBumper()) {
         slowCoefficient = .8;
       } else {
         slowCoefficient = .6;
       }
-      double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getRightX()))
+      double turnRate = turnLimiter.calculate(DriveHelper.applyDeadband(-Devices.driverController.getRightX()))
           * slowCoefficient;
-      double ySpeed = speedLimiter.calculate(DriveHelper.applyDeadband(-Devices.controller.getLeftY()));
+      double ySpeed = speedLimiter.calculate(DriveHelper.applyDeadband(-Devices.driverController.getLeftY()));
 
       double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(ySpeed, -turnRate, false);
 
@@ -101,19 +102,19 @@ public class Robot extends TimedRobot {
       Subsystems.drive.setSpeeds(leftSpeed, rightSpeed);
     }
 
-    if (Devices.controller.getAButton()) {
+    if (Devices.driverController.getAButton()) {
       Subsystems.intake.goDown();
-    } else if (Devices.controller.getYButtonPressed() && Devices.controller.getStartButton()) {
+    } else if (Devices.driverController.getYButtonPressed() && Devices.driverController.getStartButton()) {
       Subsystems.intake.unCalibrate();
-    } else if (Devices.controller.getYButton()) {
+    } else if (Devices.driverController.getYButton()) {
       Subsystems.intake.goUp();
     }
 
-    if (Devices.climbController.getAButtonPressed()) {
+    if (Devices.operatorController.getAButtonPressed()) {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "down");
-    } else if (Devices.climbController.getYButtonPressed()) {
+    } else if (Devices.operatorController.getYButtonPressed()) {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "up");
-    } else if (Devices.climbController.getStartButton() && Devices.climbController.getBackButton()) {
+    } else if (Devices.operatorController.getStartButton() && Devices.operatorController.getBackButton()) {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "manual");
     }
   }
@@ -142,6 +143,10 @@ public class Robot extends TimedRobot {
 
     NtHelper.setBoolean("/robot/intake/isLeftPressed", Subsystems.intake.isLeftPressed());
     NtHelper.setBoolean("/robot/intake/isRightPressed", Subsystems.intake.isRightPressed());
+
+    NtHelper.setBoolean("/robot/intake/shooterBeamBreak", Devices.shooterBeamBrake.get());
+    NtHelper.setBoolean("/robot/intake/intakeBeamBreak", Devices.intakeBeamBrake.get());
+
 
     Subsystems.shooter.shooterInfo();
     Subsystems.climber.climberInfo();
