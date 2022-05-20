@@ -69,6 +69,7 @@ public class ShooterSubsystem extends StateMachine {
             timer.stop();
             shooter.setIsShoot(false);
         }
+        shooter.calibrateHood();
     }
 
     // @State(name = "find")
@@ -92,7 +93,6 @@ public class ShooterSubsystem extends StateMachine {
     public void runRev(StateContext ctx) {
         if (autoMode == true) {
             shooter.aim();
-
         } else {
             Subsystems.drive.setSpeeds(0, 0);
         }
@@ -104,15 +104,22 @@ public class ShooterSubsystem extends StateMachine {
             shooter.setHoodfPosition(position);
         }
         if (ctx.getTime() < timeBeltBackwards) {
-            // move belt speedBeltBackwards
+            shooter.backwardIsSet(true);
+
         } else {
             shooter.kicker();
+            shooter.backwardIsSet(false);
         }
 
         shooter.setShooterVolt(shooterSpeed);
 
-        if (ctx.getTime() > this.revDuration && shooter.isAimed() && distance != -1)
+        if (autoMode == true) {
+            if (ctx.getTime() > this.revDuration && shooter.isAimed() && distance != -1)
             this.setState("shoot");
+        } else {
+            if (ctx.getTime() > this.revDuration && distance != -1)
+            this.setState("shoot");
+        }
 
     }
 
@@ -126,7 +133,7 @@ public class ShooterSubsystem extends StateMachine {
             NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
         }
         shooter.kicker();
-        Subsystems.drive.setSpeeds(0, 0);
+        //Subsystems.drive.setSpeeds(0, 0);
         shooter.setShooterVolt(shooterSpeed);
     }
 

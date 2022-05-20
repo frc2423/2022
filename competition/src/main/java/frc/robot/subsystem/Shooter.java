@@ -33,6 +33,7 @@ public class Shooter  {
 
     private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
     private boolean isShoot = false;
+    private boolean backwardsIs = false;
 
     // private DigitalInput turretLeftLimitSwitch;
     // private DigitalInput turretRightLimitSwitch;
@@ -53,6 +54,14 @@ public class Shooter  {
 
     public void setIsShoot(boolean value) {
         isShoot = value;
+    }
+
+    public boolean backwardIs(){
+        return backwardsIs;
+    }
+
+    public void backwardIsSet(boolean value){
+        backwardsIs = value; 
     }
 
     public void shoot(boolean isHighGoal) {
@@ -124,7 +133,7 @@ public class Shooter  {
     // }
 
     public void calibrateHood() {
-        if (!Devices.hoodLimitSwitch.get()){ //is pressed
+        if (Math.abs(hoofMotor.getSpeed()) < 0.1){ //is pressed
             hoofMotor.setSpeed(0);    
             hoofMotor.resetEncoder(0);
         }
