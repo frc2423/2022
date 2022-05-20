@@ -1,23 +1,14 @@
 package frc.robot.subsystem;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.Devices;
 import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
-import frc.robot.constants.constants;
-import frc.robot.devices.NeoMotor;
 import frc.robot.subsystem.util.TurretDistanceMapper;
-import frc.robot.util.DriveHelper;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.Targeting;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.util.Targeting;
 
 public class ShooterSubsystem extends StateMachine {

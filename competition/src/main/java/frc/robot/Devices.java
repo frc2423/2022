@@ -50,7 +50,6 @@ public class Devices {
     
     // public static DigitalInput turretLeftLimitSwitch = new DigitalInput(7);
     // public static DigitalInput turretRightLimitSwitch = new DigitalInput(8);
-    public static DigitalInput hoodLimitSwitch = new DigitalInput(9);
 
     static void init(boolean isSimulation) {
 
