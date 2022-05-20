@@ -3,6 +3,7 @@ package frc.robot.subsystem;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
 import frc.robot.Devices;
+import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
 import frc.robot.util.NtHelper;
@@ -87,10 +88,12 @@ public class Shooter  {
         hoofMotor.setDistance(position);
     }
 
-    public void aim(){}
+    public void aim(){
+        Subsystems.drive.isTargeting(true);
+    }
  
     public boolean isAimed(){
-        return false;
+        return Subsystems.drive.getIsAimed();
     }
     // public void setAcceleratoorSped(double speed) {
     //     accelMotor.setSpeed(speed);

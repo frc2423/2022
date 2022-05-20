@@ -105,8 +105,10 @@ public class ShooterSubsystem extends StateMachine {
         shooter.setShooterVolt(shooterSpeed);
 
         if (autoMode == true) {
-            if (ctx.getTime() > this.revDuration && shooter.isAimed() && distance != -1)
-            this.setState("shoot");
+            if (ctx.getTime() > this.revDuration && shooter.isAimed() && distance != -1) {
+                this.setState("shoot");
+                Subsystems.drive.isTargeting(false);
+            }
         } else {
             if (ctx.getTime() > this.revDuration && distance != -1)
             this.setState("shoot");
