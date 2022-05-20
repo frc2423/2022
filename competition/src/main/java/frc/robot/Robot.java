@@ -146,6 +146,7 @@ public class Robot extends TimedRobot {
 
     NtHelper.setBoolean("/robot/intake/shooterBeamBreak", Devices.shooterBeamBrake.get());
     NtHelper.setBoolean("/robot/intake/intakeBeamBreak", Devices.intakeBeamBrake.get());
+    NtHelper.setDouble("/robot/intake/BallCount", Subsystems.counter.getBallCount());
 
 
     Subsystems.shooter.shooterInfo();
