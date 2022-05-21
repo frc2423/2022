@@ -5,10 +5,10 @@ import frc.robot.Devices;
 public class Belt {
     public void runStorage(){
         if (Devices.driverController.getBButton() || Subsystems.cargoRejector.isRejecting()){
-            Devices.beltMotor.setPercent(-0.2);
-        }
-        else if (Subsystems.intake.isDown() || Subsystems.shooter.isShoot() || Devices.driverController.getXButton() || Subsystems.cargoRejector.isForwarding() || !isLoaded()){ 
             Devices.beltMotor.setPercent(0.2);
+        }
+        else if ((Subsystems.intake.isDown() && Subsystems.counter.getBallCount() != 2) || Subsystems.shooter.isShoot() || Devices.driverController.getXButton() || Subsystems.cargoRejector.isForwarding() /*|| !isLoaded()*/){ 
+            Devices.beltMotor.setPercent(-0.2);
         }
         else{ 
             Devices.beltMotor.setPercent(0);

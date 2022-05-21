@@ -84,7 +84,12 @@ public class Intake {
             rollerMotor.setPercent(0);
         }
         else {
-            rollerMotor.setPercent(rollerSpeed);
+            if (Subsystems.cargoRejector.isRejecting()){
+                rollerMotor.setPercent(-rollerSpeed);
+            }
+            else{
+                rollerMotor.setPercent(rollerSpeed);
+            }
         }
         armMotor.setDistance(bottomPosition);
         armMotorLeft.setDistance(bottomPosition);

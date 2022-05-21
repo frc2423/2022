@@ -15,7 +15,7 @@ public class StateMachine {
   public StateMachine(String defaultState) {
     this.defaultState = defaultState;
     states = new HashMap<String, Method>();
-    Method[] methods = this.getClass().getMethods(); // obtain all method objects
+    Method[] methods = this.getClass().getDeclaredMethods(); // obtain all method objects
     for (Method method : methods) {
       Annotation[] annotations = method.getDeclaredAnnotations();
       for (Annotation annotation : annotations) {
@@ -67,11 +67,14 @@ public class StateMachine {
         return;
       }
       if (stateMethod.getParameterCount() == 0) {
+        stateMethod.setAccessible(true);
         stateMethod.invoke(this);
+        
         if (ctx.isInit()) {
           ctx.initialize();
         }
       } else if (ctx != null) {
+        stateMethod.setAccessible(true);
         stateMethod.invoke(this, ctx);
         if (ctx.isInit()) {
           ctx.initialize();
