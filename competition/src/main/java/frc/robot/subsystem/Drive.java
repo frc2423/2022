@@ -14,9 +14,9 @@ public class Drive {
 
     private PIDController leftPid = new PIDController(0.1, 0, 0.001); // .001 p
     private PIDController rightPid = new PIDController(0.1, 0, 0.001);
-    private boolean isAimed = false;
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds();
     private boolean isTargeting = false;
+    private boolean isAutoTarget = false;
 
     public Drive() {
         leftPid.setIntegratorRange(0, .1);
@@ -37,6 +37,10 @@ public class Drive {
     }
 
     public void runTargeting() {
+        if (!isAutoTarget) {
+            setSpeeds(0, 0);
+            return;
+        }
         double rotationSpeed = Targeting.calculate();
         double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
         double leftSpeed = arcadeSpeeds[0];
@@ -44,15 +48,16 @@ public class Drive {
 
         Subsystems.drive.setSpeeds(leftSpeed * Units.feetToMeters(constants.maxSpeedo),
                 rightSpeed * Units.feetToMeters(constants.maxSpeedo));
-        isAimed = rotationSpeed == 0 && Targeting.hasTargets();
     }
 
     public boolean getIsAimed() {
-        return isAimed;
+        double rotationSpeed = Targeting.calculate();
+        return rotationSpeed == 0 && Targeting.hasTargets();
     }
 
-    public void isTargeting(boolean value) { //"not quoting things here" -Alexandra 5/20/2022
+    public void isTargeting(boolean value, boolean isAutoTarget) { //"not quoting things here" -Alexandra 5/20/2022
         isTargeting = value;
+        this.isAutoTarget = isAutoTarget;
     }
 
     public void run() {
@@ -69,10 +74,7 @@ public class Drive {
         
         if (isTargeting){
             runTargeting();
-        }
-
-        else {
-            isAimed = false;
+        } else {
             Devices.leftMotor.setPercent(feedForward[0]);
             Devices.rightMotor.setPercent(feedForward[1]);
         }
