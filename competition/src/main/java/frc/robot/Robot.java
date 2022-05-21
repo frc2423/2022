@@ -149,6 +149,7 @@ public class Robot extends TimedRobot {
 
     NtHelper.setBoolean("/robot/intake/shooterBeamBreak", Devices.shooterBeamBrake.get());
     NtHelper.setBoolean("/robot/intake/intakeBeamBreak", Devices.intakeBeamBrake.get());
+    NtHelper.setDouble("/robot/intake/BallCount", Subsystems.counter.getBallCount());
 
     NtHelper.setString("/robot/intake/rejecterState", Subsystems.cargoRejector.getState());
     NtHelper.setBoolean("/robot/intake/colorSeesRed", Devices.colourSensor.isColor("red"));

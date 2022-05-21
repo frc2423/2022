@@ -29,7 +29,7 @@ public class CargoCounter extends StateMachine {
     }
 
     public CargoCounter(){
-        super("wait");
+        super("see");
     }
 
     public void enable(){
@@ -43,14 +43,14 @@ public class CargoCounter extends StateMachine {
     @State(name = "wait") //wait until initial see
     public void runWait(StateContext ctx) {
         if (Devices.intakeBeamBrake.get()){
-            this.setState("see");
+            this.setState("add");
         }
     }
 
     @State(name = "see") //wait until no see
     public void runDetect(StateContext ctx) {
         if (!Devices.intakeBeamBrake.get()){
-            this.setState("add");
+            this.setState("wait");
         }
     }
 
@@ -60,6 +60,6 @@ public class CargoCounter extends StateMachine {
             ballCount ++;
         }
 
-        this.setState("wait");
+        this.setState("see");
     }
 }

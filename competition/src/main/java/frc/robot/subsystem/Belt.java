@@ -16,7 +16,7 @@ public class Belt {
         
     }
 
-    public boolean isLoaded(){ // returns if 
+    public boolean isNotLoaded(){ // returns if 
         // if (Subsystems.counter.getBallCount() != 1){
         //     return false;
         // } else if (Devices.shooterBeamBrake.get()) {

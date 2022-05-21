@@ -40,8 +40,8 @@ public class Devices {
     public static DigitalInput leftLimitSwitchClimber = new DigitalInput(3); // needs actual ports
     public static DigitalInput rightLimitSwitchClimber = new DigitalInput(4);
     //place holders for future beam break sensors
-    public static BeamBreak intakeBeamBrake = new BeamBreak(new DigitalInput(5)); 
-    public static BeamBreak shooterBeamBrake = new BeamBreak(new DigitalInput(6));
+    public static BeamBreak intakeBeamBrake = new BeamBreak(new DigitalInput(6)); 
+    public static BeamBreak shooterBeamBrake = new BeamBreak(new DigitalInput(5));
 
     static void init(boolean isSimulation) {
 
