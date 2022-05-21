@@ -9,9 +9,15 @@ public class CargoCounter extends StateMachine {
     
     private int ballCount = 0;
     private boolean enabled = true;
+    private int beamsBroken;
 
     public int getBallCount(){
-        return ballCount;
+        beamsBroken = 0;
+        if (Devices.intakeBeamBrake.get())
+        beamsBroken ++;
+        if (Devices.shooterBeamBrake.get())
+        beamsBroken ++;
+        return beamsBroken;
     }
 
     public void setBallCount(int value){

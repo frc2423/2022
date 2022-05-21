@@ -27,7 +27,10 @@ public class CargoRejector extends StateMachine {
     private void inactive(StateContext ctx) {
         otherColorAverage.addSample(Devices.colourSensor.isColor(otherColor) ? 1 : 0);
         if (otherColorAverage.getAverage() > colorConfidenceThreshhold){
+            otherColorAverage.resetSamples();
             setState("rejection");
+
+
         }
     }
 
