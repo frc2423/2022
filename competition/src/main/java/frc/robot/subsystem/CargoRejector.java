@@ -25,10 +25,8 @@ public class CargoRejector extends StateMachine {
 
     @State (name = "inactive")
     private void inactive(StateContext ctx) {
-        System.out.println("riuk,hl");
         otherColorAverage.addSample(Devices.colourSensor.isColor(otherColor) ? 1 : 0);
         if (otherColorAverage.getAverage() > colorConfidenceThreshhold){
-            System.out.println("For the love of Sneezus");
             otherColorAverage.resetSamples();
             setState("rejection");
 
