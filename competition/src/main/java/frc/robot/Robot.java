@@ -39,7 +39,6 @@ public class Robot extends TimedRobot {
 
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
         Devices.rightMotor.getDistance());
-    Subsystems.shooter.run();
     Subsystems.climber.run();
     Subsystems.belt.runStorage();
     Subsystems.intake.runIntake();
@@ -64,11 +63,22 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     resetRobot();
   }
-
+  
   @Override
   public void teleopInit() {
     NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
     resetRobot();
+  }
+  
+  @Override
+  public void testPeriodic() {
+    
+    if (Devices.notAdriansController.getXButton()) {
+      Subsystems.shooter.setHoodfPosition(-10);
+    } else if (!Devices.notAdriansController.getXButton()) {
+      Subsystems.shooter.setHoodfPosition(0.000000);
+    }
+    
   }
 
   @Override
@@ -77,10 +87,8 @@ public class Robot extends TimedRobot {
 
     // Targeting Code
     if (Devices.driverController.getRightTriggerAxis() > 0.2) {
-      Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
       Subsystems.shooter.shoot();
     } else if (Devices.driverController.getLeftTriggerAxis() > 0.2) {
-      Subsystems.shooter.setAuto(false);
       Subsystems.shooter.shoot(false);
     } else {
       Subsystems.shooter.stop();
