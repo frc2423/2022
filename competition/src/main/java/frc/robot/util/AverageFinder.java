@@ -26,4 +26,8 @@ public class AverageFinder {
         }
         return total / samples.size();
     }
+
+    public void resetSamples(){
+        samples.clear();
+    }
 }

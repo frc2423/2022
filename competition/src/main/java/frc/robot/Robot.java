@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
     Subsystems.drive.run();
     Subsystems.counter.run();
 
+
     telemetry();
   }
 
@@ -72,6 +73,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    Subsystems.cargoRejector.run();
 
     // Targeting Code
     if (Devices.driverController.getRightTriggerAxis() > 0.2) {
@@ -129,6 +131,7 @@ public class Robot extends TimedRobot {
     Subsystems.climber.calibrate();
     Subsystems.auto.restart();
     Subsystems.intake.unCalibrate();
+    Subsystems.counter.setBallCount(0);
   }
 
   public void telemetry() {
@@ -147,6 +150,10 @@ public class Robot extends TimedRobot {
     NtHelper.setBoolean("/robot/intake/shooterBeamBreak", Devices.shooterBeamBrake.get());
     NtHelper.setBoolean("/robot/intake/intakeBeamBreak", Devices.intakeBeamBrake.get());
     NtHelper.setDouble("/robot/intake/BallCount", Subsystems.counter.getBallCount());
+
+    NtHelper.setString("/robot/intake/rejecterState", Subsystems.cargoRejector.getState());
+    NtHelper.setBoolean("/robot/intake/colorSeesRed", Devices.colourSensor.isColor("red"));
+    NtHelper.setDouble("/robot/intake/ballNum", Subsystems.counter.getBallCount());
 
 
     Subsystems.shooter.shooterInfo();
