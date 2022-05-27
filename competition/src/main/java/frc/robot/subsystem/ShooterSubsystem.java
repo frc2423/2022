@@ -60,25 +60,8 @@ public class ShooterSubsystem extends StateMachine {
             timer.stop();
             shooter.setIsShoot(false);
         }
-        shooter.calibrateHood();
+        // shooter.calibrateHood();
     }
-
-    // @State(name = "find")
-    // public void runFind(StateContext ctx) {
-    // /* using camera to detect the relective tapes on upper hub
-    // if it sees targets goes to aiming
-    // if it doesn't see targets- find by moving turret left and right
-
-    // */
-    // }
-
-    // @State(name ="aim")
-    // public void runAim(StateContext ctx) {
-    // /**
-    // * pointing turret until the desired target is in desirable position then goes
-    // to hood adjustments
-    // */
-    // }
 
     @State(name = "rev")
     public void runRev(StateContext ctx) {
@@ -90,27 +73,31 @@ public class ShooterSubsystem extends StateMachine {
 
         double distance = Targeting.getDistance();
             
-        if (distance != -1) {
-            double position = angleFinder.getHoodAngle(distance); 
-            shooter.setHoodfPosition(position);
-        }
-        if (ctx.getTime() < timeBeltBackwards) {
-            shooter.backwardIsSet(true);
+        // if (distance != -1) {
+        //     double position = angleFinder.getHoodAngle(distance); 
+        //     shooter.setHoodfPosition(position);
+        // }
+        // if (ctx.getTime() < timeBeltBackwards) {
+        //     //shooter.backwardIsSet(true);
 
-        } else {
+        // } else {
             shooter.kicker();
-            shooter.backwardIsSet(false);
-        }
+            //shooter.backwardIsSet(false);
+       // }
 
         shooter.setShooterVolt(shooterSpeed);
 
         if (autoMode == true) {
-            if (ctx.getTime() > this.revDuration && shooter.isAimed() && distance != -1) {
+            // if (ctx.getTime() > this.revDuration && shooter.isAimed() && distance != -1) {
+                if (ctx.getTime() > this.revDuration && shooter.isAimed()) {
+
                 this.setState("shoot");
                 Subsystems.drive.isTargeting(false);
             }
         } else {
-            if (ctx.getTime() > this.revDuration && distance != -1)
+           // if (ctx.getTime() > this.revDuration && distance != -1)
+            if (ctx.getTime() > this.revDuration )
+
             this.setState("shoot");
         }
 

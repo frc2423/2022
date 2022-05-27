@@ -27,17 +27,12 @@ public class Shooter  {
     private boolean isShoot = false;
     private boolean backwardsIs = false;
 
-    // private DigitalInput turretLeftLimitSwitch;
-    // private DigitalInput turretRightLimitSwitch;
-
     public Shooter() {
         kickerMotor = Devices.kickerMotor;
         shooterMotor = Devices.shooterMotor;
         // turretMotor = Devices.turretMotor;
         hoofMotor = Devices.hoofMotor;
-        // accelMotor = Devices.accelerateMotor;
-        // turretRightLimitSwitch = Devices.turretRightLimitSwitch;
-        // turretLeftLimitSwitch = Devices.turretLeftLimitSwitch;
+
     }
 
     public boolean isShoot() {
@@ -95,36 +90,7 @@ public class Shooter  {
     public boolean isAimed(){
         return Subsystems.drive.getIsAimed();
     }
-    // public void setAcceleratoorSped(double speed) {
-    //     accelMotor.setSpeed(speed);
-    // }
-
-    // public void stopAcceleratoor(){
-    //     accelMotor.setSpeed(0);
-    // }
- 
-    // public void rotuteTurret(){
-    //     if (atTurretLeftLimitSwitch() || atTurretRightLimitSwitch()) {
-    //         turretSpeed = -turretSpeed;
-    //     }
-    //     turretMotor.setSpeed(turretSpeed);
-    // }
-
-    // public void stopTurret(){
-    //     turretMotor.setSpeed(0);
-    // }
-
-    // public void setTurretPosition(double position){
-    //     turretMotor.setDistance(position);
-    // }
-
-    // public boolean atTurretLeftLimitSwitch() {
-    //     return !turretLeftLimitSwitch.get();
-    // }
-
-    // public boolean atTurretRightLimitSwitch() {
-    //     return !turretRightLimitSwitch.get();
-    // }
+    
 
     public void calibrateHood() {
         if (Math.abs(hoofMotor.getSpeed()) < 0.05){
@@ -135,16 +101,6 @@ public class Shooter  {
             hoofMotor.setSpeed(.1);
         }
     }
-
-    // public void calibrateTurret() {
-    //     if (!Devices.turretLeftLimitSwitch.get()){ //is pressed
-    //         turretMotor.setSpeed(0);    
-    //         turretMotor.resetEncoder(0);
-    //     }
-    //     else {
-    //         turretMotor.setSpeed(.1);
-    //     }
-    // }
 
     public void kicker() {
         kickerMotor.setPercent(kickerSpeed);

@@ -36,14 +36,14 @@ public class CargoRejector extends StateMachine {
 
     @State (name = "rejection")
     private void rejection(StateContext ctx) {
-        if (ctx.getTime() > 1){
+        if (ctx.getTime() > .75){
             setState("forward");
         }
     }
 
     @State (name = "forward")
     private void forward(StateContext ctx) {
-        if (ctx.getTime() > 1){
+        if (ctx.getTime() > .75){
             setState("inactive");                                     // avocado >~<
         }
     }
