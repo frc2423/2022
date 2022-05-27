@@ -16,7 +16,7 @@ public class ShooterSubsystem extends StateMachine {
 
     private int shooterSpeed = -60;
     private Timer timer = new Timer();
-    private boolean autoMode = false;
+    private boolean autoAim = false;
     private double revDuration = 1;
     // speed, timer
     private double speedBeltBackwards = 0.2;
@@ -29,7 +29,7 @@ public class ShooterSubsystem extends StateMachine {
     }
 
     public void setAuto(boolean bool) {
-        autoMode = bool;
+        autoAim = bool;
     }
 
     public void stop() {
@@ -44,7 +44,7 @@ public class ShooterSubsystem extends StateMachine {
     public void shoot(boolean isHighGoal) {
         shooter.shoot(isHighGoal);
         if (getState() == "stop") {
-            this.setState("rev");
+            this.setState("backwardsBelt");
         }
     }
 
@@ -63,44 +63,50 @@ public class ShooterSubsystem extends StateMachine {
         // shooter.calibrateHood();
     }
 
-    @State(name = "rev")
-    public void runRev(StateContext ctx) {
-        if (autoMode == true) {
-            shooter.aim();
-        } else {
-            Subsystems.drive.setSpeeds(0, 0);
-        }
+   
 
+
+
+    // @State(name = "find")
+    // public void runFind(StateContext ctx) {
+    // /* using camera to detect the relective tapes on upper hub
+    // if it sees targets goes to aiming
+    // if it doesn't see targets- find by moving turret left and right
+
+    // */
+    // }
+
+    // @State(name ="aim")
+    // public void runAim(StateContext ctx) {
+    // /**
+    // * pointing turret until the desired target is in desirable position then goes
+    // to hood adjustments
+    // */
+    // }
+
+    @State(name = "backwardBelt")
+    public void backwardBelt(StateContext ctx){
+        if (ctx.isInit()) {
+            shooter.backwardIsSet(true);
+        }
+        if (ctx.getTime() > timeBeltBackwards) {
+            shooter.backwardIsSet(false);
+            this.setState("preShooting");
+        }
+    }
+   
+    @State(name = "preShooting")
+    public void preShooting(StateContext ctx) {
         double distance = Targeting.getDistance();
-            
-        // if (distance != -1) {
-        //     double position = angleFinder.getHoodAngle(distance); 
-        //     shooter.setHoodfPosition(position);
-        // }
-        // if (ctx.getTime() < timeBeltBackwards) {
-        //     //shooter.backwardIsSet(true);
+        
+        shooter.aim(autoAim);
+        shooter.skRev(distance);
+       // shooter.setHoodAngle(distance);
 
-        // } else {
-            shooter.kicker();
-            //shooter.backwardIsSet(false);
-       // }
-
-        shooter.setShooterVolt(shooterSpeed);
-
-        if (autoMode == true) {
-            // if (ctx.getTime() > this.revDuration && shooter.isAimed() && distance != -1) {
-                if (ctx.getTime() > this.revDuration && shooter.isAimed()) {
-
-                this.setState("shoot");
-                Subsystems.drive.isTargeting(false);
-            }
-        } else {
-           // if (ctx.getTime() > this.revDuration && distance != -1)
-            if (ctx.getTime() > this.revDuration )
-
+        if (ctx.getTime() > this.revDuration && shooter.isAimed(autoAim) && distance != -1) {
             this.setState("shoot");
+            Subsystems.drive.isTargeting(false, autoAim);
         }
-
     }
 
     @State(name = "shoot")
