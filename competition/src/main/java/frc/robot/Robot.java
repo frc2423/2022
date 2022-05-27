@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
     Devices.init(isSimulation());
     Subsystems.init();
     CameraServer.startAutomaticCapture();
-    NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, false);
+    NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, true);
   }
 
   @Override
@@ -77,11 +77,11 @@ public class Robot extends TimedRobot {
 
     // Targeting Code
     if (Devices.driverController.getRightTriggerAxis() > 0.2) {
-      Subsystems.shooterSubsystem.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
+      Subsystems.shooterSubsystem.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, true));
       Subsystems.shooterSubsystem.shoot();
     } else if (Devices.driverController.getLeftTriggerAxis() > 0.2) {
-      Subsystems.shooterSubsystem.setAuto(false);
-      Subsystems.shooterSubsystem.shoot(false);
+      Subsystems.shooterSubsystem.setAuto(true);
+      Subsystems.shooterSubsystem.shoot(true);
     } else {
       Subsystems.shooterSubsystem.stop();
       if (Devices.driverController.getRightBumper()) {

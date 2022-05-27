@@ -16,7 +16,7 @@ public class ShooterSubsystem extends StateMachine {
 
     private int shooterSpeed = -60;
     private Timer timer = new Timer();
-    private boolean autoAim = false;
+    private boolean autoAim = true;
     private double revDuration = 1;
     // speed, timer
     private double speedBeltBackwards = 0.2;
@@ -54,6 +54,8 @@ public class ShooterSubsystem extends StateMachine {
 
     @State(name = "stop")
     public void runStopped(StateContext ctx) {
+        NtHelper.setString(NtKeys.SHOOTER_STATE, "stop");
+
         if (ctx.isInit()) {
             shooter.kickerStop();
             shooter.shooterStop();
@@ -63,29 +65,10 @@ public class ShooterSubsystem extends StateMachine {
         // shooter.calibrateHood();
     }
 
-   
-
-
-
-    // @State(name = "find")
-    // public void runFind(StateContext ctx) {
-    // /* using camera to detect the relective tapes on upper hub
-    // if it sees targets goes to aiming
-    // if it doesn't see targets- find by moving turret left and right
-
-    // */
-    // }
-
-    // @State(name ="aim")
-    // public void runAim(StateContext ctx) {
-    // /**
-    // * pointing turret until the desired target is in desirable position then goes
-    // to hood adjustments
-    // */
-    // }
-
-    @State(name = "backwardBelt")
+    @State(name = "backwardsBelt")
     public void backwardBelt(StateContext ctx){
+        NtHelper.setString(NtKeys.SHOOTER_STATE, "backwards");
+
         if (ctx.isInit()) {
             shooter.backwardIsSet(true);
         }
@@ -98,7 +81,9 @@ public class ShooterSubsystem extends StateMachine {
     @State(name = "preShooting")
     public void preShooting(StateContext ctx) {
         double distance = Targeting.getDistance();
-        
+        NtHelper.setString(NtKeys.SHOOTER_STATE, "preshoot");
+        NtHelper.setDouble(NtKeys.SHOOTER_TARGETDISTANCE, distance);
+
         shooter.aim(autoAim);
         shooter.skRev(distance);
        // shooter.setHoodAngle(distance);
@@ -118,6 +103,8 @@ public class ShooterSubsystem extends StateMachine {
             shooter.setIsShoot(true);
             NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
         }
+        NtHelper.setString(NtKeys.SHOOTER_STATE, "shoot");
+
         shooter.kicker();
         //Subsystems.drive.setSpeeds(0, 0);
         shooter.setShooterVolt(shooterSpeed);
