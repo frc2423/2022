@@ -61,6 +61,9 @@ public class ShooterSubsystem extends StateMachine {
             shooter.shooterStop();
             timer.stop();
             shooter.setIsShoot(false);
+            Subsystems.drive.isTargeting(false, autoAim);
+            shooter.backwardIsSet(false);
+
         }
         // shooter.calibrateHood();
     }
@@ -84,9 +87,11 @@ public class ShooterSubsystem extends StateMachine {
         NtHelper.setString(NtKeys.SHOOTER_STATE, "preshoot");
         NtHelper.setDouble(NtKeys.SHOOTER_TARGETDISTANCE, distance);
 
-        shooter.aim(autoAim);
+        shooter.aim(true);
         shooter.skRev(distance);
        // shooter.setHoodAngle(distance);
+       NtHelper.setBoolean("/robot/shooter/isAimed", shooter.isAimed(true));
+       NtHelper.setDouble("/robot/shooter/time", ctx.getTime());
 
         if (ctx.getTime() > this.revDuration && shooter.isAimed(autoAim) && distance != -1) {
             this.setState("shoot");

@@ -8,15 +8,15 @@ import frc.robot.devices.Camera;
 
 public class Targeting {
   private static Camera camera = new Camera("Microsoft_LifeCam_HD-3000 (1)"); // aka greg
-  static double minTurn = .03;
-  static double maxTurn = 0.05;
+  static double minTurn = .1;
+  static double maxTurn = 0.25;
 
   static double minX = 6;
   static double maxX = 25;
 // 
-  static double cameraHeight = 1; //meters - not correct number get stuff
+  static double cameraHeight = .952; //meters - not correct number get stuff
   static double targetHeight = 2.64; //meter
-  static double cameraPitch = 1; //radians - not correct number get stuff
+  static double cameraPitch = Units.degreesToRadians(30); //radians - not correct number get stuff
   
   
   public static void init() { 
