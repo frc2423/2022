@@ -16,7 +16,7 @@ public class Drive {
     private PIDController rightPid = new PIDController(0.1, 0, 0.001);
     private DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds();
     private boolean isTargeting = false;
-    private boolean isAutoTarget = true;
+    private boolean isAutoTarget = false;
 
     public Drive() {
         leftPid.setIntegratorRange(0, .1);
