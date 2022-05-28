@@ -1,49 +1,56 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
+
 import frc.robot.Devices;
 import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
-import frc.robot.constants.constants;
 import frc.robot.devices.NeoMotor;
-import frc.robot.util.DriveHelper;
+import frc.robot.subsystem.util.TurretDistanceMapper;
 import frc.robot.util.NtHelper;
-import frc.robot.util.stateMachine.StateMachine;
-import frc.robot.util.stateMachine.State;
-import frc.robot.util.stateMachine.StateContext;
-import frc.robot.util.Targeting;
 import edu.wpi.first.wpilibj.RobotController;
 
-public class Shooter extends StateMachine {
+public class Shooter {
     private NeoMotor kickerMotor;
     private NeoMotor shooterMotor;
-
-    private Timer timer = new Timer();
+    // private NeoMotor turretMotor;
+    private NeoMotor hoofMotor;
+    // private NeoMotor accelMotor;
 
     private double kickerSpeed = -0.3;
     private double highGoalSpeed = -60; // for upper hub
     private double lowGoalShooterSpeed = -38; // -42; //for lower hub
     private double shooterSpeed = highGoalSpeed;
+    // private double turretSpeed = .25;
+    private TurretDistanceMapper distanceMapper = new TurretDistanceMapper();
 
-    private double revDuration = 1;
-    private SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
-    private boolean autoMode = false;
+    private SimpleMotorFeedforward flywheelFeedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
+    private SimpleMotorFeedforward kickerFeedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
     private boolean isShoot = false;
+    private boolean backwardsIs = false;
 
     public Shooter() {
-        super("stop");
         kickerMotor = Devices.kickerMotor;
         shooterMotor = Devices.shooterMotor;
+        // turretMotor = Devices.turretMotor;
+        hoofMotor = Devices.hoofMotor;
+
     }
 
     public boolean isShoot() {
         return isShoot;
     }
 
-    public void setAuto(boolean bool) {
-        autoMode = bool;
+    public void setIsShoot(boolean value) {
+        isShoot = value;
+    }
+
+    public boolean backwardIs() {
+        return backwardsIs;
+    }
+
+    public void backwardIsSet(boolean value) {
+        backwardsIs = value;
     }
 
     public void shoot(boolean isHighGoal) {
@@ -52,10 +59,6 @@ public class Shooter extends StateMachine {
         } else {
             setShooterSpeed(lowGoalShooterSpeed);
         }
-
-        if (getState() == "stop") {
-            this.setState("rev");
-        }
     }
 
     public void shoot() {
@@ -63,16 +66,74 @@ public class Shooter extends StateMachine {
     }
 
     public void stop() {
-        this.setState("stop");
+        kickerStop();
+        shooterStop();
     }
 
-    public String getState() {
-        return super.getState();
+    public void skRev(double distance) {
+        // setShooterVolt(distanceMapper.getShooterSpeed(distance));
+        // setKickerVolt(distanceMapper.getKickerSpeed(distance));
+        setShooterVolt(-60);
+        setKickerVolt(kickerSpeed);
+
     }
 
     public void setShooterSpeed(double speed) {
         shooterSpeed = speed;
     }
+
+    public void setShooterVolt(double speed) {
+        double voltage = flywheelFeedForward.calculate(speed);
+        double percent = voltage / RobotController.getBatteryVoltage();
+        shooterMotor.setPercent(percent);
+    }
+
+    public void setKickerVolt(double speed) {
+        double voltage = kickerFeedForward.calculate(speed);
+        double percent = voltage / RobotController.getBatteryVoltage();
+        kickerMotor.setPercent(percent);
+    }
+
+    public void setHoodfPosition(double position) {
+        hoofMotor.setDistance(position);
+    }
+
+    public void aim(boolean isAutoTarget) {
+        Subsystems.drive.isTargeting(true, isAutoTarget);
+    }
+
+    public boolean isAimed(boolean isAutoAim) {
+        if (!isAutoAim) {
+            return true;
+        }
+        return Subsystems.drive.getIsAimed();
+    }
+    
+
+    public void calibrateHood() {
+        if (Math.abs(hoofMotor.getSpeed()) < 0.05) {
+            hoofMotor.setSpeed(0);
+            hoofMotor.resetEncoder(0);
+        } else {
+            hoofMotor.setSpeed(.1);
+        }
+    }
+
+    public void setHoodAngle(double distance) {
+        if (distance != -1) {
+            setHoodfPosition(distanceMapper.getHoodAngle(distance));
+        }
+    }
+
+    // public void calibrateTurret() {
+    // if (!Devices.turretLeftLimitSwitch.get()){ //is pressed
+    // turretMotor.setSpeed(0);
+    // turretMotor.resetEncoder(0);
+    // }
+    // else {
+    // turretMotor.setSpeed(.1);
+    // }
+    // }
 
     public void kicker() {
         kickerMotor.setPercent(kickerSpeed);
@@ -86,62 +147,10 @@ public class Shooter extends StateMachine {
         shooterMotor.setPercent(0);
     }
 
-    public void setShooterVolt(double speed) {
-        double voltage = feedForward.calculate(speed);
-        double percent = voltage / RobotController.getBatteryVoltage();
-        shooterMotor.setPercent(percent);
-    }
-
-    @State(name = "stop")
-    public void runStopped(StateContext ctx) {
-        if (ctx.isInit()) {
-            kickerStop();
-            shooterStop();
-            timer.stop();
-            isShoot = false;
-        }
-    }
-
-    @State(name = "rev")
-    public void runRev(StateContext ctx) {
-        boolean isAimed = true;
-        if (autoMode == true) {
-            double rotationSpeed = Targeting.calculate();
-            double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);
-            double leftSpeed = arcadeSpeeds[0];
-            double rightSpeed = arcadeSpeeds[1];
-
-            Subsystems.drive.setSpeeds(leftSpeed * Units.feetToMeters(constants.maxSpeedo),
-                    rightSpeed * Units.feetToMeters(constants.maxSpeedo));
-            isAimed = rotationSpeed == 0 && Targeting.hasTargets();
-
-        } else {
-            Subsystems.drive.setSpeeds(0, 0);
-
-        }
-
-        setShooterVolt(shooterSpeed);
-
-        if (ctx.getTime() > this.revDuration && isAimed)
-            this.setState("shoot");
-
-    }
-
-    @State(name = "shoot")
-    public void runShoot(StateContext ctx) {
-        if (ctx.isInit()) {
-            isShoot = true;
-            NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
-        }
-        kicker();
-        Subsystems.drive.setSpeeds(0, 0);
-        setShooterVolt(shooterSpeed);
-    }
-
     public void shooterInfo() {
-        NtHelper.setString(NtKeys.SHOOTER_STATE, getState());
         NtHelper.setDouble(NtKeys.SHOOTER_SPEED, shooterMotor.getSpeed());
         NtHelper.setDouble(NtKeys.DESIRED_SHOOTER_SPEED, shooterSpeed);
         NtHelper.setDouble(NtKeys.DESIRED_KICKER_SPEED, kickerSpeed);
     }
+
 }

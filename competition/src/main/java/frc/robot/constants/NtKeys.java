@@ -5,6 +5,8 @@ public class NtKeys {
     public static final String IS_AUTO_AIM = "/robot/shooter/isAuto";
     public static final String SHOOTER_STATE = "/robot/shooter/state";
     public static final String SHOOTER_SPEED = "/robot/shooter/shooterspeed";
+    public static final String SHOOTER_TARGETDISTANCE = "/robot/shooter/targetdistance";
+
     public static final String DESIRED_SHOOTER_SPEED = "/robot/shooter/desiredshooterspeed";
     public static final String DESIRED_KICKER_SPEED = "/robot/shooter/desiredkickerspeed";
     
