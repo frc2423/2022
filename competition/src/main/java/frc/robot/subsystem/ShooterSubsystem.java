@@ -87,11 +87,10 @@ public class ShooterSubsystem extends StateMachine {
         NtHelper.setString(NtKeys.SHOOTER_STATE, "preshoot");
         NtHelper.setDouble(NtKeys.SHOOTER_TARGETDISTANCE, distance);
 
-        shooter.aim(true);
+        shooter.aim(autoAim);
         shooter.skRev(distance);
        // shooter.setHoodAngle(distance);
        NtHelper.setBoolean("/robot/shooter/isAimed", shooter.isAimed(true));
-       NtHelper.setDouble("/robot/shooter/time", ctx.getTime());
 
         if (ctx.getTime() > this.revDuration && shooter.isAimed(autoAim) && distance != -1) {
             this.setState("shoot");
