@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.Relay;
 public class Devices {
     public static XboxController driverController = new XboxController(0);
     public static XboxController operatorController = new XboxController(1);
+    public static XboxController notAdriansController = new XboxController(2);
+
     public static IGyro gyro;
     // Drivetrain motors
     public static  IMotor leftMotor; // front left
@@ -32,6 +34,7 @@ public class Devices {
     // Climber motors
     public static NeoMotor climberLeftMotor = new NeoMotor(12);
     public static NeoMotor climberRightMotor = new NeoMotor(11);
+    public static NeoMotor hoofMotor = new NeoMotor(13);
     //relay stuff for LEDs on stinky (the camera) - please don't lose it again
     public static final Relay camLed = new Relay(0);
     //color sensor thing
@@ -90,5 +93,7 @@ public class Devices {
 
         climberLeftMotor.resetEncoder(0);
         climberRightMotor.resetEncoder(0);
+
+        hoofMotor.setPid(.01, 0.0000000, 0.00000);
     }
 }
