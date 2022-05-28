@@ -7,6 +7,7 @@ import frc.robot.auto.Trajectories;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.Targeting;
+import frc.robot.util.TurretDistanceMapper;
 
 /**
  * Static accessor for all robot subsystems.
@@ -23,6 +24,7 @@ public class Subsystems {
     public static Belt belt;
     public static CargoCounter counter;
     public static CargoRejector cargoRejector;
+    public static TurretDistanceMapper turretDistanceMapper;
 
     static void init() {
         climber = new Climber();
@@ -41,6 +43,7 @@ public class Subsystems {
         belt = new Belt();
         counter = new CargoCounter();
         cargoRejector = new CargoRejector();
+        turretDistanceMapper = new TurretDistanceMapper();
         Targeting.init();
     }
 }

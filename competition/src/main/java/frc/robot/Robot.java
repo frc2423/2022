@@ -11,6 +11,7 @@ import frc.robot.constants.constants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.Targeting;
+import frc.robot.util.TurretDistanceMapper;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.util.RateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -29,6 +30,30 @@ public class Robot extends TimedRobot {
     Subsystems.init();
     CameraServer.startAutomaticCapture();
     NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, false);
+  }
+
+  @Override
+  public void testPeriodic() {
+    NtHelper.setDouble("/robot/testing/hoodangle", 0);
+    if (Devices.adriansController.getXButton()) {
+      Devices.hoofMotor.setDistance(-10);
+      System.out.println("X works");
+      System.out.println(Devices.hoofMotor.getDistance());
+        System.out.println("Accurate angle");
+      }
+    else if (Devices.adriansController.getBButton()) {
+      double hoodAngle = Subsystems.turretDistanceMapper.getHoodAngle(7);
+      System.out.println(hoodAngle);
+      NtHelper.setDouble("/robot/testing/hoodangle", hoodAngle);
+      for (int i = 0; i < -25; i--) {
+        System.out.println("Dist: " + i + "; Angle: " + Subsystems.turretDistanceMapper.getHoodAngle(i));
+      }
+      System.out.println("------------------------------------------");
+    }
+    else if (!Devices.adriansController.getXButton()) {
+      Devices.hoofMotor.setDistance(0);
+    }
+
   }
 
   @Override
