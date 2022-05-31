@@ -25,6 +25,7 @@ public class Subsystems {
     public static CargoCounter counter;
     public static CargoRejector cargoRejector;
     public static TurretDistanceMapper turretDistanceMapper;
+    public static ShooterSubsystem shooterSubsystem;
 
     static void init() {
         climber = new Climber();
@@ -44,6 +45,7 @@ public class Subsystems {
         counter = new CargoCounter();
         cargoRejector = new CargoRejector();
         turretDistanceMapper = new TurretDistanceMapper();
+        shooterSubsystem = new ShooterSubsystem();
         Targeting.init();
     }
 }
