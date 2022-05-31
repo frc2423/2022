@@ -44,7 +44,7 @@ public class Devices {
     public static BeamBreak shooterBeamBrake = new BeamBreak(new DigitalInput(5));
 
     public static NeoMotor hoofMotor = new NeoMotor(13);
-    public static XboxController adriansController = new XboxController(2);
+    public static XboxController notAdriansController = new XboxController(2);
 
     static void init(boolean isSimulation) {
 

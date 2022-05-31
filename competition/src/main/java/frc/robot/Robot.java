@@ -35,22 +35,22 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     NtHelper.setDouble("/robot/testing/hoodangle", 0);
-    if (Devices.adriansController.getXButton()) {
+    if (Devices.notAdriansController.getXButton()) {
       Devices.hoofMotor.setDistance(-10);
       System.out.println("X works");
       System.out.println(Devices.hoofMotor.getDistance());
         System.out.println("Accurate angle");
       }
-    else if (Devices.adriansController.getBButton()) {
+    else if (Devices.notAdriansController.getBButton()) {
       double hoodAngle = Subsystems.turretDistanceMapper.getHoodAngle(7);
       System.out.println(hoodAngle);
       NtHelper.setDouble("/robot/testing/hoodangle", hoodAngle);
-      for (int i = 0; i < -25; i--) {
+      for (int i = 0; i < 10; i++) {
         System.out.println("Dist: " + i + "; Angle: " + Subsystems.turretDistanceMapper.getHoodAngle(i));
       }
-      System.out.println("------------------------------------------");
+      System.out.println("------------------------------=------------");
     }
-    else if (!Devices.adriansController.getXButton()) {
+    else if (!Devices.notAdriansController.getXButton()) {
       Devices.hoofMotor.setDistance(0);
     }
 
