@@ -88,21 +88,21 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    if (this.isDisabled()) {
+    if (this.isDisabled() || this.isTest()) {
       return;
     }
 
-    // Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
-    //     Devices.rightMotor.getDistance());
-    // Subsystems.shooterSubsystem.run();
-    // Subsystems.climber.run();
-    // Subsystems.belt.runStorage();
-    // Subsystems.intake.runIntake();
-    // Subsystems.drive.run();
-    // Subsystems.counter.run();
+    Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
+      Devices.rightMotor.getDistance());
+    Subsystems.shooterSubsystem.run();
+    Subsystems.climber.run();
+    Subsystems.belt.runStorage();
+    Subsystems.intake.runIntake();
+    Subsystems.drive.run();
+    Subsystems.counter.run();
 
 
-    // telemetry();
+    telemetry();
   }
 
   @Override
