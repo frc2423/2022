@@ -14,7 +14,7 @@ public class Targeting {
   static double minX = 6;
   static double maxX = 25;
 // 
-  static double cameraHeight = .952; //meters - not correct number get stuff
+  static double cameraHeight = .914; //meters - not correct number get stuff
   static double targetHeight = 2.64; //meter
   static double cameraPitch = Units.degreesToRadians(30); //radians - not correct number get stuff
   
