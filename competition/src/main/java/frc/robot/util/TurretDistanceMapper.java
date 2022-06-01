@@ -11,11 +11,11 @@ public class TurretDistanceMapper {
 
     public TurretDistanceMapper() {
         distxAngleMap.put(0.0, 0.0); // distance, encoder value ([0, -15])
-        distxAngleMap.put(2.0, -1.0); 
-        distxAngleMap.put(4.0, -2.0); 
-        distxAngleMap.put(6.0, -3.0); 
-        distxAngleMap.put(8.0, -4.0);
-        distxAngleMap.put(10.0, -5.0); 
+        distxAngleMap.put(2.0, -2.0); 
+        distxAngleMap.put(4.0, -5.0); 
+        distxAngleMap.put(6.0, -8.0); 
+        distxAngleMap.put(8.0, -12.0);
+        distxAngleMap.put(10.0, -15.0); 
 
         distxSpeedMap.put(0.0, -38.0); // feet, voltage? shooter motor
         distxSpeedMap.put(2.0, -42.4);
