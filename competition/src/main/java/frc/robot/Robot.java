@@ -31,6 +31,8 @@ public class Robot extends TimedRobot {
     CameraServer.startAutomaticCapture();
     NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, true);
     NtHelper.setDouble("/robot/testing/setHoodAngle", 0.0);
+    NtHelper.setDouble("/robot/testing/setShooterSpeed", 0.0);
+    NtHelper.setDouble("/robot/testing/setKickerSpeed", 0.0);
     Devices.hoofMotor.setDistance(0);
     Devices.beltMotor.setPercent(0);
     Devices.shooterMotor.setPercent(0);
@@ -44,11 +46,13 @@ public class Robot extends TimedRobot {
     }
 
     double setHoodAngle = NtHelper.getDouble("/robot/testing/setHoodAngle", 0.0);
+    double setShooterSpeed = NtHelper.getDouble("/robot/testing/setShooterSpeed", 0.00);
+    double setKickerSpeed = NtHelper.getDouble("/robot/testing/setKickerSpeed", 0.0);
     Devices.hoofMotor.setDistance(setHoodAngle);
 
     if (Devices.notAdriansController.getXButton()) {
-      Subsystems.shooter.setShooterVolt(-60);
-      Subsystems.shooter.setKickerVolt(-30);
+      Subsystems.shooter.setShooterVolt(setShooterSpeed);
+      Subsystems.shooter.setKickerVolt(setKickerSpeed);
     }
     else {
       Subsystems.shooter.setShooterVolt(0);
@@ -56,7 +60,7 @@ public class Robot extends TimedRobot {
     }
 
     if(Devices.notAdriansController.getBButton()){
-      Devices.beltMotor.setPercent(-0.1);
+      Devices.beltMotor.setPercent(-0.2);
     }
     else {
       Devices.beltMotor.setPercent(0);
@@ -88,21 +92,21 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    if (this.isDisabled()) {
+    if (this.isDisabled() || this.isTest()) {
       return;
     }
 
-    // Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
-    //     Devices.rightMotor.getDistance());
-    // Subsystems.shooterSubsystem.run();
-    // Subsystems.climber.run();
-    // Subsystems.belt.runStorage();
-    // Subsystems.intake.runIntake();
-    // Subsystems.drive.run();
-    // Subsystems.counter.run();
+    Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
+    Devices.rightMotor.getDistance());
+    Subsystems.shooterSubsystem.run();
+    Subsystems.climber.run();
+    Subsystems.belt.runStorage();
+    Subsystems.intake.runIntake();
+    Subsystems.drive.run();
+    Subsystems.counter.run();
 
 
-    // telemetry();
+    telemetry();
   }
 
   @Override

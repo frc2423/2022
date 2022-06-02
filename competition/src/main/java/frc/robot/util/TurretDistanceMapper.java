@@ -11,25 +11,29 @@ public class TurretDistanceMapper {
 
     public TurretDistanceMapper() {
         distxAngleMap.put(0.0, 0.0); // distance, encoder value ([0, -15])
-        distxAngleMap.put(2.0, -2.0); 
-        distxAngleMap.put(4.0, -5.0); 
-        distxAngleMap.put(6.0, -8.0); 
-        distxAngleMap.put(8.0, -12.0);
-        distxAngleMap.put(10.0, -15.0); 
+    
+        distxAngleMap.put(4.0, 0.0); 
+        distxAngleMap.put(6.0, -0.8); 
+        distxAngleMap.put(8.0, -1.9);
+        distxAngleMap.put(10.0, -2.0); 
+        distxAngleMap.put(12.0, -2.35);
+        distxAngleMap.put(14.0, -2.6);
 
-        distxSpeedMap.put(0.0, -38.0); // feet, voltage? shooter motor
-        distxSpeedMap.put(2.0, -42.4);
-        distxSpeedMap.put(4.0, -46.8);
-        distxSpeedMap.put(6.0, -51.2);
-        distxSpeedMap.put(8.0, -55.6);
-        distxSpeedMap.put(10.0, -60.0);
+        distxSpeedMap.put(0.0, 0.0); // feet, voltage? shooter motor
+        distxSpeedMap.put(4.0, -55.0);
+        distxSpeedMap.put(6.0, -57.5);
+        distxSpeedMap.put(8.0, -60.0);
+        distxSpeedMap.put(10.0, -65.0);
+        distxAngleMap.put(12.0, -65.0);
+        distxAngleMap.put(14.0, -70.0);
 
-        distxSkpeedMap.put(0.0, -0.3); // feet, voltage? kicker motor
-        distxSkpeedMap.put(2.0, -0.3);
-        distxSkpeedMap.put(4.0, -0.3);
-        distxSkpeedMap.put(6.0, -0.3);
-        distxSkpeedMap.put(8.0, -0.3);
-        distxSkpeedMap.put(10.0, -0.3);
+        distxSkpeedMap.put(0.0, -25.0); // feet, voltage? kicker motor
+        distxSkpeedMap.put(4.0, -25.0);
+        distxSkpeedMap.put(6.0, -30.0);
+        distxSkpeedMap.put(8.0, -30.0);
+        distxSkpeedMap.put(10.0, -35.0);
+        distxAngleMap.put(12.0, -40.0);
+        distxAngleMap.put(14.0, -45.0);
     }
 
     private double lerp(double x1, double x2, double y1, double y2, double x) {
