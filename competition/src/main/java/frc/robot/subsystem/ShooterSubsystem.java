@@ -11,6 +11,8 @@ import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.Targeting;
 import frc.robot.util.Targeting;
 
+import edu.wpi.first.math.filter.MedianFilter;
+
 public class ShooterSubsystem extends StateMachine {
     private Shooter shooter;
 
@@ -22,6 +24,8 @@ public class ShooterSubsystem extends StateMachine {
     private double speedBeltBackwards = 0.2;
     private double timeBeltBackwards = 0.2;
     private TurretDistanceMapper angleFinder = new TurretDistanceMapper();
+
+    private MedianFilter filter = new MedianFilter(20);
 
     public ShooterSubsystem() {
         super("stop");
@@ -54,9 +58,14 @@ public class ShooterSubsystem extends StateMachine {
 
     @State(name = "stop")
     public void runStopped(StateContext ctx) {
+        double distance = filter.calculate(Targeting.getDistance());
+
         NtHelper.setString(NtKeys.SHOOTER_STATE, "stop");
+        NtHelper.setDouble(NtKeys.SHOOTER_TARGETDISTANCE, distance);
+
 
         if (ctx.isInit()) {
+            filter.reset();
             shooter.kickerStop();
             shooter.shooterStop();
             timer.stop();
@@ -70,6 +79,7 @@ public class ShooterSubsystem extends StateMachine {
 
     @State(name = "backwardsBelt")
     public void backwardBelt(StateContext ctx){
+        double distance = filter.calculate(Targeting.getDistance());
         NtHelper.setString(NtKeys.SHOOTER_STATE, "backwards");
 
         if (ctx.isInit()) {
@@ -83,7 +93,7 @@ public class ShooterSubsystem extends StateMachine {
    
     @State(name = "preShooting")
     public void preShooting(StateContext ctx) {
-        double distance = Targeting.getDistance();
+        double distance = filter.calculate(Targeting.getDistance());
         NtHelper.setString(NtKeys.SHOOTER_STATE, "preshoot");
 
         shooter.aim(autoAim);
