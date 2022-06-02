@@ -85,7 +85,6 @@ public class ShooterSubsystem extends StateMachine {
     public void preShooting(StateContext ctx) {
         double distance = Targeting.getDistance();
         NtHelper.setString(NtKeys.SHOOTER_STATE, "preshoot");
-        NtHelper.setDouble(NtKeys.SHOOTER_TARGETDISTANCE, distance);
 
         shooter.aim(autoAim);
         shooter.skRev(distance);
