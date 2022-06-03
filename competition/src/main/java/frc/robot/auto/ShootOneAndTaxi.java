@@ -4,6 +4,7 @@ import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.Subsystems;
+import frc.robot.Devices;
 
 public class ShootOneAndTaxi extends StateMachine {
 
@@ -13,11 +14,17 @@ public class ShootOneAndTaxi extends StateMachine {
 
     @State(name = "shooter")
     public void Shooter(StateContext ctx) {
-        if (ctx.isInit()) {
-            Subsystems.shooterSubsystem.setAuto(false);
+        Subsystems.shooter.skRev(3.47);
+        Subsystems.shooter.setHoodAngle(3.47);
+
+        if (ctx.getTime() > 2) {
+            Devices.beltMotor.setPercent(-0.2);
         }
-        Subsystems.shooter.shoot();
+
         if (ctx.getTime() > 4) {
+            Devices.shooterMotor.setPercent(0);
+            Devices.kickerMotor.setPercent(0);
+            Devices.beltMotor.setPercent(0);
             setState("taxi");
         }
     }

@@ -59,7 +59,9 @@ public class ShootTwoTaxi extends StateMachine {
     @State(name = "Intake")
     public void Intake(StateContext ctx) {
         Subsystems.drive.setSpeeds(0, 0);
+        Devices.beltMotor.setPercent(-0.2);
         if (ctx.getTime() > 1.5) {
+            Devices.beltMotor.setPercent(0);
             setState("Rotate");
         }
     }
@@ -72,7 +74,7 @@ public class ShootTwoTaxi extends StateMachine {
     public void rotate(StateContext ctx) {
         if (ctx.isInit()) {
             Subsystems.intake.goUp();
-            angle = Devices.gyro.getAngle() + 180;
+            angle = Devices.gyro.getAngle() + 200;
         }
         double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
         double rotationSpeed = rotate.calculate(angleError);
@@ -84,7 +86,25 @@ public class ShootTwoTaxi extends StateMachine {
                 rightSpeed * Units.feetToMeters(constants.maxSpeedo));
 
         if (rotate.isDone(angleError)) {
-            setState("ShooterAdvance");
+            setState("TurretShoot");
+        }
+    }
+
+    @State(name = "TurretShoot")
+    public void turretShoot(StateContext ctx) {
+        Subsystems.shooter.skRev(6);
+        Subsystems.shooter.setHoodAngle(6);
+
+        if (ctx.getTime() > 2) {
+            Devices.beltMotor.setPercent(-0.2);
+        }
+
+        if (ctx.getTime() > 4) {
+            Devices.shooterMotor.setPercent(0);
+            Devices.kickerMotor.setPercent(0);
+            Devices.beltMotor.setPercent(0);
+            Subsystems.shooter.setHoodAngle(0);
+            setState("TaxiBack");
         }
     }
 

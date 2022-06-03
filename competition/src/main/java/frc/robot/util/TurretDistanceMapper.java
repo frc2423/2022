@@ -12,7 +12,7 @@ public class TurretDistanceMapper {
     public TurretDistanceMapper() {
         distxAngleMap.put(0.0, 0.0); // distance, encoder value ([0, -15])
     
-        distxAngleMap.put(3.47 , 0.0); //4.0 ft.
+        distxAngleMap.put(3.47, 0.0); //4.0 ft.
         distxAngleMap.put(5.05, -0.8); //6.0 ft.
         distxAngleMap.put(7.48, -1.9); //8.0 ft.
         distxAngleMap.put(10.0, -2.0); 
