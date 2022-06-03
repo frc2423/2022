@@ -5,6 +5,8 @@ import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.State;
 import frc.robot.util.stateMachine.StateContext;
 import frc.robot.util.stateMachine.StateMachine;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Auto extends StateMachine {
 
@@ -17,6 +19,7 @@ public class Auto extends StateMachine {
     StateMachine testAuto;
     StateMachine shootTwoShootOne;
     StateMachine shootOneGetTwo;
+    private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
     public Auto() {
         super("run");
@@ -26,12 +29,22 @@ public class Auto extends StateMachine {
         shootOneAndShootTwo = new ShootOneAndShootTwo();
         testAuto = new TestAuto();
         shootOneGetTwo = new ShootOneGetTwo();
+
         NtHelper.setString(NtKeys.AUTO_MODE_NAME, "shootOneAndShootTwo");
+
+        m_chooser.setDefaultOption("shootOneAndShootTwo", "shootOneAndShootTwo");
+        m_chooser.addOption("taxi", "taxi");
+        m_chooser.addOption("shootOneAndTaxi", "shootOneAndTaxi");
+        m_chooser.addOption("shootTwoTaxi", "shootTwoTaxi");
+        m_chooser.addOption("shootOneAndShootTwo", "shootOneAndShootTwo");        m_chooser.addOption("shootOneGetTwo", "shootOneGetTwo");
+
+
+        SmartDashboard.putData("Auto choices", m_chooser);
     }
 
     public void getAuto() {
-        String name = NtHelper.getString(NtKeys.AUTO_MODE_NAME, "taxi");
-        // selectedAutonomous = testAuto;
+        String name = m_chooser.getSelected();
+
         switch (name) {
             case "taxi": //0 ball
                 selectedAutonomous = taxi;

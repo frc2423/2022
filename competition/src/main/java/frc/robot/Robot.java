@@ -99,10 +99,13 @@ public class Robot extends TimedRobot {
     Devices.rightMotor.getDistance());
     Subsystems.shooterSubsystem.run();
     Subsystems.climber.run();
-    Subsystems.belt.runStorage();
     Subsystems.intake.runIntake();
     Subsystems.drive.run();
     Subsystems.counter.run();
+
+    if (!this.isAutonomous()) {
+      Subsystems.belt.runStorage();
+    }
 
 
     telemetry();
