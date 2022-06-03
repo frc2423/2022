@@ -18,14 +18,16 @@ public class TurretDistanceMapper {
         distxAngleMap.put(10.0, -2.0); 
         distxAngleMap.put(12.0, -2.35);
         distxAngleMap.put(14.0, -2.6);
+        distxAngleMap.put(100.0, -2.6);
 
-        distxSpeedMap.put(0.0, 0.0); // feet, voltage? shooter motor
+        distxSpeedMap.put(0.0, -55.0); // feet, voltage? shooter motor
         distxSpeedMap.put(3.47, -55.0);
         distxSpeedMap.put(5.05, -57.5);
         distxSpeedMap.put(7.48, -60.0);
         distxSpeedMap.put(10.0, -65.0);
         distxAngleMap.put(12.0, -65.0);
         distxAngleMap.put(14.0, -70.0);
+        distxAngleMap.put(100.0, -70.0);
 
         distxSkpeedMap.put(0.0, -25.0); // feet, voltage? kicker motor
         distxSkpeedMap.put(3.47, -25.0);
@@ -34,6 +36,7 @@ public class TurretDistanceMapper {
         distxSkpeedMap.put(10.0, -35.0);
         distxAngleMap.put(12.0, -40.0);
         distxAngleMap.put(14.0, -45.0);
+        distxAngleMap.put(100.0, -45.0);
     }
 
     private double lerp(double x1, double x2, double y1, double y2, double x) {
@@ -81,27 +84,30 @@ public class TurretDistanceMapper {
     }
 
     public double getHoodAngle(double distance) {
-        double lessThan = getClosestDistanceLessThan(distance);
-        double greaterThan = getClosestDistanceGreaterThan(distance);
+        double boundedDistance = Math.max(0, distance);
+        double lessThan = getClosestDistanceLessThan(boundedDistance);
+        double greaterThan = getClosestDistanceGreaterThan(boundedDistance);
         double lessThanAngle = getAngleFromDistance(lessThan);
         double greaterThanAngle = getAngleFromDistance(greaterThan);
-        return lerp(lessThan, greaterThan, lessThanAngle, greaterThanAngle, distance);
+        return lerp(lessThan, greaterThan, lessThanAngle, greaterThanAngle, boundedDistance);
     }
 
     public double getShooterSpeed(double distance) {
-        double slessThan = getClosestDistanceLessThan(distance);
-        double sgreaterThan = getClosestDistanceGreaterThan(distance);
+        double boundedDistance = Math.max(0, distance);
+        double slessThan = getClosestDistanceLessThan(boundedDistance);
+        double sgreaterThan = getClosestDistanceGreaterThan(boundedDistance);
         double slessThanSpeedo = getSpeedFromDistance(slessThan);
         double sgreaterThanSped = getSpeedFromDistance(sgreaterThan);
-        return lerp(slessThan, sgreaterThan, slessThanSpeedo, sgreaterThanSped, distance);
+        return lerp(slessThan, sgreaterThan, slessThanSpeedo, sgreaterThanSped, boundedDistance);
     }
 
     public double getKickerSpeed(double distance) {
-        double klessThan = getClosestDistanceLessThan(distance);
-        double kgreaterThan = getClosestDistanceGreaterThan(distance);
+        double boundedDistance = Math.max(0, distance);
+        double klessThan = getClosestDistanceLessThan(boundedDistance);
+        double kgreaterThan = getClosestDistanceGreaterThan(boundedDistance);
         double klessThanSpeed = getSkpeedFromDistance(klessThan);
         double kgreaterThanSkpeed = getSkpeedFromDistance(kgreaterThan);
-        return lerp(klessThan, kgreaterThan, klessThanSpeed, kgreaterThanSkpeed, distance);
+        return lerp(klessThan, kgreaterThan, klessThanSpeed, kgreaterThanSkpeed, boundedDistance);
     }
 
 }
