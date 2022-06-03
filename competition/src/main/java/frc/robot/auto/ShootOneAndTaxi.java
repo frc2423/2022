@@ -22,6 +22,8 @@ public class ShootOneAndTaxi extends StateMachine {
         }
 
         if (ctx.getTime() > 4) {
+            Devices.shooterMotor.setPercent(0);
+            Devices.kickerMotor.setPercent(0);
             Devices.beltMotor.setPercent(0);
             setState("taxi");
         }
