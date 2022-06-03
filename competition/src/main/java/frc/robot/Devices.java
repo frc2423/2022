@@ -43,13 +43,8 @@ public class Devices {
     public static BeamBreak intakeBeamBrake = new BeamBreak(new DigitalInput(6)); 
     public static BeamBreak shooterBeamBrake = new BeamBreak(new DigitalInput(5));
 
-    //turret - three motors; turret, accelerator, hoof - two limit switches
-    // public static NeoMotor turretMotor = new NeoMotor(13);
-    // public static NeoMotor accelerateMotor = new NeoMotor(14);
     public static NeoMotor hoofMotor = new NeoMotor(13);
-    
-    // public static DigitalInput turretLeftLimitSwitch = new DigitalInput(7);
-    // public static DigitalInput turretRightLimitSwitch = new DigitalInput(8);
+    public static XboxController notAdriansController = new XboxController(2);
 
     static void init(boolean isSimulation) {
 
@@ -64,10 +59,14 @@ public class Devices {
             rightFollowerMotor.setInverted(true);
         } else {
             gyro = new SimGyro(0);
-            leftMotor = new SimMotor(1, 5, 6);
-            leftFollowerMotor = new SimMotor (2, 7, 8);
-            rightMotor = new SimMotor(3, 9, 10);
-            rightFollowerMotor = new SimMotor (4, 11, 12);
+            // leftMotor = new SimMotor(1, 5, 6);
+            // leftFollowerMotor = new SimMotor (2, 7, 8);
+            // rightMotor = new SimMotor(3, 9, 10);
+            // rightFollowerMotor = new SimMotor (4, 11, 12);
+            leftMotor = new NeoMotor(1);
+            leftFollowerMotor = new NeoMotor (2);
+            rightMotor = new NeoMotor(3);
+            rightFollowerMotor = new NeoMotor (4);
       
         }
 
@@ -99,7 +98,7 @@ public class Devices {
         climberLeftMotor.resetEncoder(0);
         climberRightMotor.resetEncoder(0);
 
-        hoofMotor.setPid(.035, 0.00025, 0);
-        hoofMotor.setIZone(2);
+        hoofMotor.setPid(.08, 0.0000000, 0.00000);
+
     }
 }

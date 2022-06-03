@@ -6,7 +6,6 @@ import frc.robot.Devices;
 import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
 import frc.robot.devices.NeoMotor;
-import frc.robot.subsystem.util.TurretDistanceMapper;
 import frc.robot.util.NtHelper;
 import edu.wpi.first.wpilibj.RobotController;
 
@@ -22,7 +21,6 @@ public class Shooter {
     private double lowGoalShooterSpeed = -38; // -42; //for lower hub
     private double shooterSpeed = highGoalSpeed;
     // private double turretSpeed = .25;
-    private TurretDistanceMapper distanceMapper = new TurretDistanceMapper();
 
     private SimpleMotorFeedforward flywheelFeedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
     private SimpleMotorFeedforward kickerFeedForward = new SimpleMotorFeedforward(0.10397, 0.12786, 0.0085994);
@@ -71,10 +69,10 @@ public class Shooter {
     }
 
     public void skRev(double distance) {
-        // setShooterVolt(distanceMapper.getShooterSpeed(distance));
-        // setKickerVolt(distanceMapper.getKickerSpeed(distance));
-        setShooterVolt(-60);
-        setKickerVolt(kickerSpeed);
+        setShooterVolt(Subsystems.turretDistanceMapper.getShooterSpeed(distance));
+        setKickerVolt(Subsystems.turretDistanceMapper.getKickerSpeed(distance));
+        // setShooterVolt(-60);
+        // setKickerVolt(kickerSpeed);
 
     }
 
@@ -119,10 +117,13 @@ public class Shooter {
         }
     }
 
-    public void setHoodAngle(double distance) {
+    public double setHoodAngle (double distance) {
         if (distance != -1) {
-            setHoodfPosition(distanceMapper.getHoodAngle(distance));
+            double calcDistance = Subsystems.turretDistanceMapper.getHoodAngle(distance);
+            setHoodfPosition(calcDistance);
+            return calcDistance;
         }
+        return 0.0;
     }
 
     // public void calibrateTurret() {

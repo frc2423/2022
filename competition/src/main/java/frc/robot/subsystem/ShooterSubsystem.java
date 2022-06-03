@@ -3,7 +3,6 @@ package frc.robot.subsystem;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Subsystems;
 import frc.robot.constants.NtKeys;
-import frc.robot.subsystem.util.TurretDistanceMapper;
 import frc.robot.util.NtHelper;
 import frc.robot.util.stateMachine.StateMachine;
 import frc.robot.util.stateMachine.State;
@@ -23,9 +22,10 @@ public class ShooterSubsystem extends StateMachine {
     // speed, timer
     private double speedBeltBackwards = 0.2;
     private double timeBeltBackwards = 0.2;
-    private TurretDistanceMapper angleFinder = new TurretDistanceMapper();
+    private double distance = 0.0;
 
     private MedianFilter filter = new MedianFilter(20);
+
 
     public ShooterSubsystem() {
         super("stop");
@@ -58,7 +58,7 @@ public class ShooterSubsystem extends StateMachine {
 
     @State(name = "stop")
     public void runStopped(StateContext ctx) {
-        double distance = filter.calculate(Targeting.getDistance());
+        distance = filter.calculate(Targeting.getDistance());
 
         NtHelper.setString(NtKeys.SHOOTER_STATE, "stop");
         NtHelper.setDouble(NtKeys.SHOOTER_TARGETDISTANCE, distance);
@@ -72,14 +72,12 @@ public class ShooterSubsystem extends StateMachine {
             shooter.setIsShoot(false);
             Subsystems.drive.isTargeting(false, autoAim);
             shooter.backwardIsSet(false);
-
         }
         // shooter.calibrateHood();
     }
 
     @State(name = "backwardsBelt")
     public void backwardBelt(StateContext ctx){
-        double distance = filter.calculate(Targeting.getDistance());
         NtHelper.setString(NtKeys.SHOOTER_STATE, "backwards");
 
         if (ctx.isInit()) {
@@ -87,21 +85,32 @@ public class ShooterSubsystem extends StateMachine {
         }
         if (ctx.getTime() > timeBeltBackwards) {
             shooter.backwardIsSet(false);
+            this.setState("aim");
+        }
+    }
+
+    @State(name = "aim")
+    public void aim(StateContext ctx) {
+        shooter.aim(autoAim);
+        NtHelper.setString(NtKeys.SHOOTER_STATE, "aim");
+        
+        if (shooter.isAimed(autoAim) || ctx.getTime() > 2.0) {
+            distance = Math.max(filter.calculate(Targeting.getDistance()), 0);
             this.setState("preShooting");
         }
     }
    
     @State(name = "preShooting")
     public void preShooting(StateContext ctx) {
-        double distance = filter.calculate(Targeting.getDistance());
+        // distance = filter.calculate(Targeting.getDistance());
         NtHelper.setString(NtKeys.SHOOTER_STATE, "preshoot");
 
-        shooter.aim(autoAim);
+        // shooter.aim(autoAim);
         shooter.skRev(distance);
-       // shooter.setHoodAngle(distance);
-       NtHelper.setBoolean("/robot/shooter/isAimed", shooter.isAimed(true));
+        shooter.setHoodAngle(distance);
+        NtHelper.setBoolean("/robot/shooter/isAimed", shooter.isAimed(true));
 
-        if (ctx.getTime() > this.revDuration && shooter.isAimed(autoAim) && distance != -1) {
+        if (ctx.getTime() > this.revDuration /*&& shooter.isAimed(autoAim) && distance != -1 */) {
             this.setState("shoot");
             Subsystems.drive.isTargeting(false, autoAim);
         }
@@ -117,7 +126,7 @@ public class ShooterSubsystem extends StateMachine {
             NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
         }
         NtHelper.setString(NtKeys.SHOOTER_STATE, "shoot");
-
+        shooter.setHoodAngle(distance);
         shooter.kicker();
         //Subsystems.drive.setSpeeds(0, 0);
         shooter.setShooterVolt(shooterSpeed);

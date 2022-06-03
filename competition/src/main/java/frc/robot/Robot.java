@@ -29,16 +29,74 @@ public class Robot extends TimedRobot {
     Subsystems.init();
     CameraServer.startAutomaticCapture();
     NtHelper.setBoolean(NtKeys.IS_AUTO_AIM, true);
+    NtHelper.setDouble("/robot/testing/setHoodAngle", 0.0);
+    NtHelper.setDouble("/robot/testing/setShooterSpeed", 0.0);
+    NtHelper.setDouble("/robot/testing/setKickerSpeed", 0.0);
+    Devices.hoofMotor.setDistance(0);
+    Devices.beltMotor.setPercent(0);
+    Devices.shooterMotor.setPercent(0);
+    Devices.kickerMotor.setPercent(0);
   }
 
   @Override
-  public void robotPeriodic() {
+  public void testPeriodic() {
     if (this.isDisabled()) {
       return;
     }
 
+    // double setHoodAngle = NtHelper.getDouble("/robot/testing/setHoodAngle", 0.0);
+    // double setShooterSpeed = NtHelper.getDouble("/robot/testing/setShooterSpeed", 0.00);
+    // double setKickerSpeed = NtHelper.getDouble("/robot/testing/setKickerSpeed", 0.0);
+    // Devices.hoofMotor.setDistance(setHoodAngle);
+
+    // if (Devices.notAdriansController.getXButton()) {
+    //   Subsystems.shooter.setShooterVolt(setShooterSpeed);
+    //   Subsystems.shooter.setKickerVolt(setKickerSpeed);
+    // }
+    // else {
+    //   Subsystems.shooter.setShooterVolt(0);
+    //   Subsystems.shooter.setKickerVolt(0);
+    // }
+
+    // if(Devices.notAdriansController.getBButton()){
+    //   Devices.beltMotor.setPercent(-0.2);
+    // }
+    // else {
+    //   Devices.beltMotor.setPercent(0);
+    // }
+
+
+
+    NtHelper.setDouble("/robot/testing/hoodangle", 0);
+    if (Devices.notAdriansController.getXButton()) {
+      Devices.hoofMotor.setDistance(-10);
+      System.out.println("X works");
+      System.out.println(Devices.hoofMotor.getDistance());
+        System.out.println("Accurate angle");
+      }
+    else if (Devices.notAdriansController.getBButton()) {
+      double hoodAngle = Subsystems.turretDistanceMapper.getHoodAngle(7);
+      System.out.println(hoodAngle);
+      NtHelper.setDouble("/robot/testing/hoodangle", hoodAngle);
+      for (int i = 0; i < 10; i++) {
+        System.out.println("Dist: " + i + "; Angle: " + Subsystems.turretDistanceMapper.getHoodAngle(i));
+      }
+      System.out.println("------------------------------=------------");
+    }
+    else if (!Devices.notAdriansController.getXButton()) {
+      Devices.hoofMotor.setDistance(0);
+    }
+
+  }
+
+  @Override
+  public void robotPeriodic() {
+    if (this.isDisabled() || this.isTest()) {
+      return;
+    }
+
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
-        Devices.rightMotor.getDistance());
+    Devices.rightMotor.getDistance());
     Subsystems.shooterSubsystem.run();
     Subsystems.climber.run();
     Subsystems.belt.runStorage();
@@ -78,7 +136,7 @@ public class Robot extends TimedRobot {
     // Targeting Code
     if (Devices.driverController.getRightTriggerAxis() > 0.2) {
       Subsystems.shooterSubsystem.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, true));
-      Subsystems.shooterSubsystem.shoot();
+      Subsystems.shooterSubsystem.shoot(true);
     } else if (Devices.driverController.getLeftTriggerAxis() > 0.2) {
       Subsystems.shooterSubsystem.setAuto(true);
       Subsystems.shooterSubsystem.shoot(true);
