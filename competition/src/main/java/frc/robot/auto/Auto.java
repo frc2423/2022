@@ -32,7 +32,7 @@ public class Auto extends StateMachine {
 
         NtHelper.setString(NtKeys.AUTO_MODE_NAME, "shootOneAndShootTwo");
 
-        m_chooser.setDefaultOption("shootOneAndShootTwo", "shootOneAndShootTwo");
+        m_chooser.setDefaultOption("shootOneAndTaxi", "shootOneAndTaxi");
         m_chooser.addOption("taxi", "taxi");
         m_chooser.addOption("shootOneAndTaxi", "shootOneAndTaxi");
         m_chooser.addOption("shootTwoTaxi", "shootTwoTaxi");

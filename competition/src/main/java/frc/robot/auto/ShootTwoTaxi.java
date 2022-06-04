@@ -12,6 +12,8 @@ import frc.robot.util.DriveHelper;
 import frc.robot.util.Rotation;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /* Move towards cargo in straight line
  * Intake cargo
@@ -73,8 +75,16 @@ public class ShootTwoTaxi extends StateMachine {
     @State(name = "Rotate")
     public void rotate(StateContext ctx) {
         if (ctx.isInit()) {
+            String position = NtHelper.getString(NtKeys.AUTO_MODE_ROBOT_POSITION, "bottom");
+
             Subsystems.intake.goUp();
-            angle = Devices.gyro.getAngle() + 200;
+            if (position.equals("top")){
+                angle = Devices.gyro.getAngle() + 170;
+            } else if (position.equals("middle")){
+            angle = Devices.gyro.getAngle() + 170;
+            } else {
+                angle = Devices.gyro.getAngle() + 200;
+            }
         }
         double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
         double rotationSpeed = rotate.calculate(angleError);
@@ -92,8 +102,8 @@ public class ShootTwoTaxi extends StateMachine {
 
     @State(name = "TurretShoot")
     public void turretShoot(StateContext ctx) {
-        Subsystems.shooter.skRev(6);
-        Subsystems.shooter.setHoodAngle(6);
+        Subsystems.shooter.skRev(3.8);
+        Subsystems.shooter.setHoodAngle(3.8);
 
         if (ctx.getTime() > 2) {
             Devices.beltMotor.setPercent(-0.2);

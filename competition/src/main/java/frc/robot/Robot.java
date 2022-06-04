@@ -216,6 +216,9 @@ public class Robot extends TimedRobot {
     NtHelper.setBoolean("/robot/intake/colorSeesRed", Devices.colourSensor.isColor("red"));
     NtHelper.setDouble("/robot/intake/ballNum", Subsystems.counter.getBallCount());
 
+    NtHelper.setDouble("/robot/shooter/hoodAngle", Devices.hoofMotor.getDistance());
+
+
     double distance = Targeting.getDistance();
     NtHelper.setDouble(NtKeys.SHOOTER_TARGETDISTANCE, distance);
 

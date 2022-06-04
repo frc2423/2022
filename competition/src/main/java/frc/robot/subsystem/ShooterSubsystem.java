@@ -126,10 +126,11 @@ public class ShooterSubsystem extends StateMachine {
             NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
         }
         NtHelper.setString(NtKeys.SHOOTER_STATE, "shoot");
+        shooter.skRev(distance);
         shooter.setHoodAngle(distance);
-        shooter.kicker();
+
         //Subsystems.drive.setSpeeds(0, 0);
-        shooter.setShooterVolt(shooterSpeed);
+        // shooter.setShooterVolt(shooterSpeed);
     }
 
     public void shooterInfo() {
