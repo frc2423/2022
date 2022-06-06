@@ -14,10 +14,10 @@ public class Devices {
     public static XboxController operatorController = new XboxController(1);
     public static IGyro gyro;
     // Drivetrain motors
-    public static  IMotor leftMotor; // front left
-    private static IMotor leftFollowerMotor; // back left
-    public static  IMotor rightMotor; // front right
-    private static IMotor rightFollowerMotor; // back right
+    public static  NeoMotor leftMotor; // front left
+    private static NeoMotor leftFollowerMotor; // back left
+    public static  NeoMotor rightMotor; // front right
+    private static NeoMotor rightFollowerMotor; // back right
     // Intake motors
     public static NeoMotor intakeArmMotor = new NeoMotor (5);
     public static NeoMotor intakeArmFollowerMotor = new NeoMotor (6);
@@ -70,8 +70,10 @@ public class Devices {
       
         }
 
-        rightFollowerMotor.follow(rightMotor);
-        leftFollowerMotor.follow(leftMotor);
+        rightMotor.setFollower(rightFollowerMotor);
+        leftMotor.setFollower(leftFollowerMotor);
+        // rightFollowerMotor.follow(rightMotor);
+        // leftFollowerMotor.follow(leftMotor);
         //this is because the motors are put in the opposite way, so the wheels move in the opposite direction of the motor. 
         rightMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);
         leftMotor.setConversionFactor(2 * Math.PI * Units.inchesToMeters(3) / 10.7);

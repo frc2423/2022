@@ -26,8 +26,8 @@ public class TurretDistanceMapper {
         distxAngleMap.put(8.48, -2.6); //14.0 ft
         distxAngleMap.put(100.0, -2.6);
 
-        distxSpeedMap.put(0.0, -55.0); // feet, voltage? shooter motor
-        distxSpeedMap.put(2.59, -55.0);
+        distxSpeedMap.put(0.0, -53.0); // feet, voltage? shooter motor
+        distxSpeedMap.put(2.59, -53.0);
         distxSpeedMap.put(3.5, -57.5);
         distxSpeedMap.put(4.38, -60.0);
         distxSpeedMap.put(5.3, -65.0);

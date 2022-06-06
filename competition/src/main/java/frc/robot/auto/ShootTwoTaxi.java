@@ -62,7 +62,7 @@ public class ShootTwoTaxi extends StateMachine {
     public void Intake(StateContext ctx) {
         Subsystems.drive.setSpeeds(0, 0);
         Devices.beltMotor.setPercent(-0.2);
-        if (ctx.getTime() > 1.5) {
+        if (ctx.getTime() > 2.5) {
             Devices.beltMotor.setPercent(0);
             setState("Rotate");
         }
@@ -86,6 +86,14 @@ public class ShootTwoTaxi extends StateMachine {
                 angle = Devices.gyro.getAngle() + 200;
             }
         }
+
+        if (ctx.getTime() < 0.5) {
+            Devices.beltMotor.setPercent(0.2);
+        }
+        else {
+            Devices.beltMotor.setPercent(0.00000);
+        }
+
         double angleError = getAngleErrorRadians(angle - Devices.gyro.getAngle());
         double rotationSpeed = rotate.calculate(angleError);
         double[] arcadeSpeeds = DriveHelper.getArcadeSpeeds(0, rotationSpeed, false);

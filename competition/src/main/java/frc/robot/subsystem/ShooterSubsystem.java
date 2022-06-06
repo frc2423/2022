@@ -96,6 +96,7 @@ public class ShooterSubsystem extends StateMachine {
         
         if (shooter.isAimed(autoAim) || ctx.getTime() > 2.0) {
             distance = Math.max(filter.calculate(Targeting.getDistance()), 0);
+            Subsystems.drive.setSpeeds(0, 0);
             this.setState("preShooting");
         }
     }
@@ -111,8 +112,9 @@ public class ShooterSubsystem extends StateMachine {
         NtHelper.setBoolean("/robot/shooter/isAimed", shooter.isAimed(true));
 
         if (ctx.getTime() > this.revDuration /*&& shooter.isAimed(autoAim) && distance != -1 */) {
-            this.setState("shoot");
             Subsystems.drive.isTargeting(false, autoAim);
+            Subsystems.drive.setSpeeds(0, 0);
+            this.setState("shoot");
         }
     }
 

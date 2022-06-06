@@ -52,13 +52,13 @@ public class Intake {
             armMotorLeft.setPercent(0);
             armMotorLeft.resetEncoder(0);
         } else {
-            armMotorLeft.setPercent(0.1); 
+            armMotorLeft.setPercent(0.08); 
         }
         if(isRightPressed()) {
             armMotor.setPercent(0);
             armMotor.resetEncoder(0);
         } else {
-            armMotor.setPercent(0.1); 
+            armMotor.setPercent(0.08); 
         }
         if (isLeftPressed() && isRightPressed()){
             calibrated = true;
