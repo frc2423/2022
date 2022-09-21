@@ -82,8 +82,8 @@ public class Drive {
         if (isTargeting){
             runTargeting();
         } else {
-            Devices.leftMotor.setPercent(feedForward[0]);
-            Devices.rightMotor.setPercent(feedForward[1]);
+            Devices.leftMotor.setPercent(feedForward[0]/2);
+            Devices.rightMotor.setPercent(feedForward[1]/2);
         }
     }
 

@@ -91,14 +91,15 @@ public class ShooterSubsystem extends StateMachine {
 
     @State(name = "aim")
     public void aim(StateContext ctx) {
-        shooter.aim(autoAim);
+        //shooter.aim(autoAim);
         NtHelper.setString(NtKeys.SHOOTER_STATE, "aim");
         
-        if (shooter.isAimed(autoAim) || ctx.getTime() > 2.0) {
-            distance = Math.max(filter.calculate(Targeting.getDistance()), 0);
-            Subsystems.drive.setSpeeds(0, 0);
-            this.setState("preShooting");
-        }
+        // if (shooter.isAimed(autoAim) || ctx.getTime() > 2.0) {
+        //     distance = Math.max(filter.calculate(Targeting.getDistance()), 0);
+        //     Subsystems.drive.setSpeeds(0, 0);
+                // here lies setting the state to shoot
+        //}
+        this.setState("shoot");
     }
    
     @State(name = "preShooting")
@@ -129,7 +130,7 @@ public class ShooterSubsystem extends StateMachine {
         }
         NtHelper.setString(NtKeys.SHOOTER_STATE, "shoot");
         shooter.skRev(distance);
-        shooter.setHoodAngle(distance);
+        //shooter.setHoodAngle(distance);
 
         //Subsystems.drive.setSpeeds(0, 0);
         // shooter.setShooterVolt(shooterSpeed);

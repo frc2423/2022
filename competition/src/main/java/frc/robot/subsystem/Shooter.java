@@ -69,10 +69,10 @@ public class Shooter {
     }
 
     public void skRev(double distance) {
-        setShooterVolt(Subsystems.turretDistanceMapper.getShooterSpeed(distance));
-        setKickerVolt(Subsystems.turretDistanceMapper.getKickerSpeed(distance));
-        // setShooterVolt(-60);
-        // setKickerVolt(kickerSpeed);
+        // setShooterVolt(Subsystems.turretDistanceMapper.getShooterSpeed(distance));
+        // setKickerVolt(Subsystems.turretDistanceMapper.getKickerSpeed(distance));
+        setShooterVolt(-20);
+        setKickerVolt(kickerSpeed);
 
     }
 
