@@ -167,8 +167,7 @@ public class Robot extends TimedRobot {
 
     if (Devices.driverController.getAButton()) {
       Subsystems.intake.goDown();
-    } else if (Devices.driverController.getYButtonPressed() && Devices.driverController.getStartButton()) {
-      Subsystems.intake.unCalibrate();
+    
     } else if (Devices.driverController.getYButton()) {
       Subsystems.intake.goUp();
     }
@@ -191,7 +190,7 @@ public class Robot extends TimedRobot {
     Targeting.init();
     Subsystems.climber.calibrate();
     Subsystems.auto.restart();
-    Subsystems.intake.unCalibrate();
+    
     Subsystems.counter.setBallCount(0);
   }
 
@@ -204,9 +203,6 @@ public class Robot extends TimedRobot {
     NtHelper.setDouble(NtKeys.SVG_ROTATIONS_PER_SECOND,
         Devices.leftMotor.getSpeed() / (2 * Math.PI * Units.inchesToMeters(3)));
     NtHelper.setDouble(NtKeys.SVG_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
-
-    NtHelper.setBoolean("/robot/intake/isLeftPressed", Subsystems.intake.isLeftPressed());
-    NtHelper.setBoolean("/robot/intake/isRightPressed", Subsystems.intake.isRightPressed());
 
     NtHelper.setBoolean("/robot/intake/shooterBeamBreak", Devices.shooterBeamBrake.get());
     NtHelper.setBoolean("/robot/intake/intakeBeamBreak", Devices.intakeBeamBrake.get());
