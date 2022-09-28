@@ -137,12 +137,12 @@ public class Robot extends TimedRobot {
     Subsystems.cargoRejector.run();
 
     // Targeting Code
-    if (Devices.driverController.getRightTriggerAxis() > 0.2) {
-      Subsystems.shooterSubsystem.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, true));
-      Subsystems.shooterSubsystem.shoot(true);
-    } else if (Devices.driverController.getLeftTriggerAxis() > 0.2) {
-      Subsystems.shooterSubsystem.setAuto(true);
-      Subsystems.shooterSubsystem.shoot(true);
+    if (Devices.operatorController.getRightTriggerAxis() > 0.2) {
+      Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
+      Subsystems.shooter.shoot();
+    } else if (Devices.operatorController.getLeftTriggerAxis() > 0.2) {
+      Subsystems.shooter.setAuto(false);
+      Subsystems.shooter.shoot(false);
     } else {
       Subsystems.shooterSubsystem.stop();
       if (Devices.driverController.getRightBumper()) {
@@ -165,17 +165,17 @@ public class Robot extends TimedRobot {
       Subsystems.drive.setSpeeds(leftSpeed, rightSpeed);
     }
 
-    if (Devices.driverController.getAButton()) {
+    if (Devices.operatorController.getAButton()) {
       Subsystems.intake.goDown();
-    } else if (Devices.driverController.getYButtonPressed() && Devices.driverController.getStartButton()) {
-      Subsystems.intake.unCalibrate();
-    } else if (Devices.driverController.getYButton()) {
+    } /*else if (Devices.driverController.getYButtonPressed() && Devices.driverController.getStartButton()) {
+      Subsystems.intake.unCalibrate(); (we're getting rid of this as we move to pneumatics)
+    }*/ else if (Devices.operatorController.getYButton()) {
       Subsystems.intake.goUp();
     }
 
-    if (Devices.operatorController.getAButtonPressed()) {
+    if (Devices.operatorController.getPOV() == 180) {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "down");
-    } else if (Devices.operatorController.getYButtonPressed()) {
+    } else if (Devices.operatorController.getPOV() == 0) {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "up");
     } else if (Devices.operatorController.getStartButton() && Devices.operatorController.getBackButton()) {
       NtHelper.setString(NtKeys.CLIMBER_DESIRED_STATE, "manual");
