@@ -1,45 +1,62 @@
 package frc.robot.util;
 
+/**
+ * A Rotation object for calculating turn rate values based on an error between an actual and desired rotation
+ */
 public class Rotation {
 
-  private double minTurn = .03;
-  private double maxTurn = 0.05;
-  private double minX = 6;
-  private double maxX = 25;
+  private double minTurnSpeedo = 0.03;
+  private double maxTurnSpeedo = 0.05;
+  private double onTargetMargin = 6;
+  private double maxTurnSpeedThreshold = 25;
 
-  public Rotation(double minTurn, double maxTurn, double minX, double maxX) {
-    this.minTurn = minTurn;
-    this.maxTurn = maxTurn;
-    this.minX = minX;
-    this.maxX = maxX;
+
+  /**
+   * Initializes a new Rotation object
+   * @param minTurnSpeedo The minimum rotation speed that the object will ever return
+   * @param maxTurnSpeedo The maximum rotation speed that the object will ever return
+   * @param onTargetMargin The maximum angle error allowed in either direction to consider us at the target rotation
+   * @param maxTurnSpeedThreshold The angle error threshold beyond which the min/max turn speedo will be returned
+   */
+  public Rotation(double minTurnSpeedo, double maxTurnSpeedo, double onTargetMargin, double maxTurnSpeedThreshold) {
+    this.minTurnSpeedo = minTurnSpeedo;
+    this.maxTurnSpeedo = maxTurnSpeedo;
+    this.onTargetMargin = onTargetMargin;
+    this.maxTurnSpeedThreshold = maxTurnSpeedThreshold;
   }
   
-  public double calculate(double x) { 
+  /**
+   * Takes in an angle error and returns a proper rotation speed to reduce the error.
+   * @param angleError The angle error
+   * @return The rotation speed to provide to the robot.
+   */
+  public double calculate(double angleError) { 
     
     //the two line bellow are just setting a reverse deadband
-    if (x >= maxX) {
-      return maxTurn;
+    if (angleError >= maxTurnSpeedThreshold) {
+      return maxTurnSpeedo;
     }
-    if (x <= -maxX) {
-      return -maxTurn;
+    if (angleError <= -maxTurnSpeedThreshold) {
+      return -maxTurnSpeedo;
     }
     
     //checks if we are at the target
-    if (x >= -minX && x <= minX) {
+    if (angleError >= -onTargetMargin && angleError <= onTargetMargin) {
       return 0;
 
     }
 
     //Sets the speed depending on the distance of target
-    if (x > minX) {
-      return (maxTurn - minTurn) / (maxX - minX) * (x - minX) + minTurn;
+    double turnSpeed = (maxTurnSpeedo - minTurnSpeedo) / (maxTurnSpeedThreshold - onTargetMargin) * (angleError - onTargetMargin) + minTurnSpeedo;
+    if (angleError > onTargetMargin) {
+      return turnSpeed;
     }
 
-    return (maxTurn - minTurn) / (maxX - minX) * (x + minX) - minTurn;
+    return -turnSpeed;
   }
 
   public boolean isDone(double x){
-    return x >= -minX && x <= minX;
+    return x >= -onTargetMargin && x <= onTargetMargin;
     //return (angle < maxX && angle > minX);
   }
 }
