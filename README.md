@@ -21,6 +21,10 @@ PathPlannerLib: https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-
 
 WPILib Docs: https://docs.wpilib.org/en/stable/index.html
 
+Creating a robot program: https://docs.wpilib.org/en/stable/docs/software/vscode-overview/creating-robot-program.html
+
+Building and deploying a robot program: https://docs.wpilib.org/en/stable/docs/software/vscode-overview/deploying-robot-code.html
+
 PhotonVision (vision processing solution for tracking target when scoring cargo): https://docs.photonvision.org/en/latest/index.html
 
 PhotonVision release thread: https://www.chiefdelphi.com/t/photonvision-2022-official-release/400536
