@@ -62,7 +62,7 @@ public class ShootTwoTaxi extends StateMachine {
     public void Intake(StateContext ctx) {
         Subsystems.drive.setSpeeds(0, 0);
         Devices.beltMotor.setPercent(-0.2);
-        if (ctx.getTime() > 2.5) {
+        if (ctx.getTime() > 1.5) {
             Devices.beltMotor.setPercent(0);
             setState("Rotate");
         }

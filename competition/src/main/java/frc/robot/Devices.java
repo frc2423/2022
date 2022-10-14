@@ -48,7 +48,7 @@ public class Devices {
 
     public static NeoMotor hoofMotor = new NeoMotor(13);
     public static XboxController notAdriansController = new XboxController(2);
-    public static DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 6, 7);
+    public static DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 0);
 
     static void init(boolean isSimulation) {
 
