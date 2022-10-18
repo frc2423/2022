@@ -4,10 +4,13 @@ import frc.robot.devices.NeoMotor;
 import frc.robot.devices.SimMotor;
 import frc.robot.util.ColourSensor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.util.Units;
 import frc.robot.devices.*;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Solenoid;
 
 public class Devices {
     public static XboxController driverController = new XboxController(0);
@@ -45,6 +48,7 @@ public class Devices {
 
     public static NeoMotor hoofMotor = new NeoMotor(13);
     public static XboxController notAdriansController = new XboxController(2);
+    public static DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 0);
 
     static void init(boolean isSimulation) {
 

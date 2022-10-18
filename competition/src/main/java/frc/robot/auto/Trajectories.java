@@ -9,10 +9,10 @@ public class Trajectories {
     private static HashMap<String, Trajectory> trajectoryKeeper= new HashMap<String, Trajectory>();
     public static HashMap<String, Trajectory> getTrajectories() {
         trajectoryUploader("Taxi", true, 2.5, 1.5);
-        trajectoryUploader("BottomTarmacToBottomCargo", false, 2, 1);
+        trajectoryUploader("BottomTarmacToBottomCargo", false, 2.5, 1.5);
         trajectoryUploader("MiddleTarmacToMiddleCargo", false, 2, 1);
         trajectoryUploader("TopTarmacToTopCargo", false, 2, 1);
-        trajectoryUploader("BottomCargoToHub", false, 2, 1);
+        trajectoryUploader("BottomCargoToHub", false, 2.5, 1.5);
         trajectoryUploader("MiddleCargoToHub", false, 2, 1);
         trajectoryUploader("TopCargoToHub", false, 2, 1);
         trajectoryUploader("BottomCargoToMiddleCargo", false, 2, 1);
