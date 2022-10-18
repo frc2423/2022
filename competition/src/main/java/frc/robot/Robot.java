@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
 import frc.robot.constants.constants;
+import frc.robot.led.KwarqsLed;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.Targeting;
@@ -20,7 +21,7 @@ public class Robot extends TimedRobot {
 
   private RateLimiter speedLimiter = new RateLimiter(0.7, 1.2);
   private RateLimiter turnLimiter = new RateLimiter(2, 3.5);
-
+  private KwarqsLed kwarqsLed = new KwarqsLed();
   private double slowCoefficient = .6;
 
   @Override
