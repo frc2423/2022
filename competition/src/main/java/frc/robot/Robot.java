@@ -138,11 +138,11 @@ public class Robot extends TimedRobot {
 
     // Targeting Code
     if (Devices.operatorController.getRightTriggerAxis() > 0.2) {
-      Subsystems.shooter.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, false));
-      Subsystems.shooter.shoot();
+      Subsystems.shooterSubsystem.setAuto(NtHelper.getBoolean(NtKeys.IS_AUTO_AIM, true));
+      Subsystems.shooterSubsystem.shoot(true);
     } else if (Devices.operatorController.getLeftTriggerAxis() > 0.2) {
-      Subsystems.shooter.setAuto(false);
-      Subsystems.shooter.shoot(false);
+      Subsystems.shooterSubsystem.setAuto(true);
+      Subsystems.shooterSubsystem.shoot(true);
     } else {
       Subsystems.shooterSubsystem.stop();
       if (Devices.driverController.getRightBumper()) {
