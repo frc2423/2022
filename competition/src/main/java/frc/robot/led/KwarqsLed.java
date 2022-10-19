@@ -1,5 +1,7 @@
 package frc.robot.led;
+import java.util.Random;
 
+import frc.robot.util.NtHelper;
 public class KwarqsLed {
     private LedController ledController = new LedController(60);
 
@@ -12,6 +14,7 @@ public class KwarqsLed {
         ledController.add("LedRotating", new LedRotating());
         ledController.add("LedFade", new LedFade());
         ledController.add("LedAlternate", new LedAlternate());
+        ledController.add("LedRotate2", new LedRotate2());
     }
 
     public void disable() {
@@ -19,8 +22,10 @@ public class KwarqsLed {
     }
 
     private String getRandomLedMode() {
-        var randomLed = 0;
-
+        Random random = new Random();
+        var randomLed = random.nextInt(4);
+        System.out.println(randomLed);
+        NtHelper.setDouble("/robot/testing/ledmode", randomLed);
         switch (randomLed) {
             case 0:
                 return "rainbow";

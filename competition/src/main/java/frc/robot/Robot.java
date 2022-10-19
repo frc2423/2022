@@ -37,6 +37,10 @@ public class Robot extends TimedRobot {
     Devices.beltMotor.setPercent(0);
     Devices.shooterMotor.setPercent(0);
     Devices.kickerMotor.setPercent(0);
+
+    // add led code here
+    
+    kwarqsLed.setRandom();
   }
 
   @Override
@@ -95,6 +99,8 @@ public class Robot extends TimedRobot {
     if (this.isDisabled() || this.isTest()) {
       return;
     }
+
+    kwarqsLed.run();
 
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
     Devices.rightMotor.getDistance());
