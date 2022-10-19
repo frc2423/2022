@@ -57,15 +57,15 @@ public class Auto extends StateMachine {
                 selectedAutonomous = shootOneAndTaxi;
                 break;
             case "shootTwoTaxiTop": //two ball
-                NtHelper.setString("/robot/position", "top");
+                NtHelper.setString(NtKeys.AUTO_MODE_ROBOT_POSITION, "top");
                 selectedAutonomous = shootTwoTaxi;
                 break;
             case "shootTwoTaxiMiddle": //two ball
-                NtHelper.setString("/robot/position", "middle");
+                NtHelper.setString(NtKeys.AUTO_MODE_ROBOT_POSITION, "middle");
                 selectedAutonomous = shootTwoTaxi;
                 break;
             case "shootTwoTaxiBottom": //two ball
-                NtHelper.setString("/robot/position", "bottom");
+                NtHelper.setString(NtKeys.AUTO_MODE_ROBOT_POSITION, "bottom");
                 selectedAutonomous = shootTwoTaxi;
                 break;
             case "shootOneAndShootTwo": //3 ball
