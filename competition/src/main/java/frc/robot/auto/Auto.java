@@ -35,8 +35,11 @@ public class Auto extends StateMachine {
         m_chooser.setDefaultOption("shootOneAndTaxi", "shootOneAndTaxi");
         m_chooser.addOption("taxi", "taxi");
         m_chooser.addOption("shootOneAndTaxi", "shootOneAndTaxi");
-        m_chooser.addOption("shootTwoTaxi", "shootTwoTaxi");
-        m_chooser.addOption("shootOneAndShootTwo", "shootOneAndShootTwo");        m_chooser.addOption("shootOneGetTwo", "shootOneGetTwo");
+        m_chooser.addOption("shootTwoTaxiTop", "shootTwoTaxiTop");
+        m_chooser.addOption("shootTwoTaxiMiddle", "shootTwoTaxiMiddle");
+        m_chooser.addOption("shootTwoTaxiBottom", "shootTwoTaxiBottom");
+        m_chooser.addOption("shootOneAndShootTwo", "shootOneAndShootTwo");        
+        m_chooser.addOption("shootOneGetTwo", "shootOneGetTwo");
 
 
         SmartDashboard.putData("Auto choices", m_chooser);
@@ -45,6 +48,7 @@ public class Auto extends StateMachine {
     public void getAuto() {
         String name = m_chooser.getSelected();
 
+
         switch (name) {
             case "taxi": //0 ball
                 selectedAutonomous = taxi;
@@ -52,7 +56,16 @@ public class Auto extends StateMachine {
             case "shootOneAndTaxi": //1 ball
                 selectedAutonomous = shootOneAndTaxi;
                 break;
-            case "shootTwoTaxi": //two ball
+            case "shootTwoTaxiTop": //two ball
+                NtHelper.setString(NtKeys.AUTO_MODE_ROBOT_POSITION, "top");
+                selectedAutonomous = shootTwoTaxi;
+                break;
+            case "shootTwoTaxiMiddle": //two ball
+                NtHelper.setString(NtKeys.AUTO_MODE_ROBOT_POSITION, "middle");
+                selectedAutonomous = shootTwoTaxi;
+                break;
+            case "shootTwoTaxiBottom": //two ball
+                NtHelper.setString(NtKeys.AUTO_MODE_ROBOT_POSITION, "bottom");
                 selectedAutonomous = shootTwoTaxi;
                 break;
             case "shootOneAndShootTwo": //3 ball
