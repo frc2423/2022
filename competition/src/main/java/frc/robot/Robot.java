@@ -194,14 +194,14 @@ public class Robot extends TimedRobot {
   }
 
   public void telemetry() {
-    NtHelper.setDouble(NtKeys.LEFT_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
-    NtHelper.setDouble(NtKeys.RIGHT_INTAKE_POSITION, Devices.intakeArmFollowerMotor.getDistance());
+    // NtHelper.setDouble(NtKeys.LEFT_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
+    // NtHelper.setDouble(NtKeys.RIGHT_INTAKE_POSITION, Devices.intakeArmFollowerMotor.getDistance());
     NtHelper.setDouble(NtKeys.GYRO_ANGLE, Devices.gyro.getAngle());
 
     NtHelper.setString(NtKeys.SVG_ALLIANCE_COLOR, DriverStation.getAlliance().toString());
     NtHelper.setDouble(NtKeys.SVG_ROTATIONS_PER_SECOND,
         Devices.leftMotor.getSpeed() / (2 * Math.PI * Units.inchesToMeters(3)));
-    NtHelper.setDouble(NtKeys.SVG_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
+    // NtHelper.setDouble(NtKeys.SVG_INTAKE_POSITION, Devices.intakeArmMotor.getDistance());
 
     NtHelper.setBoolean("/robot/intake/shooterBeamBreak", Devices.shooterBeamBrake.get());
     NtHelper.setBoolean("/robot/intake/intakeBeamBreak", Devices.intakeBeamBrake.get());

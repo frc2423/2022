@@ -22,8 +22,8 @@ public class Devices {
     public static  NeoMotor rightMotor; // front right
     private static NeoMotor rightFollowerMotor; // back right
     // Intake motors
-    public static NeoMotor intakeArmMotor = new NeoMotor (5);
-    public static NeoMotor intakeArmFollowerMotor = new NeoMotor (6);
+    // public static NeoMotor intakeArmMotor = new NeoMotor (5);
+    // public static NeoMotor intakeArmFollowerMotor = new NeoMotor (6);
     public static NeoMotor intakeRollerMotor = new NeoMotor (7);
     // Intake limit switches
     public static DigitalInput leftLimit = new DigitalInput(1);
@@ -88,11 +88,11 @@ public class Devices {
         rightFollowerMotor.setBrakeMode(false);
 
 
-        intakeArmMotor.setPid(.035, 0.00025, 0);
-        intakeArmFollowerMotor.setPid(.035, 0.00025, 0);
-        intakeArmMotor.setIZone(2);
-        intakeArmFollowerMotor.setIZone(2);
-        intakeArmFollowerMotor.setInverted(true);
+        // intakeArmMotor.setPid(.035, 0.00025, 0);
+        // intakeArmFollowerMotor.setPid(.035, 0.00025, 0);
+        // intakeArmMotor.setIZone(2);
+        // intakeArmFollowerMotor.setIZone(2);
+        // intakeArmFollowerMotor.setInverted(true);
         
         colourSensor.addColor("red", .475, .382, .142);
         colourSensor.addColor("blue", .17, .42, .39);
