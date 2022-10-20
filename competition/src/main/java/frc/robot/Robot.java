@@ -165,9 +165,9 @@ public class Robot extends TimedRobot {
       Subsystems.drive.setSpeeds(leftSpeed, rightSpeed);
     }
 
-    if (Devices.operatorController.getAButton()) {
+    if (Devices.operatorController.getAButton() || Devices.driverController.getAButton()) {
       Subsystems.intake.goDown();
-    } else if (Devices.operatorController.getYButton()) {
+    } else if (Devices.operatorController.getYButton() || Devices.driverController.getYButton()) {
       Subsystems.intake.goUp();
     }
 
