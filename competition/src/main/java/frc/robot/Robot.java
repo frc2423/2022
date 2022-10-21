@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.util.NtHelper;
 import frc.robot.util.DriveHelper;
 import frc.robot.constants.constants;
+import frc.robot.led.KwarqsLed;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.util.Targeting;
@@ -20,7 +21,7 @@ public class Robot extends TimedRobot {
 
   private RateLimiter speedLimiter = new RateLimiter(0.7, 1.2);
   private RateLimiter turnLimiter = new RateLimiter(2, 3.5);
-
+  private KwarqsLed kwarqsLed = new KwarqsLed();
   private double slowCoefficient = .6;
 
   @Override
@@ -35,7 +36,7 @@ public class Robot extends TimedRobot {
     Devices.hoofMotor.setDistance(0);
     Devices.beltMotor.setPercent(0);
     Devices.shooterMotor.setPercent(0);
-    Devices.kickerMotor.setPercent(0);
+    Devices.kickerMotor.setPercent(0);      
   }
 
   @Override
@@ -91,9 +92,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    kwarqsLed.run();
+    
     if (this.isDisabled() || this.isTest()) {
       return;
     }
+
 
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
     Devices.rightMotor.getDistance());
@@ -123,12 +127,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    kwarqsLed.setRandom();
     resetRobot();
   }
 
   @Override
   public void teleopInit() {
     NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
+    kwarqsLed.setRandom();
     resetRobot();
   }
 
@@ -220,5 +226,9 @@ public class Robot extends TimedRobot {
 
     Subsystems.shooter.shooterInfo();
     Subsystems.climber.climberInfo();
+  }
+ @Override
+  public void disabledInit() {
+    kwarqsLed.disable();
   }
 }

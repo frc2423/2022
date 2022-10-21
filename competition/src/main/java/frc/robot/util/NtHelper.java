@@ -7,6 +7,11 @@ import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTableEntry;
 
 public class NtHelper {
+
+    public static void setPersistent(String key) {
+        getEntry(key).setPersistent();
+    }
+
     /**
      * Adds an entry listener to network tables
      * @param key String for network tables key
