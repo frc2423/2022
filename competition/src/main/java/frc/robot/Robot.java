@@ -36,11 +36,7 @@ public class Robot extends TimedRobot {
     Devices.hoofMotor.setDistance(0);
     Devices.beltMotor.setPercent(0);
     Devices.shooterMotor.setPercent(0);
-    Devices.kickerMotor.setPercent(0);
-
-    // add led code here
-    
-    kwarqsLed.setRandom();
+    Devices.kickerMotor.setPercent(0);      
   }
 
   @Override
@@ -96,11 +92,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    kwarqsLed.run();
+    
     if (this.isDisabled() || this.isTest()) {
       return;
     }
 
-    kwarqsLed.run();
 
     Subsystems.drivetrain.updateOdometry(Devices.gyro.getRotation(), Devices.leftMotor.getDistance(),
     Devices.rightMotor.getDistance());
@@ -130,12 +127,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    kwarqsLed.setRandom();
     resetRobot();
   }
 
   @Override
   public void teleopInit() {
     NtHelper.setDouble(NtKeys.CARGO_COUNT, 0);
+    kwarqsLed.setRandom();
     resetRobot();
   }
 
@@ -227,5 +226,9 @@ public class Robot extends TimedRobot {
 
     Subsystems.shooter.shooterInfo();
     Subsystems.climber.climberInfo();
+  }
+ @Override
+  public void disabledInit() {
+    kwarqsLed.disable();
   }
 }
