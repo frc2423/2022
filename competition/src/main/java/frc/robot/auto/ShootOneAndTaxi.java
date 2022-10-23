@@ -14,11 +14,11 @@ public class ShootOneAndTaxi extends StateMachine {
 
     @State(name = "shooter")
     public void Shooter(StateContext ctx) {
-        Subsystems.shooter.skRev(2.58);
+        Subsystems.shooter.skRev(2);
         Subsystems.shooter.setHoodAngle(2.58);
 
         if (ctx.getTime() > 2) {
-            Devices.beltMotor.setPercent(-0.2);
+            Devices.beltMotor.setPercent(-0.3);
         }
 
         if (ctx.getTime() > 4) {

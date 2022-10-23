@@ -17,7 +17,7 @@ public class TurretDistanceMapper {
         NtHelper.setDouble("/robot/mapper/offsetSpeed", 0);
 
         distxAngleMap.put(0.0, 0.0); // distance, encoder value ([0, -15])
-    
+        distxAngleMap.put(1.99, 0.0); //4.0 ft.
         distxAngleMap.put(2.59, 0.0); //4.0 ft.
         distxAngleMap.put(3.5, -0.8); //6.0 ft.
         distxAngleMap.put(4.38, -1.9); //8.0 ft.
@@ -26,7 +26,8 @@ public class TurretDistanceMapper {
         distxAngleMap.put(8.48, -2.6); //14.0 ft
         distxAngleMap.put(100.0, -2.6);
 
-        distxSpeedMap.put(0.0, -53.0); // feet, voltage? shooter motor
+        distxSpeedMap.put(0.0, -10.0); // feet, voltage? shooter motor
+        distxSpeedMap.put(1.99, -50.0); // feet, voltage? shooter motor
         distxSpeedMap.put(2.59, -53.0);
         distxSpeedMap.put(3.5, -57.5);
         distxSpeedMap.put(4.38, -60.0);
@@ -36,6 +37,7 @@ public class TurretDistanceMapper {
         distxAngleMap.put(100.0, -70.0);
 
         distxSkpeedMap.put(0.0, -25.0); // feet, voltage? kicker motor
+        distxSkpeedMap.put(1.99, -25.0);
         distxSkpeedMap.put(2.59, -25.0);
         distxSkpeedMap.put(3.5, -30.0);
         distxSkpeedMap.put(4.38, -30.0);
@@ -105,6 +107,7 @@ public class TurretDistanceMapper {
         double slessThanSpeedo = getSpeedFromDistance(slessThan);
         double sgreaterThanSped = getSpeedFromDistance(sgreaterThan);
         double value = lerp(slessThan, sgreaterThan, slessThanSpeedo, sgreaterThanSped, boundedDistance);
+
         return getShootValue(value);
     }
 
