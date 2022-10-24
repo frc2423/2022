@@ -27,3 +27,7 @@ To share our code and work collaboratively, we use a version control system call
 Next download `git`. You can download it here: https://git-scm.com/downloads
 
 To be able to contribute, you must also add an ssh key to your github account: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+
+Finally, clone the `2022` repository here: https://github.com/frc2423/2022
+
+Go here if you'd like to learn more about version control and git: https://git-scm.com/videos
