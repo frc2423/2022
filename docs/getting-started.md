@@ -31,3 +31,15 @@ To be able to contribute, you must also add an ssh key to your github account: h
 Finally, clone the `2022` repository here: https://github.com/frc2423/2022
 
 Go here if you'd like to learn more about version control and git: https://git-scm.com/videos
+
+### Installing 3rd party libraries 
+
+Our code also relies on various 3rd party libraries. Follow the links below to download them:
+
+REVLib (SPARK MAX and Color Sensor V3): https://docs.revrobotics.com/sparkmax/software-resources/spark-max-api-information#c++-and-java
+
+NavX: https://www.kauailabs.com/public_files/navx-mxp/navx-mxp.zip
+
+PhotonVision: https://docs.photonvision.org/en/latest/docs/programming/photonlib/adding-vendordep.html
+
+PathPlannerLib: https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Installing
