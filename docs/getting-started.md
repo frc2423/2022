@@ -22,4 +22,8 @@ TODO
 
 ### Install git and signup on github
 
+To share our code and work collaboratively, we use a version control system called `git` and host our code on `github`. To get started first create an account on https://github.com/. When you have an account, ask a mentor for an invitation to the team's organization for access to our code.
 
+Next download `git`. You can download it here: https://git-scm.com/downloads
+
+To be able to contribute, you must also add an ssh key to your github account: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
