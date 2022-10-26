@@ -18,7 +18,7 @@ Follow the documentation here to install the FRC Driver Station software: https:
 
 ### Install FRC Driver Station for Mac and Linux (Optional)
 
-TODO
+A 3rd party cross-platform DS called OpenDS can be found here: https://boomaa23.github.io/open-ds/
 
 ### Install git and signup on github
 
