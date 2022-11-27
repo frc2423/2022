@@ -1,3 +1,16 @@
+## Intro to Java and FRC
+
+This video provides a pretty decent introduction to programming with Java: https://youtu.be/ieuLFF_gaM8
+
+Watch this video for an intro to FRC in general: https://youtu.be/JdAwEDxC2qk
+
+2022 game animation: https://youtu.be/LgniEjI9cCM
+
+Match from 2022 season: https://youtu.be/b56UKoQq8fg
+
+Robot reveal from 2022 season: https://youtu.be/9s7zUlTgnDc
+
+
 ## Setting up your computer
 
 To develop robot code you will need either a mac, windows or linux machine. A chromebook will not work. To get setup you will need to follow the below steps.
